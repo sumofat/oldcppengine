@@ -1,0 +1,10 @@
+
+void GameInit()
+{
+
+}
+
+void GameUpdate()
+{
+
+}
