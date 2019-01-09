@@ -1,0 +1,345 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		94FD8F5D21E631C000054E9C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F5C21E631C000054E9C /* AppDelegate.m */; };
+		94FD8F6021E631C000054E9C /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F5F21E631C000054E9C /* Renderer.m */; };
+		94FD8F6321E631C000054E9C /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F6221E631C000054E9C /* GameViewController.m */; };
+		94FD8F6521E631C000054E9C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F6421E631C000054E9C /* Shaders.metal */; };
+		94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6721E631C100054E9C /* Assets.xcassets */; };
+		94FD8F6B21E631C100054E9C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6921E631C100054E9C /* Main.storyboard */; };
+		94FD8F6E21E631C200054E9C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F6D21E631C100054E9C /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		94FD8F5821E631C000054E9C /* pedaltothemetal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pedaltothemetal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		94FD8F5B21E631C000054E9C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		94FD8F5C21E631C000054E9C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		94FD8F5E21E631C000054E9C /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		94FD8F5F21E631C000054E9C /* Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
+		94FD8F6121E631C000054E9C /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		94FD8F6221E631C000054E9C /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		94FD8F6421E631C000054E9C /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		94FD8F6621E631C000054E9C /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		94FD8F6721E631C100054E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		94FD8F6A21E631C100054E9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		94FD8F6C21E631C100054E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94FD8F6D21E631C100054E9C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		94FD8F6F21E631C200054E9C /* pedaltothemetal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = pedaltothemetal.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		94FD8F5521E631C000054E9C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		94FD8F4F21E631C000054E9C = {
+			isa = PBXGroup;
+			children = (
+				94FD8F5A21E631C000054E9C /* pedaltothemetal */,
+				94FD8F5921E631C000054E9C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		94FD8F5921E631C000054E9C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94FD8F5821E631C000054E9C /* pedaltothemetal.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		94FD8F5A21E631C000054E9C /* pedaltothemetal */ = {
+			isa = PBXGroup;
+			children = (
+				94FD8F5B21E631C000054E9C /* AppDelegate.h */,
+				94FD8F5C21E631C000054E9C /* AppDelegate.m */,
+				94FD8F5E21E631C000054E9C /* Renderer.h */,
+				94FD8F5F21E631C000054E9C /* Renderer.m */,
+				94FD8F6121E631C000054E9C /* GameViewController.h */,
+				94FD8F6221E631C000054E9C /* GameViewController.m */,
+				94FD8F6421E631C000054E9C /* Shaders.metal */,
+				94FD8F6621E631C000054E9C /* ShaderTypes.h */,
+				94FD8F6721E631C100054E9C /* Assets.xcassets */,
+				94FD8F6921E631C100054E9C /* Main.storyboard */,
+				94FD8F6C21E631C100054E9C /* Info.plist */,
+				94FD8F6D21E631C100054E9C /* main.m */,
+				94FD8F6F21E631C200054E9C /* pedaltothemetal.entitlements */,
+			);
+			path = pedaltothemetal;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		94FD8F5721E631C000054E9C /* pedaltothemetal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94FD8F7221E631C200054E9C /* Build configuration list for PBXNativeTarget "pedaltothemetal" */;
+			buildPhases = (
+				94FD8F5421E631C000054E9C /* Sources */,
+				94FD8F5521E631C000054E9C /* Frameworks */,
+				94FD8F5621E631C000054E9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = pedaltothemetal;
+			productName = pedaltothemetal;
+			productReference = 94FD8F5821E631C000054E9C /* pedaltothemetal.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		94FD8F5021E631C000054E9C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = DeNA;
+				TargetAttributes = {
+					94FD8F5721E631C000054E9C = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 94FD8F5321E631C000054E9C /* Build configuration list for PBXProject "pedaltothemetal" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 94FD8F4F21E631C000054E9C;
+			productRefGroup = 94FD8F5921E631C000054E9C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				94FD8F5721E631C000054E9C /* pedaltothemetal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		94FD8F5621E631C000054E9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */,
+				94FD8F6B21E631C100054E9C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		94FD8F5421E631C000054E9C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94FD8F6E21E631C200054E9C /* main.m in Sources */,
+				94FD8F6521E631C000054E9C /* Shaders.metal in Sources */,
+				94FD8F6021E631C000054E9C /* Renderer.m in Sources */,
+				94FD8F6321E631C000054E9C /* GameViewController.m in Sources */,
+				94FD8F5D21E631C000054E9C /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		94FD8F6921E631C100054E9C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				94FD8F6A21E631C100054E9C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		94FD8F7021E631C200054E9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		94FD8F7121E631C200054E9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		94FD8F7321E631C200054E9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = pedaltothemetal/pedaltothemetal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7W6L9J77EJ;
+				INFOPLIST_FILE = pedaltothemetal/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		94FD8F7421E631C200054E9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = pedaltothemetal/pedaltothemetal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7W6L9J77EJ;
+				INFOPLIST_FILE = pedaltothemetal/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		94FD8F5321E631C000054E9C /* Build configuration list for PBXProject "pedaltothemetal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94FD8F7021E631C200054E9C /* Debug */,
+				94FD8F7121E631C200054E9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94FD8F7221E631C200054E9C /* Build configuration list for PBXNativeTarget "pedaltothemetal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94FD8F7321E631C200054E9C /* Debug */,
+				94FD8F7421E631C200054E9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 94FD8F5021E631C000054E9C /* Project object */;
+}
