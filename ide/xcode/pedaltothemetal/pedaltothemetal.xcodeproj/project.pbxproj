@@ -15,8 +15,8 @@
 		9452F9E221E8DEC000B07061 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7C21E6C01300054E9C /* AppDelegate.m */; };
 		9452F9E321E8DEC000B07061 /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7921E6C01300054E9C /* GameViewController.mm */; };
 		9452F9E821E8DFCB00B07061 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7B21E6C01300054E9C /* main.m */; };
-		9452F9F521E8E5CF00B07061 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9452F9EB21E8E1F700B07061 /* main.cpp */; };
 		94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */; };
+		94A841E921E9F0D30051DB13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94A841E221E9F0BB0051DB13 /* main.cpp */; };
 		94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6721E631C100054E9C /* Assets.xcassets */; };
 		94FD8FE021E6CC0E00054E9C /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */; };
 		94FD8FE121E6CC0E00054E9C /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDF21E6CC0E00054E9C /* Metal.framework */; };
@@ -54,6 +54,20 @@
 			remoteGlobalIDString = 9452F9F021E8E5BB00B07061;
 			remoteInfo = pedaltothemetal;
 		};
+		94A841E521E9F0BB0051DB13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FD8F8621E6C01300054E9C /* metalizermactest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 94FD8FFE21E6F64500054E9C;
+			remoteInfo = metalizer;
+		};
+		94A841E721E9F0BB0051DB13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FD8F8621E6C01300054E9C /* metalizermactest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 94FD904C21E6FCA900054E9C;
+			remoteInfo = metalizertestios;
+		};
 		94FD8FBE21E6C01300054E9C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 94FD8F8621E6C01300054E9C /* metalizermactest.xcodeproj */;
@@ -81,7 +95,6 @@
 		941D746E21E85FEA00FF30A3 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		944DEE4D21E8732100AC5621 /* main */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = main; path = ../../../../kitplayground/helloworld/main; sourceTree = "<group>"; };
 		9452F9CE21E8DA5100B07061 /* pedaltothemetal copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "pedaltothemetal copy-Info.plist"; path = "/Users/ray.garner/work/pedaltothemetal/ide/xcode/pedaltothemetal/pedaltothemetal copy-Info.plist"; sourceTree = "<absolute>"; };
-		9452F9EB21E8E1F700B07061 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		9452F9EC21E8E1F700B07061 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpedaltothemetal.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9452FA0021E9926800B07061 /* yoyoyo_math_ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yoyoyo_math_ext.h; sourceTree = "<group>"; };
@@ -132,6 +145,9 @@
 		9452FA2F21E9927C00B07061 /* api_parse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api_parse.h; sourceTree = "<group>"; };
 		9452FA3021E9927D00B07061 /* api_vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api_vector.h; sourceTree = "<group>"; };
 		9452FA3121E9927D00B07061 /* api_dyn_memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = api_dyn_memory.h; sourceTree = "<group>"; };
+		94A841E221E9F0BB0051DB13 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		94A841EA21EA0F320051DB13 /* input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = input.cpp; sourceTree = "<group>"; };
+		94A841EB21EA10950051DB13 /* PlatformState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlatformState.h; sourceTree = "<group>"; };
 		94FD8F5821E631C000054E9C /* engine_runtime_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = engine_runtime_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FD8F6721E631C100054E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94FD8F6C21E631C100054E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -247,7 +263,7 @@
 		9452F9EA21E8E1F700B07061 /* pedaltothemetal */ = {
 			isa = PBXGroup;
 			children = (
-				9452F9EB21E8E1F700B07061 /* main.cpp */,
+				94A841E121E9F0BB0051DB13 /* code */,
 			);
 			path = pedaltothemetal;
 			sourceTree = "<group>";
@@ -283,6 +299,14 @@
 				9452FA1A21E9926900B07061 /* meow_test.h */,
 			);
 			path = more;
+			sourceTree = "<group>";
+		};
+		94A841E121E9F0BB0051DB13 /* code */ = {
+			isa = PBXGroup;
+			children = (
+				94A841E221E9F0BB0051DB13 /* main.cpp */,
+			);
+			path = code;
 			sourceTree = "<group>";
 		};
 		94FD8F4F21E631C000054E9C = {
@@ -336,6 +360,7 @@
 		94FD8F7721E6C01300054E9C /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				94A841EB21EA10950051DB13 /* PlatformState.h */,
 				94FD8F7821E6C01300054E9C /* apple */,
 				94FD8F7E21E6C01300054E9C /* shared */,
 				94FD8F7F21E6C01300054E9C /* README.md */,
@@ -421,6 +446,8 @@
 			children = (
 				94FD8FBF21E6C01300054E9C /* metalizermactest.app */,
 				94FD8FC121E6C01300054E9C /* libmetalizermac.a */,
+				94A841E621E9F0BB0051DB13 /* libmetalizer.a */,
+				94A841E821E9F0BB0051DB13 /* metalizertestios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -537,6 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				94FD8FCB21E6C84F00054E9C /* input.h */,
+				94A841EA21EA0F320051DB13 /* input.cpp */,
 			);
 			path = input;
 			sourceTree = "<group>";
@@ -702,6 +730,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		94A841E621E9F0BB0051DB13 /* libmetalizer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmetalizer.a;
+			remoteRef = 94A841E521E9F0BB0051DB13 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		94A841E821E9F0BB0051DB13 /* metalizertestios.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = metalizertestios.app;
+			remoteRef = 94A841E721E9F0BB0051DB13 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		94FD8FBF21E6C01300054E9C /* metalizermactest.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
@@ -734,7 +776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9452F9F521E8E5CF00B07061 /* main.cpp in Sources */,
+				94A841E921E9F0D30051DB13 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -976,6 +1018,7 @@
 					"@executable_path/../Frameworks",
 					"~/Users⁩/⁨ray.garner⁩/⁨work⁩/⁨kitplayground⁩/⁨helloworld⁩",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
@@ -1002,6 +1045,7 @@
 					"@executable_path/../Frameworks",
 					"~/Users⁩/⁨ray.garner⁩/⁨work⁩/⁨kitplayground⁩/⁨helloworld⁩",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",

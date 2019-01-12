@@ -7,15 +7,9 @@
 //NOTE(Ray):
 //#import "SpriteExample.h"
 #import "../../engine.h"
+
 //Things in the platform layer just return or fill out the raw results.
 //The engine will tranlate those to useful resutls.
-void PullMouseState(PlatformState* ps)
-{
-    NSPoint mouseLoc;
-    mouseLoc = [NSEvent mouseLocation]; //get current mouse position
-    NSLog(@"Mouse location: %f %f", mouseLoc.x, mouseLoc.y);
-
-}
 
 @implementation GameViewController
 {

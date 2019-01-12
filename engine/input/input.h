@@ -1,3 +1,5 @@
+#if !defined(INPUT_H)
+
 #define MAX_KEYS 256
 #define MAX_CONTROLLER_SUPPORT 8
 struct DigitalButton
@@ -81,5 +83,13 @@ struct Input
     Mouse mouse;
     GamePad game_pads[MAX_CONTROLLER_SUPPORT];
 };
-    
 
+struct PlatformState;
+namespace EngineInput
+{
+    extern bool log;
+    void PullMouseState(PlatformState* ps);
+}
+
+#define INPUT_H
+#endif
