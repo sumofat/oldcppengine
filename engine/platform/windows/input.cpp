@@ -8,6 +8,9 @@ internal void UpdateDigitalButton(DigitalButton* button,u32 state)
     button->down = down;    
 }
 
+//NOTE(Ray):Wrap mode is something that should be handled at a level above this.
+//Not really relevant to the platform.
+
 internal void PullMouseState(PlatformState* ps)
 {
     Input* input = &ps->input;

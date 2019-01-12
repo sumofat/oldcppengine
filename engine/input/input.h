@@ -1,4 +1,5 @@
-
+#define MAX_KEYS 256
+#define MAX_CONTROLLER_SUPPORT 8
 struct DigitalButton
 {
     b32 down;
@@ -80,4 +81,5 @@ struct Input
     Mouse mouse;
     GamePad game_pads[MAX_CONTROLLER_SUPPORT];
 };
+    
 
