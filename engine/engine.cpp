@@ -32,7 +32,7 @@ namespace Engine
         
         //Init Renderer
         Camera::Init();
-        DefferedRenderer::Init(&Camera::main);
+        DefferedRenderer::Init(&Camera::main, &ps);
         //Init Audio
         //Init Physics
 

@@ -93,7 +93,6 @@
 
 /* Begin PBXFileReference section */
 		941D746E21E85FEA00FF30A3 /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		944DEE4D21E8732100AC5621 /* main */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = main; path = ../../../../kitplayground/helloworld/main; sourceTree = "<group>"; };
 		9452F9CE21E8DA5100B07061 /* pedaltothemetal copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "pedaltothemetal copy-Info.plist"; path = "/Users/ray.garner/work/pedaltothemetal/ide/xcode/pedaltothemetal/pedaltothemetal copy-Info.plist"; sourceTree = "<absolute>"; };
 		9452F9EC21E8E1F700B07061 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpedaltothemetal.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,6 +147,11 @@
 		94A841E221E9F0BB0051DB13 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		94A841EA21EA0F320051DB13 /* input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = input.cpp; sourceTree = "<group>"; };
 		94A841EB21EA10950051DB13 /* PlatformState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlatformState.h; sourceTree = "<group>"; };
+		94A841EE21EAC5930051DB13 /* AudioInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioInterface.h; sourceTree = "<group>"; };
+		94A841F021EAC5B30051DB13 /* camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
+		94A841F221EAC5B30051DB13 /* deffered.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = deffered.cpp; sourceTree = "<group>"; };
+		94A841F321EAC5B30051DB13 /* deffered.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deffered.h; sourceTree = "<group>"; };
+		94A841F421EAC5B30051DB13 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		94FD8F5821E631C000054E9C /* engine_runtime_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = engine_runtime_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FD8F6721E631C100054E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94FD8F6C21E631C100054E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -263,6 +267,7 @@
 		9452F9EA21E8E1F700B07061 /* pedaltothemetal */ = {
 			isa = PBXGroup;
 			children = (
+				94A841EC21EA4B040051DB13 /* data */,
 				94A841E121E9F0BB0051DB13 /* code */,
 			);
 			path = pedaltothemetal;
@@ -309,6 +314,40 @@
 			path = code;
 			sourceTree = "<group>";
 		};
+		94A841EC21EA4B040051DB13 /* data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		94A841ED21EAC5930051DB13 /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				94A841EE21EAC5930051DB13 /* AudioInterface.h */,
+			);
+			path = audio;
+			sourceTree = "<group>";
+		};
+		94A841EF21EAC5B30051DB13 /* graphics */ = {
+			isa = PBXGroup;
+			children = (
+				94A841F021EAC5B30051DB13 /* camera.cpp */,
+				94A841F121EAC5B30051DB13 /* deffered */,
+				94A841F421EAC5B30051DB13 /* camera.h */,
+			);
+			path = graphics;
+			sourceTree = "<group>";
+		};
+		94A841F121EAC5B30051DB13 /* deffered */ = {
+			isa = PBXGroup;
+			children = (
+				94A841F221EAC5B30051DB13 /* deffered.cpp */,
+				94A841F321EAC5B30051DB13 /* deffered.h */,
+			);
+			path = deffered;
+			sourceTree = "<group>";
+		};
 		94FD8F4F21E631C000054E9C = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +385,8 @@
 		94FD8F7521E6C01300054E9C /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				94A841EF21EAC5B30051DB13 /* graphics */,
+				94A841ED21EAC5930051DB13 /* audio */,
 				94FD8FCA21E6C84F00054E9C /* input */,
 				94FD8F7621E6C01300054E9C /* engine.h */,
 				94FD8FBB21E6C01300054E9C /* engine.cpp */,
@@ -572,7 +613,6 @@
 		94FD8FDD21E6CC0E00054E9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				944DEE4D21E8732100AC5621 /* main */,
 				94FD8FDF21E6CC0E00054E9C /* Metal.framework */,
 				94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */,
 			);

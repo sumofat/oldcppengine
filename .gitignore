@@ -2,3 +2,7 @@
 engine/\.#engine\.h
 
 ide/xcode/pedaltothemetal/pedaltothemetal\.xcodeproj/project\.xcworkspace/xcuserdata/ray\.garner\.xcuserdatad/UserInterfaceState\.xcuserstate
+
+ide/xcode/pedaltothemetal/pedaltothemetal\.xcodeproj/xcuserdata/ray\.garner\.xcuserdatad/xcdebugger/Breakpoints_v2\.xcbkptlist
+
+\.DS_Store
