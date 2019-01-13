@@ -16,8 +16,12 @@
 extern "C" void gameInit();
 extern "C" void gameUpdate();
 
+
+ 
 namespace Engine
 {
+    YoyoVector test_vector;
+    
     bool engine_log = true;
     PlatformState ps = {};
     //NOTE(Ray):Here we init all the engine memory and ints "Subsystems"
@@ -40,6 +44,9 @@ namespace Engine
         
         //Init Multithreading
 
+        
+        test_vector = YoyoInitVector(1,float2,false);
+        test_vector.resize_ratio = 0.5f;
 //TODO(Ray):
         //Init Network
         //Init etc..
@@ -58,8 +65,11 @@ namespace Engine
         EngineInput::PullMouseState(&ps);
 
         gameUpdate();
-        
 
+        
+        PlatformOutput(engine_log,"Test vec size %d \n",test_vector.max_size);
+        float2 newf2 = float2(100,100);
+        YoyoStretchPushBack(&test_vector,newf2);
         //Update Graphics
         DefferedRenderer::ExecutePasses();
         //Update Audio
