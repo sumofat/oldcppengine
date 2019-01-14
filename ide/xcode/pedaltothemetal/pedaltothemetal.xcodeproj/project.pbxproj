@@ -152,6 +152,7 @@
 		94A841F221EAC5B30051DB13 /* deffered.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = deffered.cpp; sourceTree = "<group>"; };
 		94A841F321EAC5B30051DB13 /* deffered.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deffered.h; sourceTree = "<group>"; };
 		94A841F421EAC5B30051DB13 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		94A841F621EB36B70051DB13 /* AssetSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetSystem.h; sourceTree = "<group>"; };
 		94FD8F5821E631C000054E9C /* engine_runtime_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = engine_runtime_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FD8F6721E631C100054E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94FD8F6C21E631C100054E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -332,9 +333,9 @@
 		94A841EF21EAC5B30051DB13 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				94A841F421EAC5B30051DB13 /* camera.h */,
 				94A841F021EAC5B30051DB13 /* camera.cpp */,
 				94A841F121EAC5B30051DB13 /* deffered */,
-				94A841F421EAC5B30051DB13 /* camera.h */,
 			);
 			path = graphics;
 			sourceTree = "<group>";
@@ -346,6 +347,14 @@
 				94A841F321EAC5B30051DB13 /* deffered.h */,
 			);
 			path = deffered;
+			sourceTree = "<group>";
+		};
+		94A841F521EB36B70051DB13 /* asset */ = {
+			isa = PBXGroup;
+			children = (
+				94A841F621EB36B70051DB13 /* AssetSystem.h */,
+			);
+			path = asset;
 			sourceTree = "<group>";
 		};
 		94FD8F4F21E631C000054E9C = {
@@ -385,13 +394,14 @@
 		94FD8F7521E6C01300054E9C /* engine */ = {
 			isa = PBXGroup;
 			children = (
+				94FD8F8121E6C01300054E9C /* README.md */,
+				94A841F521EB36B70051DB13 /* asset */,
 				94A841EF21EAC5B30051DB13 /* graphics */,
 				94A841ED21EAC5930051DB13 /* audio */,
 				94FD8FCA21E6C84F00054E9C /* input */,
 				94FD8F7621E6C01300054E9C /* engine.h */,
 				94FD8FBB21E6C01300054E9C /* engine.cpp */,
 				94FD8F7721E6C01300054E9C /* platform */,
-				94FD8F8121E6C01300054E9C /* README.md */,
 				94FD8F8221E6C01300054E9C /* yoyo */,
 			);
 			name = engine;
@@ -401,10 +411,10 @@
 		94FD8F7721E6C01300054E9C /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				94FD8F7F21E6C01300054E9C /* README.md */,
 				94A841EB21EA10950051DB13 /* PlatformState.h */,
 				94FD8F7821E6C01300054E9C /* apple */,
 				94FD8F7E21E6C01300054E9C /* shared */,
-				94FD8F7F21E6C01300054E9C /* README.md */,
 				94FD8F8021E6C01300054E9C /* windows */,
 			);
 			path = platform;

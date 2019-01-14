@@ -12,12 +12,10 @@ namespace AssetSystem
 
 #endif
 
-
-
 #if ENGINEIMPL
 namespace AssetSystem
 {
-    YoyoVector loaded_meshes;
+    //YoyoVector loaded_meshes;
     YoyoVector loaded_textures;
 
     YoyoHashTable texture_hash;
@@ -33,16 +31,22 @@ namespace AssetSystem
         runtime_assets = AllocateMemoryPartition(MegaBytes(100));
         runtime_sprite_assets = AllocateMemoryPartition(MAX_SPRITES * sizeof(AtlasTexture));
         
+        //TODO(Ray):Get a better estimate of the maximum texture memory we have available.
+        //Or just make this a stretchy buffer and check we have enough room before we try to
+        //upload to gpu.
         texture_hash = YoyoInitHashTable(MAX_GPU_TEXTURE_STORAGE_COUNT);
         loaded_textures = YoyoInitVector(MAX_GPU_TEXTURE_STORAGE_COUNT,Texture,false);
     }
 
+    //TODO(Ray):Create a proper interface to FBXSDK
     ModelAsset* LoadModel(char* file_name,PlatformState* ps)
     {
+        //LOAD MODEL from disk
         Yostr* base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);
         Yostr* mat_final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(file_name,&ps->string_state.transient_string_memory), &ps->string_state.transient_string_memory);
         read_file_result mat_file_result =  PlatformReadEntireFile(mat_final_path);
 
+        
         //Create a new material if we couldnt find the one at data
         if(mat_file_result.ContentSize <= 0)
         {
@@ -146,7 +150,8 @@ namespace AssetSystem
         LoadedModelToModelAsset(loaded_model, new_model_asset);
         //TODO(Ray):Why does this fail sometimes!!
         UploadModelAssetToGPU(new_model_asset);
-
+//END LOAD MODEL FROM DISK
+        
 //This next part gets and loads all the relevent information to render this object properly.
         //NOTE(Ray):
         //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
