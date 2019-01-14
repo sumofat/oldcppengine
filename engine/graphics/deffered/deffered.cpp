@@ -15,6 +15,7 @@ namespace DefferedRenderer
     RenderPassBuffer transparent_pass_buffer;
     RenderPassBuffer ui_pass_buffer;
     RenderPassBuffer overlay_pass_buffer;
+    RenderPassBuffer imgui_pass_buffer;//editor ui 
 
     void InitPerProjPass(RenderCamera* cam,PlatformState* ps,DefferedRenderPass* pass)
     {
@@ -61,24 +62,16 @@ namespace DefferedRenderer
         cam->projection_matrix = init_pers_proj_matrix(ps->window.dim,cam->fov,cam->near_far_planes);
         float3 cam_p = float3(0,2,5);//Parametize init p
         cam->matrix = set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
-
     }
     
     //TODO(Ray):Create a render quad pass able to render into any quad
     //texture.  Used for full screen passes or downsampled passes upsampled passes render textures etc...
     void InitRenderQuadPass(RenderCamera* cam,PlatformState* ps)
     {
-        
     }
     
     void InitTransparentPass(RenderCamera* cam,PlatformState* ps)
     {
-        
-    }
-    
-    void InitUIPass(RenderCamera* cam,PlatformState* ps)
-    {
-        
     }
     
     void Init(RenderCamera* cam,PlatformState* ps)
@@ -86,7 +79,10 @@ namespace DefferedRenderer
         passes.buffer = YoyoInitVector(10, RenderPassBuffer, false);
         InitPerProjPass(cam, ps, &gbufferpass);
         YoyoPushBack(&passes.buffer, gbufferpass);
-        
+
+        //imgui
+        IMGUIRender::Init(&imgui_pass_buffer);
+        YoyoPushBack(&passes.buffer, imgui_pass_buffer);
     }
     
     //TODO(Ray):Later we should have a render graph that would have intimate knowledge of the passes to be executed
