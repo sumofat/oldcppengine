@@ -12,11 +12,10 @@
 
 #include "graphics/camera.cpp"
 #include "graphics/deffered/deffered.cpp"
+#include "graphics/deffered/imguirender.cpp"
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
-
-
  
 namespace Engine
 {

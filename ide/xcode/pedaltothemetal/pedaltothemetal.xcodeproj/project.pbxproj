@@ -17,6 +17,7 @@
 		9452F9E821E8DFCB00B07061 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7B21E6C01300054E9C /* main.m */; };
 		94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */; };
 		94A841E921E9F0D30051DB13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94A841E221E9F0BB0051DB13 /* main.cpp */; };
+		94A842CC21EC7A5B0051DB13 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94A8427E21EC27E70051DB13 /* imgui_impl_metal.mm */; };
 		94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6721E631C100054E9C /* Assets.xcassets */; };
 		94FD8FE021E6CC0E00054E9C /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */; };
 		94FD8FE121E6CC0E00054E9C /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDF21E6CC0E00054E9C /* Metal.framework */; };
@@ -174,8 +175,6 @@
 		94A841F321EAC5B30051DB13 /* deffered.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deffered.h; sourceTree = "<group>"; };
 		94A841F421EAC5B30051DB13 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		94A841F621EB36B70051DB13 /* AssetSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AssetSystem.h; sourceTree = "<group>"; };
-		94A841F721EC27BA0051DB13 /* imguirender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imguirender.h; sourceTree = "<group>"; };
-		94A841F821EC27BA0051DB13 /* imguirender.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = imguirender.mm; sourceTree = "<group>"; };
 		94A841FD21EC27E70051DB13 /* imgui_freetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_freetype.h; sourceTree = "<group>"; };
 		94A841FE21EC27E70051DB13 /* imgui_freetype.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_freetype.cpp; sourceTree = "<group>"; };
 		94A841FF21EC27E70051DB13 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -334,6 +333,10 @@
 		94A842C021EC27E70051DB13 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		94A842C121EC27E70051DB13 /* imgui_demo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
 		94A842C221EC27E70051DB13 /* imgui_draw.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
+		94A842CD21ECB5B80051DB13 /* imguirender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imguirender.h; sourceTree = "<group>"; };
+		94A842CE21ECB5B80051DB13 /* imguirender.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imguirender.cpp; sourceTree = "<group>"; };
+		94A842CF21ECB5D20051DB13 /* imgui_impl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl.cpp; sourceTree = "<group>"; };
+		94A842D021ECB5D20051DB13 /* imgui_impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_impl.h; sourceTree = "<group>"; };
 		94FD8F5821E631C000054E9C /* engine_runtime_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = engine_runtime_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FD8F6721E631C100054E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94FD8F6C21E631C100054E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -526,8 +529,10 @@
 			children = (
 				94A841F321EAC5B30051DB13 /* deffered.h */,
 				94A841F221EAC5B30051DB13 /* deffered.cpp */,
-				94A841F721EC27BA0051DB13 /* imguirender.h */,
-				94A841F821EC27BA0051DB13 /* imguirender.mm */,
+				94A842CD21ECB5B80051DB13 /* imguirender.h */,
+				94A842CE21ECB5B80051DB13 /* imguirender.cpp */,
+				94A842D021ECB5D20051DB13 /* imgui_impl.h */,
+				94A842CF21ECB5D20051DB13 /* imgui_impl.cpp */,
 			);
 			path = deffered;
 			sourceTree = "<group>";
@@ -666,6 +671,7 @@
 				94A8427B21EC27E70051DB13 /* imgui_impl_marmalade.h */,
 				94A8427C21EC27E70051DB13 /* imgui_impl_opengl2.h */,
 				94A8427D21EC27E70051DB13 /* .gitignore */,
+				94A8428521EC27E70051DB13 /* imgui_impl_metal.h */,
 				94A8427E21EC27E70051DB13 /* imgui_impl_metal.mm */,
 				94A8427F21EC27E70051DB13 /* imgui_impl_dx10.h */,
 				94A8428021EC27E70051DB13 /* imgui_impl_allegro5.cpp */,
@@ -673,7 +679,6 @@
 				94A8428221EC27E70051DB13 /* imgui_impl_freeglut.h */,
 				94A8428321EC27E70051DB13 /* imgui_impl_opengl2.cpp */,
 				94A8428421EC27E70051DB13 /* imgui_impl_glfw.h */,
-				94A8428521EC27E70051DB13 /* imgui_impl_metal.h */,
 				94A8428621EC27E70051DB13 /* imgui_impl_opengl3.cpp */,
 				94A8428721EC27E70051DB13 /* README.txt */,
 				94A8428821EC27E70051DB13 /* imgui_impl_dx10.cpp */,
@@ -1535,6 +1540,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94A842CC21EC7A5B0051DB13 /* imgui_impl_metal.mm in Sources */,
 				9452F9E221E8DEC000B07061 /* AppDelegate.m in Sources */,
 				9452F9E321E8DEC000B07061 /* GameViewController.mm in Sources */,
 				94FD8FE621E6CDC100054E9C /* engine.cpp in Sources */,

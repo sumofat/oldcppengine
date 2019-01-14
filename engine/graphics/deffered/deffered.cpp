@@ -1,11 +1,13 @@
 
 #include "deffered.h"
+#include "imguirender.h"
 
 #ifdef ENGINEIMPL
 namespace DefferedRenderer
 {
     DefferedRenderPassBuffer passes;
     DefferedRenderPass gbufferpass;
+    DefferedRenderPass imguipass;
     
     RenderPassBuffer shadow_gen_pass_buffer;//Creates shadow maps
     //RenderPassBuffer gbuffer_pass_buffer;//creates diffuse normal etc.. buffers
@@ -81,8 +83,8 @@ namespace DefferedRenderer
         YoyoPushBack(&passes.buffer, gbufferpass);
 
         //imgui
-        IMGUIRender::Init(&imgui_pass_buffer);
-        YoyoPushBack(&passes.buffer, imgui_pass_buffer);
+        IMGUIRender::Init(&imguipass);
+        YoyoPushBack(&passes.buffer, imguipass);
     }
     
     //TODO(Ray):Later we should have a render graph that would have intimate knowledge of the passes to be executed
