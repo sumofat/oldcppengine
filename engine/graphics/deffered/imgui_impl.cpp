@@ -279,10 +279,6 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
         return;
     drawData->ScaleClipRects(io.DisplayFramebufferScale);
 
-    RenderEncoderCode::SetCullMode(command_encoder, cull_mode_none);
-    //    [commandEncoder setCullMode:CullModeNone];
-//    [commandEncoder setDepthStencilState:g_sharedMetalContext.depthStencilState];
-    RenderEncoderCode::SetDepthStencilState(command_encoder, &g_sharedMetalContext.depthStencilState);
     // Setup viewport, orthographic projection matrix
     // Our visible imgui space lies from draw_data->DisplayPos (top left) to
     // draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
@@ -330,14 +326,18 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
 //    MetalBuffer *indexBuffer = [self dequeueReusableBufferOfLength:indexBufferLength device:commandBuffer.device];
     //GPUBuffer vertex_buffer;
     
-    Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
+    //Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
     //if(current_drawable.state)
     //{
-        RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,passdesc,0);
-        RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(passdesc,0);
+    //    RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,passdesc,0);
+    //    RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(passdesc,0);
     //RenderPipelineState renderPipelineState = render_pipeline_state;//RenderPipelineStateForFrameAndDevice(context,device);
     RenderEncoderCode::SetRenderPipelineState(command_encoder,render_pipeline_state.state);
 
+    RenderEncoderCode::SetCullMode(command_encoder, cull_mode_none);
+    //    [commandEncoder setCullMode:CullModeNone];
+    //    [commandEncoder setDepthStencilState:g_sharedMetalContext.depthStencilState];
+    RenderEncoderCode::SetDepthStencilState(command_encoder, &g_sharedMetalContext.depthStencilState);
     RenderEncoderCode::SetVertexBuffer(command_encoder,&buffer,0,0);
 //        [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
     
@@ -369,9 +369,11 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                 if (clip_rect.x < fb_width && clip_rect.y < fb_height && clip_rect.z >= 0.0f && clip_rect.w >= 0.0f)
                 {
                     // Apply scissor/clipping rectangle
+                    // Apply scissor/clipping rectangle
+                    
                     ScissorRect scissorRect =
-                        { (int)clip_rect.y,
-                          (int)clip_rect.x,
+                        { (int)clip_rect.x,
+                          (int)clip_rect.y,
                           (int)(clip_rect.z - clip_rect.x),
                           (int)(clip_rect.w - clip_rect.y) };
                     //[commandEncoder setScissorRect:scissorRect];

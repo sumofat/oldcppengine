@@ -6,3 +6,9 @@ ide/xcode/pedaltothemetal/pedaltothemetal\.xcodeproj/project\.xcworkspace/xcuser
 ide/xcode/pedaltothemetal/pedaltothemetal\.xcodeproj/xcuserdata/ray\.garner\.xcuserdatad/xcdebugger/Breakpoints_v2\.xcbkptlist
 
 \.DS_Store
+
+engine/graphics/deffered/\.#imgui_impl\.cpp
+
+engine/platform/apple/\.#AppDelegate\.h
+
+engine/platform/apple/\.#GameViewController\.mm

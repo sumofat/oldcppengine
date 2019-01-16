@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "94FD8F5721E631C000054E9C"
-               BuildableName = "engine_runtime_app.app"
-               BlueprintName = "engine_runtime_app"
+               BlueprintIdentifier = "94FD8FD821E6CA7F00054E9C"
+               BuildableName = "libmetalize.a"
+               BlueprintName = "metalize"
                ReferencedContainer = "container:pedaltothemetal.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94FD8F5721E631C000054E9C"
-            BuildableName = "engine_runtime_app.app"
-            BlueprintName = "engine_runtime_app"
-            ReferencedContainer = "container:pedaltothemetal.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -52,16 +43,15 @@
       debugServiceExtension = "internal"
       enableGPUValidationMode = "2"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94FD8F5721E631C000054E9C"
-            BuildableName = "engine_runtime_app.app"
-            BlueprintName = "engine_runtime_app"
+            BlueprintIdentifier = "94FD8FD821E6CA7F00054E9C"
+            BuildableName = "libmetalize.a"
+            BlueprintName = "metalize"
             ReferencedContainer = "container:pedaltothemetal.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -71,16 +61,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "94FD8F5721E631C000054E9C"
-            BuildableName = "engine_runtime_app.app"
-            BlueprintName = "engine_runtime_app"
+            BlueprintIdentifier = "94FD8FD821E6CA7F00054E9C"
+            BuildableName = "libmetalize.a"
+            BlueprintName = "metalize"
             ReferencedContainer = "container:pedaltothemetal.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
