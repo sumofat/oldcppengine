@@ -83,7 +83,7 @@ namespace DefferedRenderer
         YoyoPushBack(&passes.buffer, gbufferpass);
 
         //imgui
-        IMGUIRender::Init(&imguipass);
+        IMGUIRender::Init(&imguipass,ps);
         YoyoPushBack(&passes.buffer, imguipass);
     }
     

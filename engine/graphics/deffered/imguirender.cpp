@@ -13,8 +13,7 @@ namespace IMGUIRender
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
-        ImGui_ImplMetal_Init(RendererCode::device);
-
+        
         RenderPassCode::InitRenderPass(&pass->pass_buffer,1,IMGUIRender::ExecutePass);
 
         TextureDescriptor depth_texture_desc = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatDepth32Float_Stencil8,ps->window.dim.x(),ps->window.dim.y(),false);
@@ -39,10 +38,13 @@ namespace IMGUIRender
         rp_ca_desc.clear_color = float4(1);
         rp_ca_desc.description.loadAction = LoadActionClear;
         rp_ca_desc.description.storeAction = StoreActionStore;
-
+        
+        
         RenderEncoderCode::AddRenderPassColorAttachment(&renderpass_desc,&rp_ca_desc);
         RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&renderpass_desc,0);
-
+        
+        ImGui_ImplMetal_Init(RendererCode::device, &renderpass_desc);
+        
         int no_os_passes = 1;
         RenderPass* subpass = RenderPassCode::AddRenderPass(&pass->pass_buffer, no_os_passes, 0,0,&renderpass_desc);
         subpass->viewport = float4(0,0,ps->window.dim.x(),ps->window.dim.y());
@@ -51,6 +53,7 @@ namespace IMGUIRender
 
     void ExecutePass(RenderPassBuffer* buffer,void* c_buffer,void* global_pass_params)
     {
+        void* command_buffer = global_pass_params;
         ImGuiIO &io = ImGui::GetIO();
         float2 dim = RendererCode::dim;
         io.DisplaySize.x = dim.x();//view.bounds.size.width;
@@ -89,9 +92,9 @@ namespace IMGUIRender
 //            [renderEncoder pushDebugGroup:@"ImGui demo"];
 
             // Start the Dear ImGui frame
-            ImGui_ImplMetal_NewFrame(renderPassDescriptor);
+            //ImGui_ImplMetal_NewFrame(renderPassDescriptor);
 #if TARGET_OS_OSX
-            ImGui_ImplOSX_NewFrame(view);
+            ImGui_ImplOSX_NewFrame();
 #endif
             ImGui::NewFrame();
 
@@ -135,8 +138,7 @@ namespace IMGUIRender
             // Rendering
             ImGui::Render();
             ImDrawData *drawData = ImGui::GetDrawData();
-            ImGui_ImplMetal_RenderDrawData(drawData, commandBuffer, renderEncoder);
-
+            ImGui_ImplMetal_RenderDrawData(drawData, command_buffer, &re);
             //TODO(Ray):Add to metalizer          
 //            [renderEncoder popDebugGroup];
 //            [renderEncoder endEncoding];

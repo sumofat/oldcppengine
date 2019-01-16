@@ -12,7 +12,17 @@
 
 #include "graphics/camera.cpp"
 #include "graphics/deffered/deffered.cpp"
+#include "external/imgui/imgui.cpp"
+#include "external/imgui/imgui_draw.cpp"
+#include "external/imgui/imgui_widgets.cpp"
+
+//TODO(Ray):NOTE(Ray):Due to the use of static in the function calls here we need to add a
+//a-fno_threadsafe_static call to the engine for reasons unknown revisit later.
+
+#include "external/imgui/imgui_demo.cpp"
 #include "graphics/deffered/imguirender.cpp"
+
+#include "graphics/deffered/imgui_impl.cpp"
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
