@@ -19,15 +19,43 @@
 struct MetalContext
 {
     DepthStencilState depthStencilState;
-    Texture font_texture;
 };
 
 static MetalContext g_sharedMetalContext;
-static RenderPassDescriptor* renderpassdesc;
 static RenderPipelineState render_pipeline_state;
 static GPUBuffer buffer;
 static GPUBuffer index_buffer;
 #pragma mark - ImGui API implementation
+// We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
+// In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
+// However, using a shader designed for 1-channel texture would make it less obvious to use the ImTextureID facility to render users own textures.
+// You can make that change in your implementation.
+void MakeFontTextureWithDevice(RenderDevice device)
+{
+    ImGuiIO &io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    TextureDescriptor textureDescriptor = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm, width, height, false);// Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm,width,height,false);
+    
+    textureDescriptor.usage = TextureUsageShaderRead;
+#if TARGET_OS_OSX
+    textureDescriptor.storageMode = StorageModeManaged;
+#else
+    textureDescriptor.storageMode = StorageModeShared;
+#endif
+    
+    Texture texture = RendererCode::NewTextureWithDescriptor(textureDescriptor);
+    RenderRegion region =  {float3(0, 0,0), float2(width, height)};
+    
+    RenderGPUMemory::ReplaceRegion(texture, region, 0,pixels , width * 4);
+    // ReplaceRegion(texture,region,0,pixels,width * 4);
+    //    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:pixels bytesPerRow:width * 4];
+    
+    //ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->TexID = texture.state; // ImTextureID == void*
+}
+
 
 RenderPipelineState InitRenderPipelineStateForFramebufferDescriptor(MetalContext* context,RenderDevice device)
 {
@@ -91,40 +119,53 @@ RenderPipelineState InitRenderPipelineStateForFramebufferDescriptor(MetalContext
     
     VertexDescriptor vertexDescriptor = RenderEncoderCode::NewVertexDescriptor();
     //[VertexDescriptor vertexDescriptor];
-    vertexDescriptor.attributes[0].offset = IM_OFFSETOF(ImDrawVert, pos);
-    vertexDescriptor.attributes[0].format = VertexFormatFloat2; // position
-    vertexDescriptor.attributes[0].buffer_index = 0;
-    vertexDescriptor.attributes[1].offset = IM_OFFSETOF(ImDrawVert, uv);
-    vertexDescriptor.attributes[1].format = VertexFormatFloat2; // texCoords
-    vertexDescriptor.attributes[1].buffer_index = 0;
-    vertexDescriptor.attributes[2].offset = IM_OFFSETOF(ImDrawVert, col);
-    vertexDescriptor.attributes[2].format = VertexFormatUChar4; // color
-    vertexDescriptor.attributes[2].buffer_index = 0;
-    vertexDescriptor.layouts[0].step_rate = 1;
-    vertexDescriptor.layouts[0].step_function = step_function_per_vertex;
-    vertexDescriptor.layouts[0].stride = sizeof(ImDrawVert);
+    VertexAttributeDescriptor vad;
+    vad.offset = IM_OFFSETOF(ImDrawVert, pos);
+    vad.format = VertexFormatFloat2; // position
+    vad.buffer_index = 0;
+    RenderEncoderCode::AddVertexAttribute(&vertexDescriptor,vad);
+    
+    vad.offset = IM_OFFSETOF(ImDrawVert, uv);
+    vad.format = VertexFormatFloat2; // texCoords
+    vad.buffer_index = 0;
+    RenderEncoderCode::AddVertexAttribute(&vertexDescriptor,vad);
+    
+    vad.offset = IM_OFFSETOF(ImDrawVert, col);
+    vad.format = VertexFormatUChar4; // color
+    vad.buffer_index = 0;
+    RenderEncoderCode::AddVertexAttribute(&vertexDescriptor,vad);
+    
+    VertexBufferLayoutDescriptor vbld;
+    vbld.step_rate = 1;
+    vbld.step_function = step_function_per_vertex;
+    vbld.stride = sizeof(ImDrawVert);
+    RenderEncoderCode::AddVertexLayout(&vertexDescriptor, vbld);
     
     RenderPipelineStateDesc pipelineDescriptor = RenderEncoderCode::CreatePipelineDescriptor(vertexFunction, fragmentFunction, 1);
-    //RenderPipelineDescriptor *pipelineDescriptor = RendererCode::CreatePipelineStateDesc(vertexFunction,fragmentFunction,1);
-    //[[RenderPipelineDescriptor alloc] init];
+    
+    RenderEncoderCode::SetVertexDescriptor(&pipelineDescriptor,&vertexDescriptor);
+    
     pipelineDescriptor.vertex_function = vertexFunction;
     pipelineDescriptor.fragment_function = fragmentFunction;
     //pipelineDescriptor.vertexDescriptor = vertexDescriptor;
     
     pipelineDescriptor.sample_count = 1;//renderpassdesc->sample_count;
-    //pipelineDescriptor.colorAttachments[0].pixelFormat = //renderpassdesc->color_pixel_format;
-    /*
-    pipelineDescriptor.colorAttachments[0].blendingEnabled = true;
-    pipelineDescriptor.colorAttachments[0].rgbBlendOperation = BlendOperationAdd;
-    pipelineDescriptor.colorAttachments[0].alphaBlendOperation = BlendOperationAdd;
-    pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = BlendFactorSourceAlpha;
-    pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = BlendFactorSourceAlpha;
-    pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
-    pipelineDescriptor.colorAttachments[0].destinationAlphaBlendFactor = BlendFactorOneMinusSourceAlpha;
-    pipelineDescriptor.depthAttachmentPixelFormat = renderpassdesc->depth_pixel_format;
+    
+    Drawable d = RenderEncoderCode::GetDefaultDrawableFromView();
+
+    pipelineDescriptor.color_attachments.i[0].pixelFormat = d.texture.descriptor.pixelFormat;//renderpassdesc->color_pixel_format;
+   //pipelineDescriptor.color_attachments.i[0].
+    pipelineDescriptor.color_attachments.i[0].blendingEnabled = true;
+    pipelineDescriptor.color_attachments.i[0].rgbBlendOperation = BlendOperationAdd;
+    pipelineDescriptor.color_attachments.i[0].alphaBlendOperation = BlendOperationAdd;
+    pipelineDescriptor.color_attachments.i[0].sourceRGBBlendFactor = BlendFactorSourceAlpha;
+    pipelineDescriptor.color_attachments.i[0].sourceAlphaBlendFactor = BlendFactorSourceAlpha;
+    pipelineDescriptor.color_attachments.i[0].destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
+    pipelineDescriptor.color_attachments.i[0].destinationAlphaBlendFactor = BlendFactorOneMinusSourceAlpha;
+    pipelineDescriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;//renderpassdesc->depth_pixel_format;
      
-    pipelineDescriptor.stencilAttachmentPixelFormat = renderpassdesc->stencil_pixel_format;
-    */
+    pipelineDescriptor.stencilAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;//renderpassdesc->stencil_pixel_format;
+   
     //    RenderPipelineState renderPipelineState = [device newRenderPipelineStateWithDescriptor:pipelineDescriptor error:&error];
     RenderPipelineState renderPipelineState = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(pipelineDescriptor);
     
@@ -145,13 +186,18 @@ bool ImGui_ImplMetal_Init(RenderDevice device,RenderPassDescriptor* renderpassde
     g_sharedMetalContext = {};    
     
 //Create a reasonably sized buffer.
-    buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
-    index_buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
+    buffer = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeManaged);
+    index_buffer = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeManaged);
+    //buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
+    //index_buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
 
     //ImGui_ImplMetal_CreateDeviceObjects(device);
-
     render_pipeline_state = InitRenderPipelineStateForFramebufferDescriptor(&g_sharedMetalContext,device);
-        
+    DepthStencilDescription depthStencilDescriptor = RendererCode::CreateDepthStencilDescriptor();
+    depthStencilDescriptor.depthWriteEnabled = false;
+    depthStencilDescriptor.depthCompareFunction = compare_func_always;
+    g_sharedMetalContext.depthStencilState = RendererCode::NewDepthStencilStateWithDescriptor(&depthStencilDescriptor);
+    MakeFontTextureWithDevice(RendererCode::device);
     return true;
 }
 
@@ -221,38 +267,9 @@ void MakeDeviceObjectsWithDevice(RenderDevice device)
     self.depthStencilState = NewDepthStencilStateWithDescriptor(&depthStencilDescriptor);
 }
 */
-// We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
-// In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
-// However, using a shader designed for 1-channel texture would make it less obvious to use the ImTextureID facility to render users own textures.
-// You can make that change in your implementation.
-void MakeFontTextureWithDevice(MetalContext* context,RenderDevice device)
-{
-    ImGuiIO &io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    TextureDescriptor textureDescriptor = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm, width, height, false);// Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm,width,height,false);
-
-    textureDescriptor.usage = TextureUsageShaderRead;
-#if TARGET_OS_OSX
-    textureDescriptor.storageMode = StorageModeManaged;
-#else
-    textureDescriptor.storageMode = StorageModeShared;
-#endif
-    
-    Texture texture = RendererCode::NewTextureWithDescriptor(textureDescriptor);
-    RenderRegion region =  {float3(0, 0,0), float2(width, height)};
-        
-    RenderGPUMemory::ReplaceRegion(texture, region, 0,pixels , width * 4);
-    // ReplaceRegion(texture,region,0,pixels,width * 4);
-//    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:pixels bytesPerRow:width * 4];
-    context->font_texture = texture;
-    //ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->TexID = context->font_texture.state; // ImTextureID == void*
-}
 
 
-void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncoder* command_encoder)
+void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncoder* command_encoder,RenderPassDescriptor* passdesc)
 {
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO &io = ImGui::GetIO();
@@ -312,10 +329,14 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
 //    MetalBuffer *vertexBuffer = [self dequeueReusableBufferOfLength:vertexBufferLength device:commandBuffer.device];
 //    MetalBuffer *indexBuffer = [self dequeueReusableBufferOfLength:indexBufferLength device:commandBuffer.device];
     //GPUBuffer vertex_buffer;
-    GPUBuffer index_buffer;
     
+    Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
+    //if(current_drawable.state)
+    //{
+        RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,passdesc,0);
+        RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(passdesc,0);
     //RenderPipelineState renderPipelineState = render_pipeline_state;//RenderPipelineStateForFrameAndDevice(context,device);
-    RenderEncoderCode::SetRenderPipelineState(command_encoder,&render_pipeline_state);
+    RenderEncoderCode::SetRenderPipelineState(command_encoder,render_pipeline_state.state);
 
     RenderEncoderCode::SetVertexBuffer(command_encoder,&buffer,0,0);
 //        [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
@@ -349,8 +370,8 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                 {
                     // Apply scissor/clipping rectangle
                     ScissorRect scissorRect =
-                        { (int)clip_rect.x,
-                          (int)clip_rect.y,
+                        { (int)clip_rect.y,
+                          (int)clip_rect.x,
                           (int)(clip_rect.z - clip_rect.x),
                           (int)(clip_rect.w - clip_rect.y) };
                     //[commandEncoder setScissorRect:scissorRect];
@@ -371,7 +392,7 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                                               indexBuffer:indexBuffer.buffer
                                         indexBufferOffset:indexBufferOffset + idx_buffer_offset];
 */
-                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer,primitive_type_triangle,pcmd->ElemCount,indexBufferOffset + idx_buffer_offset);
+                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer,primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
                 }
             }
             idx_buffer_offset += pcmd->ElemCount * sizeof(ImDrawIdx);
@@ -401,8 +422,8 @@ void ImGui_ImplOSX_NewFrame()
 }
 
 // Metal Render function.
-void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, void* commandBuffer, RenderCommandEncoder* commandEncoder)
+void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, void* commandBuffer, RenderCommandEncoder* commandEncoder,RenderPassDescriptor* passdesc)
 {
-    RenderDrawData(draw_data,commandBuffer,commandEncoder);
+    RenderDrawData(draw_data,commandBuffer,commandEncoder,passdesc);
 }
 #endif

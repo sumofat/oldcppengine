@@ -36,6 +36,7 @@ namespace Engine
     //NOTE(Ray):Here we init all the engine memory and ints "Subsystems"
     void Init(float2 window_dim)
     {
+        RenderCache::Init(3000);
         PlatformOutput(engine_log,"Engine Init Begin\n");
         ps.window.dim = window_dim;
         ps.window.is_full_screen_mode = false;
