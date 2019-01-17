@@ -20,11 +20,13 @@ struct MetalContext
 {
     DepthStencilState depthStencilState;
 };
-
+static DispatchSemaphoreT semaphore;
 static MetalContext g_sharedMetalContext;
 static RenderPipelineState render_pipeline_state;
-static GPUBuffer buffer;
-static GPUBuffer index_buffer;
+static int current_buffer = 0;
+static int buffer_count = 3;
+static GPUBuffer buffer[3];
+static GPUBuffer index_buffer[3];
 #pragma mark - ImGui API implementation
 // We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
 // In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
@@ -36,8 +38,7 @@ void MakeFontTextureWithDevice(RenderDevice device)
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
-    TextureDescriptor textureDescriptor = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm, width, height, false);// Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm,width,height,false);
-    
+    TextureDescriptor textureDescriptor = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm, width, height, false);
     textureDescriptor.usage = TextureUsageShaderRead;
 #if TARGET_OS_OSX
     textureDescriptor.storageMode = StorageModeManaged;
@@ -49,10 +50,7 @@ void MakeFontTextureWithDevice(RenderDevice device)
     RenderRegion region =  {float3(0, 0,0), float2(width, height)};
     
     RenderGPUMemory::ReplaceRegion(texture, region, 0,pixels , width * 4);
-    // ReplaceRegion(texture,region,0,pixels,width * 4);
-    //    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:pixels bytesPerRow:width * 4];
     
-    //ImGuiIO& io = ImGui::GetIO();
     io.Fonts->TexID = texture.state; // ImTextureID == void*
 }
 
@@ -186,8 +184,12 @@ bool ImGui_ImplMetal_Init(RenderDevice device,RenderPassDescriptor* renderpassde
     g_sharedMetalContext = {};    
     
 //Create a reasonably sized buffer.
-    buffer = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeManaged);
-    index_buffer = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeManaged);
+    for(int i = 0;i < buffer_count;++i)
+    {
+        buffer[i] = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeShared);
+        index_buffer[i] = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeShared);
+    }
+    
     //buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
     //index_buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
 
@@ -198,79 +200,19 @@ bool ImGui_ImplMetal_Init(RenderDevice device,RenderPassDescriptor* renderpassde
     depthStencilDescriptor.depthCompareFunction = compare_func_always;
     g_sharedMetalContext.depthStencilState = RendererCode::NewDepthStencilStateWithDescriptor(&depthStencilDescriptor);
     MakeFontTextureWithDevice(RendererCode::device);
+    semaphore = RenderSynchronization::DispatchSemaphoreCreate(buffer_count);
     return true;
 }
-
-/*
-void ImGui_ImplMetal_Shutdown()
-{
-    ImGui_ImplMetal_DestroyDeviceObjects();
-}
-
-void ImGui_ImplMetal_NewFrame(RenderPassDescriptor *render_pass_desc)
-{
-    IM_ASSERT(g_sharedMetalContext != nil && "No Metal context. Did you call ImGui_ImplMetal_Init?");
-//    g_sharedMetalContext.framebufferDescriptor = InitWithRenderPassDescriptor(render_pass_desc);
-}
-*/
-
-
-/*
-bool ImGui_ImplMetal_CreateFontsTexture(id<MTLDevice> device)
-{
-    makeFontTextureWithDevice(g_sharedMetalContext,device);
-    ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->TexID = (__bridge void *)g_sharedMetalContext.fontTexture; // ImTextureID == void*
-    return (g_sharedMetalContext.fontTexture != nil);
-}
- 
-
-
-bool ImGui_ImplMetal_CreateDeviceObjects(RenderDevice device)
-{
-    //DepthStencilDescriptor *depthStencilDescriptor = CreateDepthStencilDescriptor();
-    //depthStencilDescriptor.depthWriteEnabled = NO;
-    //depthStencilDescriptor.depthCompareFunction = CompareFunctionAlways;
-    
-    ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->TexID = (__bridge void *)g_sharedMetalContext.fontTexture; // ImTextureID == void*
-    return true;
-}
- */
-
-/*
-FrameBufferDescriptor InitWithRenderPassDescriptor(RenderPassDescriptor* renderPassDescriptor)
-{
-    FrameBufferDescriptor result;
-//    if ((self = [super init])) 
-    {
-        result.sample_count = renderPassDescriptor.colorAttachments[0].texture.sampleCount;
-        result.color_pixel_format = renderPassDescriptor.colorAttachments[0].texture.pixelFormat;
-        result.depth_pixel_format = renderPassDescriptor.depthAttachment.texture.pixelFormat;
-        result.stencil_pixel_format = renderPassDescriptor.stencilAttachment.texture.pixelFormat;
-    }
-    return result;    
-}
-*/
 
 MetalContext Init()
 {
     MetalContext result = {};
     return result;    
 }
-/*
-void MakeDeviceObjectsWithDevice(RenderDevice device)
-{
-    DepthStencilDescriptor *depthStencilDescriptor = CreateDepthStencilDescriptor();
-    depthStencilDescriptor.depthWriteEnabled = NO;
-    depthStencilDescriptor.depthCompareFunction = CompareFunctionAlways;
-    self.depthStencilState = NewDepthStencilStateWithDescriptor(&depthStencilDescriptor);
-}
-*/
-
 
 void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncoder* command_encoder,RenderPassDescriptor* passdesc)
 {
+
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO &io = ImGui::GetIO();
     int fb_width = (int)(drawData->DisplaySize.x * io.DisplayFramebufferScale.x);
@@ -282,18 +224,7 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
     // Setup viewport, orthographic projection matrix
     // Our visible imgui space lies from draw_data->DisplayPos (top left) to
     // draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayMin is typically (0,0) for single viewport apps.
-/*
-    Viewport viewport = 
-    {   
-        .originX = 0.0,
-        .originY = 0.0,
-        .width = double(fb_width),
-        .height = double(fb_height),
-        .znear = 0.0,
-        .zfar = 1.0 
-    };
-*/
-    
+
     RenderEncoderCode::SetViewport(command_encoder,0.0f,0.0f,fb_width,fb_height,0.0f,1.0f);
 //    [commandEncoder setViewport:viewport];
     float L = drawData->DisplayPos.x;
@@ -322,37 +253,36 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
     }
 
     //TODO(Ray):Use a simpler buffer here no need for all of this.
-//    MetalBuffer *vertexBuffer = [self dequeueReusableBufferOfLength:vertexBufferLength device:commandBuffer.device];
-//    MetalBuffer *indexBuffer = [self dequeueReusableBufferOfLength:indexBufferLength device:commandBuffer.device];
-    //GPUBuffer vertex_buffer;
-    
-    //Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
-    //if(current_drawable.state)
-    //{
-    //    RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,passdesc,0);
-    //    RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(passdesc,0);
-    //RenderPipelineState renderPipelineState = render_pipeline_state;//RenderPipelineStateForFrameAndDevice(context,device);
+    //MetalBuffer *vertexBuffer = [self dequeueReusableBufferOfLength:vertexBufferLength device:commandBuffer.device];
+    //MetalBuffer *indexBuffer = [self dequeueReusableBufferOfLength:indexBufferLength device:commandBuffer.device];
+
     RenderEncoderCode::SetRenderPipelineState(command_encoder,render_pipeline_state.state);
 
     RenderEncoderCode::SetCullMode(command_encoder, cull_mode_none);
-    //    [commandEncoder setCullMode:CullModeNone];
-    //    [commandEncoder setDepthStencilState:g_sharedMetalContext.depthStencilState];
     RenderEncoderCode::SetDepthStencilState(command_encoder, &g_sharedMetalContext.depthStencilState);
-    RenderEncoderCode::SetVertexBuffer(command_encoder,&buffer,0,0);
-//        [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
+    RenderEncoderCode::SetVertexBuffer(command_encoder,&buffer[current_buffer],0,0);
+
     
     size_t vertexBufferOffset = 0;
     size_t indexBufferOffset = 0;
     ImVec2 pos = drawData->DisplayPos;
+    
+    RenderSynchronization::DispatchSemaphoreWait(&semaphore,YOYO_DISPATCH_TIME_FOREVER);
+    
+    RenderEncoderCode::AddCompletedHandler(command_buffer, [](void* arg)
+    {
+       DispatchSemaphoreT* sema = (DispatchSemaphoreT*)arg;
+       RenderSynchronization::DispatchSemaphoreSignal(sema);
+    }, &semaphore);
+    
     for (int n = 0; n < drawData->CmdListsCount; n++)
     {
         const ImDrawList* cmd_list = drawData->CmdLists[n];
         ImDrawIdx idx_buffer_offset = 0;
         
-        memcpy((char *)buffer.data + vertexBufferOffset, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy((char *)index_buffer.data + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
-        
-//        [commandEncoder setVertexBufferOffset:vertexBufferOffset atIndex:0];
+        memcpy((char *)buffer[current_buffer].data + vertexBufferOffset, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy((char *)index_buffer[current_buffer].data + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+
         RenderEncoderCode::SetVertexBufferOffset(command_encoder,vertexBufferOffset,0);
         
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
@@ -382,30 +312,27 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                     // Bind texture, Draw
                     if (pcmd->TextureId != NULL)
                     {
-//                        [commandEncoder setFragmentTexture:(__bridge id<Texture>)(pcmd->TextureId) atIndex:0];
                         Texture tex = {};
                         tex.state = pcmd->TextureId;
                         RenderEncoderCode::SetFragmentTexture(command_encoder,&tex,0);
                     }
-/*                        
-                    [commandEncoder drawIndexedPrimitives:PrimitiveTypeTriangle
-                                               indexCount:pcmd->ElemCount
-                                                indexType:sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32
-                                              indexBuffer:indexBuffer.buffer
-                                        indexBufferOffset:indexBufferOffset + idx_buffer_offset];
-*/
-                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer,primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
+                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer[current_buffer],primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
+                    
+                    
                 }
             }
             idx_buffer_offset += pcmd->ElemCount * sizeof(ImDrawIdx);
         }
         
+       
+
+        
         vertexBufferOffset += cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         indexBufferOffset += cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
     }
-
-    
+    current_buffer = (current_buffer + 1) % buffer_count;
 }
+
 static CFAbsoluteTime g_Time = 0.0;
 void ImGui_ImplOSX_NewFrame()
 {
