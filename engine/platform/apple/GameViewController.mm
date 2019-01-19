@@ -43,11 +43,7 @@ void OnIMGUIEvent(NSEvent* event)
             
            
 #if OSX
-            [self.view.window setBackgroundColor: NSColor.whiteColor];
-            [self.view.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-            [self.view.window setFrame:screenFrame display:YES];
-            [self.view.window toggleFullScreen:self];
-            [self.view setFrameSize:screenFrame.size];
+            
             //[self.view.window makeFirstResponder:self.view];
             //[self.view.window acceptsMouseMovedEvents];
             //[self.view.window setAcceptsMouseMovedEvents:YES];

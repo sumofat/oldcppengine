@@ -298,17 +298,12 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                 ImVec4 clip_rect = ImVec4(pcmd->ClipRect.x - pos.x, pcmd->ClipRect.y - pos.y, pcmd->ClipRect.z - pos.x, pcmd->ClipRect.w - pos.y);
                 if (clip_rect.x < fb_width && clip_rect.y < fb_height && clip_rect.z >= 0.0f && clip_rect.w >= 0.0f)
                 {
-                    // Apply scissor/clipping rectangle
-                    // Apply scissor/clipping rectangle
-                    
                     ScissorRect scissorRect =
                         { (int)clip_rect.x,
                           (int)clip_rect.y,
                           (int)(clip_rect.z - clip_rect.x),
                           (int)(clip_rect.w - clip_rect.y) };
-                    //[commandEncoder setScissorRect:scissorRect];
                     RenderEncoderCode::SetScissorRect(command_encoder,scissorRect);
-                                        
                     // Bind texture, Draw
                     if (pcmd->TextureId != NULL)
                     {
@@ -317,16 +312,10 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                         RenderEncoderCode::SetFragmentTexture(command_encoder,&tex,0);
                     }
                     RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer[current_buffer],primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
-                    
-                    
                 }
             }
             idx_buffer_offset += pcmd->ElemCount * sizeof(ImDrawIdx);
         }
-        
-       
-
-        
         vertexBufferOffset += cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         indexBufferOffset += cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
     }
