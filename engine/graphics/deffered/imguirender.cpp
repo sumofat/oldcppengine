@@ -41,7 +41,6 @@ namespace IMGUIRender
         rp_ca_desc.description.loadAction = LoadActionLoad;
         rp_ca_desc.description.storeAction = StoreActionStore;
         
-        
         RenderEncoderCode::AddRenderPassColorAttachment(&renderpass_desc,&rp_ca_desc);
         RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&renderpass_desc,0);
         
@@ -50,7 +49,6 @@ namespace IMGUIRender
         int no_os_passes = 1;
         RenderPass* subpass = RenderPassCode::AddRenderPass(&pass->pass_buffer, no_os_passes, 0,0,&renderpass_desc);
         subpass->viewport = float4(0,0,ps->window.dim.x(),ps->window.dim.y());
-
     }
 
     void ExecutePass(RenderPassBuffer* buffer,void* c_buffer,void* global_pass_params)
@@ -63,29 +61,12 @@ namespace IMGUIRender
         io.DisplaySize.y = dim.y();//view.bounds.size.height;
 
         float frame_buffer_scale = RendererCode::display_scale_factor;
-#if TARGET_OS_OSX
-        //CGFloat framebufferScale = view.window.screen.backingScaleFactor ?: NSScreen.mainScreen.backingScaleFactor;
-        //float frameBufferScale = RendererCode::display_scale_factor;
-#else
-       // CGFloat framebufferScale = view.window.screen.scale ?: UIScreen.mainScreen.scale;
-#endif
         io.DisplayFramebufferScale = ImVec2(frame_buffer_scale, frame_buffer_scale);
-
         io.DeltaTime = 1 / float(RendererCode::preferred_frame_per_second ?: 60);
-    
-//        commandBuffer = [self.commandQueue commandBuffer];
-//        commandBuffer = RenderEncoderCode::CommandBuffer();
-        
-
-    
-//        renderPassDescriptor = view.currentRenderPassDescriptor;
-//        if (renderPassDescriptor != nil)
         RenderPass* pass;
         //Here  you will do any setup for all the passes...
         while(pass = YoyoIterateVector(&buffer->buffer,RenderPass))
         {
-//NOTE(Ray):We wont be clearing the color because we are loading and drawing on top
-//            renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
 
             Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
             if(current_drawable.state)

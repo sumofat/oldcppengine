@@ -12,3 +12,5 @@ engine/graphics/deffered/\.#imgui_impl\.cpp
 engine/platform/apple/\.#AppDelegate\.h
 
 engine/platform/apple/\.#GameViewController\.mm
+
+engine/external/fbx/

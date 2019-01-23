@@ -3,10 +3,7 @@
 //We want the game to link to the engine as a dll or static lib.
 
 #include "engine.h"
-
-
 #include "input/input.cpp"
-
 
 #ifdef ENGINEIMPL
 
@@ -26,6 +23,10 @@
 
 #include "editor/editor.h"
 
+
+
+#include "asset/AssetSystem.cpp"
+
 extern "C" void gameInit();
 extern "C" void gameUpdate();
  
@@ -38,10 +39,25 @@ namespace Engine
     //NOTE(Ray):Here we init all the engine memory and ints "Subsystems"
     void Init(float2 window_dim)
     {
+        //order of importantce
+        //TODO(Ray):FBXSDK inclusion .. set up precompiled headers
+        AssetSystem::Init();
+        //TODO(Ray):Go ahead and set up physx and fmod see how compile times will fair    
+        //TODO(Ray):AssetSystem:loading serializing meta prefabs shaders loading etc etc..
+
+        //TODO(Ray):Graphics:Deffered needs some assets first.
+        //TODO(Ray):Physx and Audio integration
+        //TODO(Ray):Multi threading facilities
+        //TODO(Ray):Memory tracking system
+        //TODO(Ray):Profiling System
+        //TODO(Ray):Networking 
+        
         APIFileOptions::data_dir = "/data/";
         //TODO(Ray):Set Asset or file system to hold this 
 //        es.base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);
         StringsHandler::Init();
+
+        //NOTE(Ray):Probably move this to a more renderer specific area
         RenderCache::Init(3000);
         PlatformOutput(engine_log,"Engine Init Begin\n");
         ps.window.dim = window_dim;

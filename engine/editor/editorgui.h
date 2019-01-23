@@ -57,43 +57,28 @@ namespace EditorGUI
                     ImGui::EndMenuBar();
                 }
                 
-                dir_files_result result = PlatformGetAllAssetFilesInDir(Directory_None,&StringsHandler::transient_string_memory,true);
+                dir_files_result result = PlatformGetAllAssetFilesInDir(Directory_None,&StringsHandler::transient_string_memory,true,true);
                 int i =0;
                 file_info* f_info;
                 while ((f_info = IterateVector(&result.Files, file_info)))
                 {
 //                if(f_info->Name.String)
 //                    ImGui::Selectable(f_info->Name.String);
+                    //StripExtension(<#Yostr *FileNameOrPathWithExtension#>, <#MemoryArena *StringMem#>)
+                    //Yostr file_name = StripExtension(<#Yostr *FileNameOrPathWithExtension#>, <#MemoryArena *StringMem#>)
                     if(ImGui::Button(f_info->Name.String, ImVec2(-1.0f, 0.0f)))
                     {
                         LoadedTexture tex;
-//                        Yostr* base_path_to_data = BuildPathToAssets(&StringsHandler::transient_string_memory, Directory_None);
-//                        Yostr* final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(f_info->Name.String,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
-                        
-//                        YoyoSpriteBatchRenderer::GetImageFromDisk(final_path->String,&tex);
-                        tex = YoyoSpriteBatchRenderer::GetLoadedImage(f_info->Name.String,&StringsHandler::transient_string_memory);
-                        if(tex.texels)
+                        if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))
                         {
-                            tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
-                            
                             current_texture = tex;
-                            
-                            current_tex_id = tex.texture.state;
+                            current_tex_id = tex.texture.state;                            
                         }
                     }
 //                ImGui::Text("%04d: %s", i++,f_info->Name.String);
 //                    PlatformOutput(true, f_info->Name.String);
                 }
                 FreeVectorMem(&result.Files);
-/*
-  for (int i = 0; i < 100; i++)
-  {
-  char buf[32];
-  sprintf(buf, "%03d", i);
-
-  ImGui::NextColumn();
-  }
-*/
                 ImGui::EndChild();
                 ImGui::PopStyleVar();
             }
@@ -106,10 +91,13 @@ namespace EditorGUI
                 ImTextureID my_tex_id = current_tex_id;//io.Fonts->TexID;
                 float my_tex_w = current_texture.dim.x();//(float)io.Fonts->TexWidth;
                 float my_tex_h = current_texture.dim.y();//(float)io.Fonts->TexHeight;
+                float ww = ImGui::GetWindowWidth() - 15;
+                float scale = ww / my_tex_w;
                 
                 ImGui::Text("%.0fx%.0f", my_tex_w, my_tex_h);
                 ImVec2 pos = ImGui::GetCursorScreenPos();
-                ImGui::Image(my_tex_id, ImVec2(my_tex_w, my_tex_h), ImVec2(0,0), ImVec2(1,1), ImColor(255,255,255,255), ImColor(255,255,255,128));
+                
+                ImGui::Image(my_tex_id, ImVec2(my_tex_w * scale, my_tex_h * scale), ImVec2(0,0), ImVec2(1,1), ImColor(255,255,255,255), ImColor(255,255,255,128));
                 if (ImGui::IsItemHovered())
                 {
                     ImGui::BeginTooltip();

@@ -3,7 +3,6 @@
 
 #include "yoyo/RendererInclude.h"
 
-
 #include "input.h"
 #include "platform/PlatformState.h"
 #include "graphics/camera.h"
@@ -12,7 +11,14 @@
 
 #include "graphics/deffered/deffered.h"
 
+#include "asset/AssetSystem.h"
 
+#include "external/fbx/fbxsdk.h"
+
+#include "external/rapidjson/document.h"
+#include "external/rapidjson/writer.h"
+#include "external/rapidjson/stringbuffer.h"
+#include "external/rapidjson/prettywriter.h"
 
 namespace Engine
 {

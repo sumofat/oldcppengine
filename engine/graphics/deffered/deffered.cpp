@@ -78,12 +78,15 @@ namespace DefferedRenderer
     
     void Init(RenderCamera* cam,PlatformState* ps)
     {
+//TODO(Ray):Add a perlim pass for the editor that will do any rendering to a texture target
+        //for displaying to the uis that we will need to pass to imgui
+        //InitRenderToTexturesForUI();
+
         passes.buffer = YoyoInitVector(10, RenderPassBuffer, false);
         InitPerProjPass(cam, ps, &gbufferpass);
         YoyoPushBack(&passes.buffer, gbufferpass);
 
         //imgui
-        
         IMGUIRender::Init(&imguipass,ps);
         YoyoPushBack(&passes.buffer, imguipass);
     }
