@@ -62,18 +62,22 @@ namespace EditorGUI
                 file_info* f_info;
                 while ((f_info = IterateVector(&result.Files, file_info)))
                 {
-//                if(f_info->Name.String)
-//                    ImGui::Selectable(f_info->Name.String);
-                    //StripExtension(<#Yostr *FileNameOrPathWithExtension#>, <#MemoryArena *StringMem#>)
-                    //Yostr file_name = StripExtension(<#Yostr *FileNameOrPathWithExtension#>, <#MemoryArena *StringMem#>)
+
                     if(ImGui::Button(f_info->Name.String, ImVec2(-1.0f, 0.0f)))
                     {
                         LoadedTexture tex;
-                        if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))
+                        Yostr* file_ext = GetExtension(&f_info->Name,&StringsHandler::transient_string_memory,false);
+                        MetaFileType::Type type = MetaFiles::GetFileExtensionType(file_ext);
+                        if(MetaFileType::PNG == type || MetaFileType::PSD == type)
                         {
-                            current_texture = tex;
-                            current_tex_id = tex.texture.state;                            
+                            if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))
+                            {
+                                current_texture = tex;
+                                current_tex_id = tex.texture.state;
+                            }
+                            //result = CreateDefaultModelMetaFile(file,model);
                         }
+                       
                     }
 //                ImGui::Text("%04d: %s", i++,f_info->Name.String);
 //                    PlatformOutput(true, f_info->Name.String);
@@ -84,7 +88,7 @@ namespace EditorGUI
             }
             
             ImGui::Separator();//--------
-            
+
 //            if (ImGui::TreeNode("Images"))
             {
                 ImGuiIO& io = ImGui::GetIO();

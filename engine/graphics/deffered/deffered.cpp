@@ -19,13 +19,16 @@ namespace DefferedRenderer
     RenderPassBuffer overlay_pass_buffer;
     RenderPassBuffer imgui_pass_buffer;//editor ui 
 
+
+    GPUBuffer uniform_buffer;
+
     void InitPerProjPass(RenderCamera* cam,PlatformState* ps,DefferedRenderPass* pass)
     {
         RenderPassCode::InitRenderPass(&pass->pass_buffer,1,RenderPassCode::ExecuteRenderPasses);
         RenderCommandBuffer command_buffer;
         RenderCommandCode::InitRenderCommand(&command_buffer,cam,sizeof(RenderWithMaterialCommand),0,RenderCommandCode::ExecuteCommands,(void*)&pass->material);
         
-        //2. Add a Pass to RenderPass
+        //2.Add a Pass to RenderPass
         //first create a depth state
         TextureDescriptor depth_texture_desc = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatDepth32Float_Stencil8,ps->window.dim.x(),ps->window.dim.y(),false);
         depth_texture_desc.usage       = TextureUsageRenderTarget;
@@ -62,8 +65,11 @@ namespace DefferedRenderer
         pass->pass_command_buffer = RenderPassCode::CreateRenderPassCommandBuffer(subpass, &command_buffer);
         
         cam->projection_matrix = init_pers_proj_matrix(ps->window.dim,cam->fov,cam->near_far_planes);
-        float3 cam_p = float3(0,2,5);//Parametize init p
+        float3 cam_p = float3(0,0,0);//Parametize init p
         cam->matrix = set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
+
+        //Default uniform_buffer
+        uniform_buffer = RenderGPUMemory::NewBufferWithLength(sizeof(Uniforms),ResourceCPUCacheModeDefaultCache);
     }
     
     //TODO(Ray):Create a render quad pass able to render into any quad
@@ -78,7 +84,7 @@ namespace DefferedRenderer
     
     void Init(RenderCamera* cam,PlatformState* ps)
     {
-//TODO(Ray):Add a perlim pass for the editor that will do any rendering to a texture target
+//TODO(Ray):Add a perliminary pass for the editor that will do any rendering to a texture target
         //for displaying to the uis that we will need to pass to imgui
         //InitRenderToTexturesForUI();
 

@@ -10,6 +10,8 @@ namespace AssetSystem
     //ModelAsset* LoadModel(char* file_name,PlatformState* ps);
     
     bool AddOrGetTexture(Yostr path,LoadedTexture* result);
+    bool FBXSDKLoadModel(char* file_path,ModelAsset* result);
+    void UploadModelAssetToGPU(ModelAsset* ma);
 }
 
 //#endif

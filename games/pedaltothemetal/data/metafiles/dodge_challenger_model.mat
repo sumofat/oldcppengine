@@ -1,0 +1,309 @@
+{
+    "model_file": "dodge_challenger_model",
+    "Materials": [
+        {
+            "name": "Body.002",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Body",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Wheel1_graphics",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Wheel3_graphics",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Wheel2_graphics",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Wheel0_graphics",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Body.001",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RearLight",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Interior",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Glasses",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Chassis",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "BrakeDisk3",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "BrakeDisk1",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "BrakeDisk2",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "BrakeDisk0",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Roller",
+            "base_color": [
+                1,
+                1,
+                1,
+                1
+            ],
+            "textures": [],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        }
+    ]
+}

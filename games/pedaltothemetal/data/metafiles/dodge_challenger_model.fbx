@@ -1,0 +1,341 @@
+{
+    "Mesh": "/Users/ray.garner/Library/Developer/Xcode/DerivedData/pedaltothemetal-gxjvfeawbnommrcbotcusexrecex/Build/Products/Debug/engine_runtime_app.app/Contents/Resources/data/dodge_challenger_model.fbx",
+    "Materials": [
+        {
+            "name": "\u0000",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "@",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "PÀ¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "PÀ¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "PÀ¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "PÀ¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "€²¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "€²¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "€²¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "€²¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        },
+        {
+            "name": "PÀ¿ï",
+            "base_color": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "textures": [
+                "kart.png"
+            ],
+            "shader": {
+                "vs": "diffuse_vs",
+                "ps": "diffuse_fs",
+                "slots": [
+                    {
+                        "id": 0
+                    }
+                ]
+            }
+        }
+    ]
+}

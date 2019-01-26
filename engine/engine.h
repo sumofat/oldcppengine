@@ -11,14 +11,11 @@
 
 #include "graphics/deffered/deffered.h"
 
+#include "asset/MetaFiles.h"
 #include "asset/AssetSystem.h"
 
-#include "external/fbx/fbxsdk.h"
-
-#include "external/rapidjson/document.h"
-#include "external/rapidjson/writer.h"
-#include "external/rapidjson/stringbuffer.h"
-#include "external/rapidjson/prettywriter.h"
+#define FBXSDK_SHARED
+#include <fbxsdk.h>
 
 namespace Engine
 {

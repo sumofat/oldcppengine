@@ -5,6 +5,7 @@ struct DefferedRenderPass
     RenderPassBuffer pass_buffer;
     RenderCommandBuffer* pass_command_buffer;//s
     RenderMaterial material;
+    
 };
 
 struct DefferedRenderPassBuffer
@@ -30,6 +31,8 @@ namespace DefferedRenderer
     extern RenderPassBuffer ui_pass_buffer;
     extern RenderPassBuffer overlay_pass_buffer;
 
+    extern GPUBuffer uniform_buffer;
+    
     void Init(RenderCamera* cam,PlatformState* ps);
     //void InitPerProjPass(RenderCamera* cam,PlatformState* ps,DefferedRenderPass* pass);
     
