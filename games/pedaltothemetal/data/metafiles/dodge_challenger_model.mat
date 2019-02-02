@@ -1,309 +1,325 @@
 {
     "model_file": "dodge_challenger_model",
-    "Materials": [
+    "Meshes": [
         {
-            "name": "Body.002",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Body.002",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Body",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Body",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Wheel1_graphics",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Wheel1_graphics",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Wheel3_graphics",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Wheel3_graphics",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Wheel2_graphics",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Wheel2_graphics",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Wheel0_graphics",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Wheel0_graphics",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Body.001",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Body.001",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "RearLight",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "RearLight",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Interior",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Interior",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Glasses",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Glasses",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Chassis",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Chassis",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "BrakeDisk3",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "BrakeDisk3",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "BrakeDisk1",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "BrakeDisk1",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "BrakeDisk2",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "BrakeDisk2",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "BrakeDisk0",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "BrakeDisk0",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "name": "Roller",
-            "base_color": [
-                1,
-                1,
-                1,
-                1
-            ],
-            "textures": [],
-            "shader": {
-                "vs": "diffuse_vs",
-                "ps": "diffuse_fs",
-                "slots": [
-                    {
-                        "id": 0
-                    }
-                ]
-            }
+            "meshname": "Roller",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

@@ -28,6 +28,38 @@ namespace MetaFiles
         file_write_path = *AppendString(*asset_path,*CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
     }
     
+    ShaderValueType::Type GetShaderType(Yostr* type)
+    {
+        for(auto element : ShaderValueType::as_array)
+        {
+            if(CompareStringtoChar(*type,"float4"))
+            {
+                return ShaderValueType::float4;                                    
+            }
+            else if(CompareStringtoChar(*type,"float3"))
+            {
+                return ShaderValueType::float3;                                    
+            }
+            else if(CompareStringtoChar(*type,"float2"))
+            {
+                return ShaderValueType::float2;                                    
+            }
+            else if(CompareStringtoChar(*type,"float"))
+            {
+                return ShaderValueType::afloat;                                    
+            }
+            else if(CompareStringtoChar(*type,"texture"))
+            {
+                return ShaderValueType::texture;                                    
+            }
+            else
+            {
+                PlatformOutput(log_output,"No shader value of that type supported by the asset system.");                
+            }
+        }
+        return ShaderValueType::unknown;
+    }
+    
     MetaFileType::Type GetFileExtensionType(Yostr* file)
     {
         for(auto element : MetaFileType::as_array)
@@ -51,7 +83,7 @@ namespace MetaFiles
         }
         return MetaFileType::NONE;
     }
-    
+
     Yostr* GetMetaFile(Yostr* path_to_asset)
     {
         Yostr* result;
@@ -63,6 +95,94 @@ namespace MetaFiles
         result = CreateStringFromLength((char*)meta_file_result.Content,meta_file_result.ContentSize,&StringsHandler::transient_string_memory);
 //ok as long as we are an ascii string//1 byte = 1 character
         return result;
+    }
+
+    enum ShaderInputTypes
+    {
+        shader_input_float4,
+        shader_input_float3,
+        shader_input_float2,
+        shader_input_float,
+        shader_input_texture,
+    };
+    
+    Value AddInputEntryToArray(Yostr* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
+    {
+        Value input_object(kObjectType);
+        Value base_color_name(kObjectType);
+        base_color_name.SetString(name->String,(SizeType)name->Length,allocator);
+        input_object.AddMember("name",base_color_name,allocator);
+
+        Yostr* type_text;
+        switch(input_type)
+        {
+            case shader_input_float:
+            {
+                type_text = CreateStringFromLiteral("float",&StringsHandler::transient_string_memory);
+                Value base_color_type(kObjectType);
+                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                input_object.AddMember("type",base_color_type,allocator);
+                float final_value = *((float*)value);
+                Value base_color_value(kArrayType);
+                base_color_value.PushBack(final_value,allocator);
+                input_object.AddMember("value",base_color_value,allocator);
+            }break;
+            case shader_input_float2:
+            {
+                type_text = CreateStringFromLiteral("float2",&StringsHandler::transient_string_memory);
+                Value base_color_type(kObjectType);
+                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                input_object.AddMember("type",base_color_type,allocator);
+                float2 final_value = *((float2*)value);
+                Value base_color_value(kArrayType);
+                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator);
+                input_object.AddMember("value",base_color_value,allocator);
+            }break;
+            case shader_input_float3:
+            {
+                type_text = CreateStringFromLiteral("float3",&StringsHandler::transient_string_memory);
+                Value base_color_type(kObjectType);
+                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                input_object.AddMember("type",base_color_type,allocator);
+                float3 final_value = *((float3*)value);
+                Value base_color_value(kArrayType);
+                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator);
+                input_object.AddMember("value",base_color_value,allocator);
+            }break;
+            case shader_input_float4:
+            {
+                type_text = CreateStringFromLiteral("float4",&StringsHandler::transient_string_memory);
+                Value base_color_type(kObjectType);
+                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                input_object.AddMember("type",base_color_type,allocator);
+                float4 final_value = *((float4*)value);
+                Value base_color_value(kArrayType);
+                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator).PushBack(final_value.w(),allocator);
+                input_object.AddMember("value",base_color_value,allocator);
+            }break;
+            case shader_input_texture:
+            {
+#if 0
+                type_text = CreateStringFromLiteral("texture",&StringsHandler::transient_string_memory);
+                Value base_color_type(kObjectType);
+                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                input_object.AddMember("type",base_color_type,allocator);
+
+                Texture final_value = *((Texture*)value);
+                Value base_color_value(kArrayType);
+                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator).PushBack(final_value.w(),allocator);
+                input_object.AddMember("value",base_color_value,allocator);
+#endif
+                //Not supported yet.
+                Assert(false);
+            }break;
+            default:
+            {
+                //Unsupported type.
+                Assert(false);
+            }break;
+        }
+        return input_object;
     }
     
     Yostr* CreateDefaultModelMetaFile(Yostr* filepath,ModelAsset* model)
@@ -87,7 +207,7 @@ namespace MetaFiles
             Value n(namenoext->String, allocator);            
             d.AddMember("model_file", n, allocator);
 
-            Value materials_json(kArrayType);
+            Value meshes_json(kArrayType);
 
             for(int i = 0;i < model->meshes.count;++i)
             {
@@ -95,9 +215,51 @@ namespace MetaFiles
                 Value obj(kObjectType);
                 Value val(kObjectType);
                 val.SetString(ma->name.String,(SizeType)ma->name.Length,allocator);
-                obj.AddMember("name",val,allocator);
+                obj.AddMember("meshname",val,allocator);
 
-                //white as default color
+                //mesh object
+                //material object
+                //   name/link
+                //   inputs array
+                //       input object
+                //            type//float4 float3 float2 float texture
+                //            values
+                //            name
+                //TODO(Ray):These are linked by the user to the material
+                //thee are inputs to the material.
+                //When we create a material we have a list of inputs
+                //and when you link a material to a we gen a list of default inputs to those
+                //properties and also can be tweaked by the user via the ui. or directly here.
+                //preferably UI.
+                //Types supported are vectors of 2 , 3 , 4 and textures for now.
+                Value mat_obj(kObjectType);
+                Value mat_val(kObjectType);
+
+                Yostr* default_mat_string = CreateStringFromLiteral("default_material",&StringsHandler::transient_string_memory);
+                
+                mat_val.SetString(default_mat_string->String,(SizeType)default_mat_string->Length,allocator);
+                mat_obj.AddMember("material_name",mat_val,allocator);
+                
+                Value materials_array(rapidjson::kArrayType);
+                Value inputs_array(rapidjson::kArrayType);
+                //Set defaults as
+                //base color float4(1)
+                //textures empty
+
+                Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+                float4 bcvalue = float4(1);
+                Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+                
+                inputs_array.PushBack(input_object,allocator);
+                
+                mat_obj.AddMember("inputs",inputs_array,allocator);                
+
+                materials_array.PushBack(mat_obj,allocator);
+                
+                obj.AddMember("materials",materials_array, allocator); // 
+                //TODO(Ray):Create a default shader/materialdefinition
+
+/*                
                 rapidjson::Value float_4_as_array(rapidjson::kArrayType);
                 float_4_as_array.PushBack(1,allocator).PushBack(1,allocator).PushBack(1,allocator).PushBack(1,allocator);
                 obj.AddMember("base_color",float_4_as_array,allocator);
@@ -107,9 +269,8 @@ namespace MetaFiles
 //                tex_val.SetString(" ",(SizeType)8,allocator);
 //                texture_array.PushBack(tex_val,allocator);
                 obj.AddMember("textures",texture_array,allocator);
-
-                //TODO(Ray):Shaders shoud just be a path to shader def file
-                //with shaader name function names and slots available?
+                
+                //TODO(Ray):Shaders shoud be in the material file only
                 Value shader_obj(kObjectType);                
                 rapidjson::Value object(rapidjson::kObjectType);
 //TODO(Ray):Allow user to define default shader names
@@ -124,11 +285,11 @@ namespace MetaFiles
                 shader_obj.AddMember("slots",slot_array,allocator);
 
                 obj.AddMember("shader",shader_obj,allocator);
-
-                materials_json.PushBack(obj,allocator);
+*/
+                meshes_json.PushBack(obj,allocator);
             }
             
-            d.AddMember("Materials",materials_json , allocator);
+            d.AddMember("Meshes",meshes_json , allocator);
 
             // Convert JSON document to string
             rapidjson::StringBuffer strbuf;

@@ -651,6 +651,193 @@ namespace AssetSystem
         return bool_result;
     }
 
+//Take in a json doc here
+    RenderMaterial CreateDefaultMaterial()
+    {
+        //test material
+        RenderMaterial mat_result = {};
+        mat_result.type = -1;//default opaque
+        float4 base_color = float4(1);
+        mat_result.inputs.base_color = base_color;
+
+        RenderShader shader;
+        RenderShaderCode::InitShaderFromDefaultLib(&shader,"diffuse_vs","diffuse_color_fs");
+        ShaderTextureSlot slot;
+        slot.material_resource_id = 0;
+        shader.texture_slot_count = 1;
+        shader.texture_slots[0] = slot;
+
+        RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,0);
+        render_pipeline_descriptor.label = "test";
+        render_pipeline_descriptor.vertex_function = shader.vs_object;
+        render_pipeline_descriptor.fragment_function = shader.ps_object;
+        render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        render_pipeline_descriptor.stencilAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        mat_result.shader = shader;
+
+        //Vertex descriptions and application
+        //TODO(Ray):So now we are going to return a vertex descriptor of our own and handle it
+        //than set it back and let teh api do the translation for us. Thats the pattern here for pipeline
+        //state creation... than we will do serialization to the pipeline desc for
+        //pre creation of our pipeline states to save on load times and perfs if need be. but can save that
+        //for much later stages.
+
+        //TODO(Ray):Introspect the shader and build this automagically from the introspected shader
+        //source.  We can get the datatypes inputs to the vertex function from the shader.
+        VertexDescriptor vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
+        VertexAttributeDescriptor vad;
+        vad.format = VertexFormatFloat3;
+        vad.offset = 0;
+        vad.buffer_index = 0;
+        VertexAttributeDescriptor n_ad;
+        n_ad.format = VertexFormatFloat3;
+        n_ad.offset = 0;
+        n_ad.buffer_index = 1;
+        VertexAttributeDescriptor uv_ad;
+        uv_ad.format = VertexFormatFloat2;
+        uv_ad.offset = 0;
+        uv_ad.buffer_index = 2;
+        VertexBufferLayoutDescriptor vbld;
+        vbld.step_function = step_function_per_vertex;
+        vbld.step_rate = 1;
+        vbld.stride = 12;
+        VertexBufferLayoutDescriptor n_bld;
+        n_bld.step_function = step_function_per_vertex;
+        n_bld.step_rate = 1;
+        n_bld.stride = 12;
+        VertexBufferLayoutDescriptor uv_bld;
+        uv_bld.step_function = step_function_per_vertex;
+        uv_bld.step_rate = 1;
+        uv_bld.stride = 8;
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,n_ad,n_bld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
+        RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
+            
+/*
+  if(mat_result.type == 1)//transparent set blending
+  {
+  RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
+  RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
+  rad.writeMask = ColorWriteMaskAll;
+  rad.blendingEnabled = true;
+  rad.destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
+  rad.destinationAlphaBlendFactor = BlendFactorOne;
+  rad.sourceRGBBlendFactor = BlendFactorSourceAlpha;
+  rad.sourceAlphaBlendFactor = BlendFactorOne;
+  render_pipeline_descriptor.color_attachments.i[0] = rad;                    
+  }
+*/
+
+//Create pipeline states    
+        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
+        mat_result.pipeline_state = pipeline_state;
+
+//create depth states            
+        DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
+        depth_desc.depthWriteEnabled = true;
+        depth_desc.depthCompareFunction = compare_func_less;
+        DepthStencilState depth_state = RendererCode::NewDepthStencilStateWithDescriptor(&depth_desc);
+        mat_result.depth_stencil_state = depth_state;
+            
+//            mat_result.texture_slots[mat_result.texture_count] = uploaded_texture;
+//            mat_result.texture_count++;                   
+//        test_material = mat_result;
+
+        //NOTE(Ray):Probably move this to a more renderer specific area
+        return mat_result;
+    }
+    
+//Take in a json doc here and shaders infer the vertex attributews from those.
+    //also all inputs and types need to take in here and pass down to rendering api about
+    //our data.
+    RenderMaterial CreateDefaultQuadMaterial()
+    {
+        //test material
+        RenderMaterial mat_result = {};
+        mat_result.type = -1;//default opaque
+        float4 base_color = float4(1);
+        mat_result.inputs.base_color = base_color;
+
+        RenderShader shader;
+        RenderShaderCode::InitShaderFromDefaultLib(&shader,"diffuse_composite_vs","diffuse_composite_color_fs");
+        ShaderTextureSlot slot;
+        slot.material_resource_id = 0;
+        shader.texture_slot_count = 1;
+        shader.texture_slots[0] = slot;
+
+        RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,0);
+        render_pipeline_descriptor.label = "test";
+        render_pipeline_descriptor.vertex_function = shader.vs_object;
+        render_pipeline_descriptor.fragment_function = shader.ps_object;
+        render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        render_pipeline_descriptor.stencilAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        mat_result.shader = shader;
+
+        //Vertex descriptions and application
+        //TODO(Ray):So now we are going to return a vertex descriptor of our own and handle it
+        //than set it back and let teh api do the translation for us. Thats the pattern here for pipeline
+        //state creation... than we will do serialization to the pipeline desc for
+        //pre creation of our pipeline states to save on load times and perfs if need be. but can save that
+        //for much later stages.
+
+        //TODO(Ray):Introspect the shader and build this automagically from the introspected shader
+        //source.  We can get the datatypes inputs to the vertex function from the shader.
+        VertexDescriptor vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
+        VertexAttributeDescriptor vad;
+        vad.format = VertexFormatFloat3;
+        vad.offset = 0;
+        vad.buffer_index = 0;
+        VertexAttributeDescriptor uv_ad;
+        uv_ad.format = VertexFormatFloat2;
+        uv_ad.offset = 0;
+        uv_ad.buffer_index = 2;
+
+        VertexBufferLayoutDescriptor vbld;
+        vbld.step_function = step_function_per_vertex;
+        vbld.step_rate = 1;
+        vbld.stride = 12;
+        VertexBufferLayoutDescriptor uv_bld;
+        uv_bld.step_function = step_function_per_vertex;
+        uv_bld.step_rate = 1;
+        uv_bld.stride = 8;
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
+        RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
+            
+/*
+  if(mat_result.type == 1)//transparent set blending
+  {
+  RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
+  RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
+  rad.writeMask = ColorWriteMaskAll;
+  rad.blendingEnabled = true;
+  rad.destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
+  rad.destinationAlphaBlendFactor = BlendFactorOne;
+  rad.sourceRGBBlendFactor = BlendFactorSourceAlpha;
+  rad.sourceAlphaBlendFactor = BlendFactorOne;
+  render_pipeline_descriptor.color_attachments.i[0] = rad;                    
+  }
+*/
+
+//Create pipeline states    
+        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
+        mat_result.pipeline_state = pipeline_state;
+
+//create depth states            
+        DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
+        depth_desc.depthWriteEnabled = true;
+        depth_desc.depthCompareFunction = compare_func_less;
+        DepthStencilState depth_state = RendererCode::NewDepthStencilStateWithDescriptor(&depth_desc);
+        mat_result.depth_stencil_state = depth_state;
+            
+//            mat_result.texture_slots[mat_result.texture_count] = uploaded_texture;
+//            mat_result.texture_count++;                   
+//        test_material = mat_result;
+
+        //NOTE(Ray):Probably move this to a more renderer specific area
+        return mat_result;
+    }
 };
 
 #endif

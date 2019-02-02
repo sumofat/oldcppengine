@@ -261,7 +261,6 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
     RenderEncoderCode::SetCullMode(command_encoder, cull_mode_none);
     RenderEncoderCode::SetDepthStencilState(command_encoder, &g_sharedMetalContext.depthStencilState);
     RenderEncoderCode::SetVertexBuffer(command_encoder,&buffer[current_buffer],0,0);
-
     
     size_t vertexBufferOffset = 0;
     size_t indexBufferOffset = 0;

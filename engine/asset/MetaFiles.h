@@ -15,9 +15,25 @@ namespace MetaFileType
     static const Type as_array[] = {FBX,PSD,PNG,NONE};
 };
 
+namespace ShaderValueType
+{
+    enum Type
+    {
+        float4,
+        float3,
+        float2,
+        afloat,
+        texture,
+        unknown,
+        COUNT
+    };
+    static const Type as_array[] = {float4,float3,float2,afloat,texture,unknown};
+};
+
 namespace MetaFiles
 {
     MetaFileType::Type GetFileExtensionType(Yostr* file);
+    ShaderValueType::Type GetShaderType(Yostr* type);
 }
 
 #define METAFILE_H

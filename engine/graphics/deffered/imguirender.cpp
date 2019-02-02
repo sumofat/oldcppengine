@@ -7,7 +7,7 @@ namespace IMGUIRender
     PlatformState* platform_state;
     RenderCommandEncoder renderEncoder;
     void ExecutePass(RenderPassBuffer* buffer,void* c_buffer,void* global_pass_params);
-    void Init(DefferedRenderPass* pass,PlatformState* ps)
+    void Init(DefferedRenderPass* pass,PlatformState* ps,Texture* texture)
     {
         //_commandQueue = [_device newCommandQueue];
         Assert(ps);
@@ -43,6 +43,9 @@ namespace IMGUIRender
         
         RenderEncoderCode::AddRenderPassColorAttachment(&renderpass_desc,&rp_ca_desc);
         RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&renderpass_desc,0);
+
+        RenderEncoderCode::SetRenderPassColorAttachmentTexture(texture,&renderpass_desc,0);
+        RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&renderpass_desc,0);
         
         ImGui_ImplMetal_Init(RendererCode::device, &renderpass_desc);
         
@@ -71,8 +74,8 @@ namespace IMGUIRender
             Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
             if(current_drawable.state)
             {
-                RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,&pass->desc,0);
-                RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&pass->desc,0);
+//                RenderEncoderCode::SetRenderPassColorAttachmentTexture(&current_drawable.texture,&pass->desc,0);
+//                RenderEncoderCode::SetRenderPassColorAttachmentDescriptor(&pass->desc,0);
                 
                 RenderCommandEncoder re = RenderEncoderCode::RenderCommandEncoderWithDescriptor(c_buffer,&pass->desc);
    //TODO(Ray):Add this to metalizer

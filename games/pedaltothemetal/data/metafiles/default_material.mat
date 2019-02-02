@@ -1,0 +1,20 @@
+
+{
+    "material_name":"default_material",
+    "shaders":[
+       {
+           "type":"vertex",
+           "name":"diffuse_vs",
+	   "input_slot":[
+	       {
+	          "name":"base_color",
+		  "type":"float4"
+	       },
+	       {
+	          "name":"base_texture",
+		  "type":"texture"
+	       }
+	   ]
+       }
+    ]
+}
