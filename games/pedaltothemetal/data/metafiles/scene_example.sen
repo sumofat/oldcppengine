@@ -1,0 +1,23 @@
+{
+  "name":"scene_example",
+  "nodes":
+   [
+      {
+          "name":"car",
+          "p":{"x":0,"y":0,"z":0},
+	  "s":{"x":1,"y":1,"z":1},
+	  "r":{"x":1,"y":1,"z":1,"w":1},
+	  "model":"dodge_challenger_model",
+          "nodes":
+	  [
+            {
+                "name":"carchild",
+		 "p":{"x":15,"y":15,"z":0},
+         	 "s":{"x":1,"y":1,"z":1},
+		 "r":{"x":1,"y":1,"z":1,"w":1},
+                 "model":"dodge_challenger_model",
+            }
+         ]
+      }
+   ]
+}

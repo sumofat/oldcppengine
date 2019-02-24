@@ -149,9 +149,9 @@ RenderPipelineState InitRenderPipelineStateForFramebufferDescriptor(MetalContext
     
     pipelineDescriptor.sample_count = 1;//renderpassdesc->sample_count;
     
-    Drawable d = RenderEncoderCode::GetDefaultDrawableFromView();
+    //Drawable d = RenderEncoderCode::GetDefaultDrawableFromView();
 
-    pipelineDescriptor.color_attachments.i[0].pixelFormat = d.texture.descriptor.pixelFormat;//renderpassdesc->color_pixel_format;
+    pipelineDescriptor.color_attachments.i[0].pixelFormat = PixelFormatBGRA8Unorm;//d.texture.descriptor.pixelFormat;//renderpassdesc->color_pixel_format;
    //pipelineDescriptor.color_attachments.i[0].
     pipelineDescriptor.color_attachments.i[0].blendingEnabled = true;
     pipelineDescriptor.color_attachments.i[0].rgbBlendOperation = BlendOperationAdd;

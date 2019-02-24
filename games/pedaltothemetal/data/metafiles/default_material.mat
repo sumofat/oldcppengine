@@ -9,12 +9,13 @@
 	       {
 	          "name":"base_color",
 		  "type":"float4"
-	       },
-	       {
-	          "name":"base_texture",
-		  "type":"texture"
 	       }
 	   ]
+       },
+       {
+           "type":"fragment",
+           "name":"diffuse_color_fs",
+	   "input_slot":[]
        }
     ]
 }

@@ -12,6 +12,9 @@ namespace AssetSystem
     bool AddOrGetTexture(Yostr path,LoadedTexture* result);
     bool FBXSDKLoadModel(char* file_path,ModelAsset* result);
     void UploadModelAssetToGPU(ModelAsset* ma);
+
+    RenderMaterial CreateMaterialFromDescription(Yostr* vs_name,Yostr* as_name,float4 base_color);
+    RenderMaterial CreateDefaultQuadMaterial();
 }
 
 //#endif

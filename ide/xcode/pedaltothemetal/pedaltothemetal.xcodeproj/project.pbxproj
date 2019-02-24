@@ -3454,7 +3454,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -3473,6 +3473,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
+					"-fno-objc-arc",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
@@ -3490,7 +3491,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = pedaltothemetal/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3503,6 +3504,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
+					"-fno-objc-arc",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
@@ -3538,6 +3540,7 @@
 					"-ObjC",
 					"-fno-threadsafe-statics",
 					"-stdlib=libc++",
+					"-fno-objc-arc",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

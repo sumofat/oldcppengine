@@ -14,7 +14,7 @@ namespace AssetSystem
     FbxManager* fbx_manager = NULL;
     FbxScene* fbx_scene = NULL;
 
-    bool print_fbx = true;
+    bool asset_system_log = false;
 
     Yostr* error_strings[1000];
     u32 error_count = 0;
@@ -25,10 +25,10 @@ namespace AssetSystem
         fbx_manager = FbxManager::Create();
         if (!fbx_manager)
         {
-            PlatformOutput(print_fbx, "Error: Unable to create FBX Manager!\n");
+            PlatformOutput(asset_system_log, "Error: Unable to create FBX Manager!\n");
             exit(1);
         }
-        else PlatformOutput(print_fbx, "Autodesk FBX SDK version %s\n", fbx_manager->GetVersion());
+        else PlatformOutput(asset_system_log, "Autodesk FBX SDK version %s\n", fbx_manager->GetVersion());
 
         //Create an IOSettings object. This object holds all import/export settings.
         FbxIOSettings* ios = FbxIOSettings::Create(fbx_manager, IOSROOT);
@@ -42,7 +42,7 @@ namespace AssetSystem
         fbx_scene = FbxScene::Create(fbx_manager, "My Scene");
         if (!fbx_scene)
         {
-            PlatformOutput(print_fbx, "Error: Unable to create FBX scene!\n");
+            PlatformOutput(asset_system_log, "Error: Unable to create FBX scene!\n");
             exit(1);
         }
     }
@@ -129,7 +129,7 @@ namespace AssetSystem
                 {
                     case FbxNodeAttribute::eMesh:
                     {
-                        PlatformOutput(print_fbx, "MeshNAME:: %s", current_node->GetName());
+                        PlatformOutput(asset_system_log, "MeshNAME:: %s", current_node->GetName());
                         const char* s = current_node->GetName();
                         node_name = *CreateStringFromLiteral((char*)s,&StringsHandler::string_memory);
                 
@@ -172,7 +172,7 @@ namespace AssetSystem
                         int vertexId = 0;
                         for (int pi = 0; pi < lPolygonCount; ++pi)
                         {
-                            PlatformOutput(print_fbx, "Start Poly ---------------\n");
+                            PlatformOutput(asset_system_log, "Start Poly ---------------\n");
                             for (int vi = 0; vi < lPolygonSize; vi++)
                             {
                                 u32 element_index = mesh->GetPolygonVertex(pi, vi);
@@ -193,7 +193,7 @@ namespace AssetSystem
                                 YoyoSetVectorElement(&vertex_vector, v_index + 1, &vertex.i[1]);
                                 YoyoSetVectorElement(&vertex_vector, v_index + 2, &vertex.i[2]);
 
-                                PlatformOutput(print_fbx, "Element :: %d Vertex:: x::%f y::%f z::%f  \n", final_element_index, vertex.x, vertex.y, vertex.z);
+                                PlatformOutput(asset_system_log, "Element :: %d Vertex:: x::%f y::%f z::%f  \n", final_element_index, vertex.x, vertex.y, vertex.z);
                                 int normal_count = mesh->GetElementNormalCount();
                                 for (int l = 0; l < normal_count; ++l)
                                 {
@@ -255,7 +255,7 @@ namespace AssetSystem
                                                 YoyoSetVectorElement(&normal_vector, index, &normal_input.i[0]);
                                                 YoyoSetVectorElement(&normal_vector, index + 1, &normal_input.i[1]);
                                                 YoyoSetVectorElement(&normal_vector, index + 2, &normal_input.i[2]);
-                                                PlatformOutput(print_fbx, " Normal:: x::%f y::%f z::%f  \n", normal[0], normal[1], normal[2]);
+                                                PlatformOutput(asset_system_log, " Normal:: x::%f y::%f z::%f  \n", normal[0], normal[1], normal[2]);
                                             }break;
                                             default:
                                             {
@@ -367,7 +367,7 @@ namespace AssetSystem
                                                 YoyoSetVectorElement(&tangent_vector, index + 1, &tangent.i[1]);
                                                 YoyoSetVectorElement(&tangent_vector, index + 2, &tangent.i[2]);
                                                 YoyoSetVectorElement(&tangent_vector, index + 3, &tangent.i[3]);
-                                                PlatformOutput(print_fbx, " Tangent:: x::%f y::%f z::%f w::%f  \n", f_tangent[0], f_tangent[1], f_tangent[2], f_tangent[3]);
+                                                PlatformOutput(asset_system_log, " Tangent:: x::%f y::%f z::%f w::%f  \n", f_tangent[0], f_tangent[1], f_tangent[2], f_tangent[3]);
                                             }break;
                                             default:
                                                 break; // other reference modes not shown here!
@@ -484,7 +484,7 @@ namespace AssetSystem
                                 vertexId++;
                             }
 
-                            PlatformOutput(print_fbx, "End Poly ---------------\n");
+                            PlatformOutput(asset_system_log, "End Poly ---------------\n");
                         }
                     }break;
                     default:
@@ -540,20 +540,20 @@ namespace AssetSystem
         if (!lImportStatus)
         {
             FbxString error = lImporter->GetStatus().GetErrorString();
-            PlatformOutput(print_fbx, "Call to FbxImporter::Initialize() failed.\n");
-            PlatformOutput(print_fbx, "Error returned: %s\n\n", error.Buffer());
+            PlatformOutput(asset_system_log, "Call to FbxImporter::Initialize() failed.\n");
+            PlatformOutput(asset_system_log, "Error returned: %s\n\n", error.Buffer());
 
             if (lImporter->GetStatus().GetCode() == FbxStatus::eInvalidFileVersion)
             {
-                PlatformOutput(print_fbx, "FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
-                PlatformOutput(print_fbx, "FBX file format version for file '%s' is %d.%d.%d\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
+                PlatformOutput(asset_system_log, "FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
+                PlatformOutput(asset_system_log, "FBX file format version for file '%s' is %d.%d.%d\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
             }
             return false;
         }
 
         if (lImporter->IsFBX())
         {
-            PlatformOutput(print_fbx, "FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
+            PlatformOutput(asset_system_log, "FBX file format version for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
             IOS_REF.SetBoolProp(IMP_FBX_MATERIAL, true);
             IOS_REF.SetBoolProp(IMP_FBX_TEXTURE, true);
             IOS_REF.SetBoolProp(IMP_FBX_LINK, true);
@@ -568,7 +568,7 @@ namespace AssetSystem
 
         if (!lStatus && lImporter->GetStatus().GetCode() == FbxStatus::ePasswordError)
         {
-            PlatformOutput(print_fbx, "Please enter password: ");
+            PlatformOutput(asset_system_log, "Please enter password: ");
             lPassword[0] = '\0';
             FBXSDK_CRT_SECURE_NO_WARNING_BEGIN
                 scanf("%s", lPassword);
@@ -579,7 +579,7 @@ namespace AssetSystem
             lStatus = lImporter->Import(fbx_scene);
             if (!lStatus && lImporter->GetStatus().GetCode() == FbxStatus::ePasswordError)
             {
-                PlatformOutput(print_fbx, "\nPassword is wrong, import aborted.\n");
+                PlatformOutput(asset_system_log, "\nPassword is wrong, import aborted.\n");
             }
         }
 
@@ -601,7 +601,7 @@ namespace AssetSystem
 
     bool FBXSDKLoadModel(char* file_path,ModelAsset* result)
     {
-        PlatformOutput(print_fbx, "TestLoading with FBXSDK");
+        PlatformOutput(asset_system_log, "TestLoading with FBXSDK");
         //ModelAsset result = {};
         bool is_success = false;
         result->model_name = *CreateStringFromLiteral(file_path, &StringsHandler::transient_string_memory);
@@ -651,6 +651,110 @@ namespace AssetSystem
         return bool_result;
     }
 
+#if 1
+    //Take in a json doc here
+    RenderMaterial CreateMaterialFromDescription(Yostr* vs_name,Yostr* as_name,float4 base_color)
+    {
+        //test material
+        RenderMaterial mat_result = {};
+        mat_result.type = -1;//default opaque
+//        float4 base_color = float4(1);
+        mat_result.inputs.base_color = base_color;
+        
+        RenderShader shader;
+        RenderShaderCode::InitShaderFromDefaultLib(&shader,vs_name->String,as_name->String);
+        ShaderTextureSlot slot;
+        slot.material_resource_id = 0;
+        shader.texture_slot_count = 1;
+        shader.texture_slots[0] = slot;
+        
+        RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,1);
+        render_pipeline_descriptor.label = "test";
+        render_pipeline_descriptor.vertex_function = shader.vs_object;
+        render_pipeline_descriptor.fragment_function = shader.ps_object;
+        render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        render_pipeline_descriptor.stencilAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
+        mat_result.shader = shader;
+        
+        //Vertex descriptions and application
+        //TODO(Ray):So now we are going to return a vertex descriptor of our own and handle it
+        //than set it back and let teh api do the translation for us. Thats the pattern here for pipeline
+        //state creation... than we will do serialization to the pipeline desc for
+        //pre creation of our pipeline states to save on load times and perfs if need be. but can save that
+        //for much later stages.
+        
+        //TODO(Ray):Introspect the shader and build this automagically from the introspected shader
+        //source.  We can get the datatypes inputs to the vertex function from the shader.
+        VertexDescriptor vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
+        VertexAttributeDescriptor vad;
+        vad.format = VertexFormatFloat3;
+        vad.offset = 0;
+        vad.buffer_index = 0;
+        VertexAttributeDescriptor n_ad;
+        n_ad.format = VertexFormatFloat3;
+        n_ad.offset = 0;
+        n_ad.buffer_index = 1;
+        VertexAttributeDescriptor uv_ad;
+        uv_ad.format = VertexFormatFloat2;
+        uv_ad.offset = 0;
+        uv_ad.buffer_index = 2;
+        VertexBufferLayoutDescriptor vbld;
+        vbld.step_function = step_function_per_vertex;
+        vbld.step_rate = 1;
+        vbld.stride = 12;
+        VertexBufferLayoutDescriptor n_bld;
+        n_bld.step_function = step_function_per_vertex;
+        n_bld.step_rate = 1;
+        n_bld.stride = 12;
+        VertexBufferLayoutDescriptor uv_bld;
+        uv_bld.step_function = step_function_per_vertex;
+        uv_bld.step_rate = 1;
+        uv_bld.stride = 8;
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,n_ad,n_bld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
+        RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
+        
+        RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
+        RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
+        rad.pixelFormat = PixelFormatBGRA8Unorm;
+        render_pipeline_descriptor.color_attachments.i[0] = rad;
+        
+        /*
+         if(mat_result.type == 1)//transparent set blending
+         {
+         RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
+         RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
+         rad.writeMask = ColorWriteMaskAll;
+         rad.blendingEnabled = true;
+         rad.destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
+         rad.destinationAlphaBlendFactor = BlendFactorOne;
+         rad.sourceRGBBlendFactor = BlendFactorSourceAlpha;
+         rad.sourceAlphaBlendFactor = BlendFactorOne;
+         render_pipeline_descriptor.color_attachments.i[0] = rad;
+         }
+         */
+        
+        //Create pipeline states
+        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
+        mat_result.pipeline_state = pipeline_state;
+        
+        //create depth states
+        DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
+        depth_desc.depthWriteEnabled = true;
+        depth_desc.depthCompareFunction = compare_func_less;
+        DepthStencilState depth_state = RendererCode::NewDepthStencilStateWithDescriptor(&depth_desc);
+        mat_result.depth_stencil_state = depth_state;
+        
+        //            mat_result.texture_slots[mat_result.texture_count] = uploaded_texture;
+        //            mat_result.texture_count++;
+        //        test_material = mat_result;
+        
+        //NOTE(Ray):Probably move this to a more renderer specific area
+        return mat_result;
+    }
+#endif
+    
 //Take in a json doc here
     RenderMaterial CreateDefaultMaterial()
     {
@@ -667,7 +771,7 @@ namespace AssetSystem
         shader.texture_slot_count = 1;
         shader.texture_slots[0] = slot;
 
-        RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,0);
+        RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,1);
         render_pipeline_descriptor.label = "test";
         render_pipeline_descriptor.vertex_function = shader.vs_object;
         render_pipeline_descriptor.fragment_function = shader.ps_object;
@@ -713,7 +817,12 @@ namespace AssetSystem
         RenderEncoderCode::AddVertexDescription(&vertex_descriptor,n_ad,n_bld);
         RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
         RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
-            
+
+        RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
+        RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
+        rad.pixelFormat = PixelFormatBGRA8Unorm;
+        render_pipeline_descriptor.color_attachments.i[0] = rad;
+        
 /*
   if(mat_result.type == 1)//transparent set blending
   {
@@ -760,7 +869,7 @@ namespace AssetSystem
         mat_result.inputs.base_color = base_color;
 
         RenderShader shader;
-        RenderShaderCode::InitShaderFromDefaultLib(&shader,"diffuse_composite_vs","diffuse_composite_color_fs");
+        RenderShaderCode::InitShaderFromDefaultLib(&shader,"composite_vs","composite_fs");
         ShaderTextureSlot slot;
         slot.material_resource_id = 0;
         shader.texture_slot_count = 1;
@@ -790,19 +899,18 @@ namespace AssetSystem
         vad.buffer_index = 0;
         VertexAttributeDescriptor uv_ad;
         uv_ad.format = VertexFormatFloat2;
-        uv_ad.offset = 0;
-        uv_ad.buffer_index = 2;
+        uv_ad.offset = float3::size();
+        uv_ad.buffer_index = 0;
 
         VertexBufferLayoutDescriptor vbld;
         vbld.step_function = step_function_per_vertex;
         vbld.step_rate = 1;
-        vbld.stride = 12;
-        VertexBufferLayoutDescriptor uv_bld;
-        uv_bld.step_function = step_function_per_vertex;
-        uv_bld.step_rate = 1;
-        uv_bld.stride = 8;
-        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
-        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
+        vbld.stride = float3::size() + float2::size();
+        
+        RenderEncoderCode::AddVertexAttribute(&vertex_descriptor,vad);
+        RenderEncoderCode::AddVertexAttribute(&vertex_descriptor,uv_ad);
+        //RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,vbld);
+        RenderEncoderCode::AddVertexLayout(&vertex_descriptor, vbld);//(&vertex_descriptor,uv_ad,uv_bld);
         RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
             
 /*
@@ -822,12 +930,13 @@ namespace AssetSystem
 
 //Create pipeline states    
         RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
+        Assert(pipeline_state.state);
         mat_result.pipeline_state = pipeline_state;
 
 //create depth states            
         DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
-        depth_desc.depthWriteEnabled = true;
-        depth_desc.depthCompareFunction = compare_func_less;
+        depth_desc.depthWriteEnabled = false;
+        //depth_desc.depthCompareFunction = compare_func_less;
         DepthStencilState depth_state = RendererCode::NewDepthStencilStateWithDescriptor(&depth_desc);
         mat_result.depth_stencil_state = depth_state;
             

@@ -23,7 +23,7 @@
 
 @end
 #if OSX
-NSWindow *window;
+//NSWindow *window;
 GameViewController* view_controller;
 
 #endif
@@ -50,11 +50,12 @@ GameViewController* view_controller;
     //[window setBackgroundColor: NSColor.whiteColor];
     //[window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [window setFrame:frame display:YES];
+    
     int windowLevel = CGShieldingWindowLevel();
     [window setLevel:windowLevel];
     view_controller = [[GameViewController alloc] init];
     //[window toggleFullScreen:view_controller.view];
-    //[self.view setFrameSize:screenFrame.size];
+    //[view_controller setFrameSize:frame.size];
     //[window setFrame:frame display:YES animate:YES];
     //window.styleMask
     //view_controller = [[GameViewController alloc] init];

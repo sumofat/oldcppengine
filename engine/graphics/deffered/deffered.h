@@ -13,6 +13,20 @@ struct DefferedRenderPassBuffer
     YoyoVector buffer;
 };
 
+enum RenderPassType
+{
+    pass_imgui,
+    pass_gbuffer,
+    pass_composite
+};
+
+struct RenderWithFullScreenCommand
+{
+    RenderMaterial material;
+    GPUBuffer resource;
+    Texture texture;
+};
+
 namespace DefferedRenderer
 {
     extern DefferedRenderPassBuffer passes;
@@ -21,8 +35,6 @@ namespace DefferedRenderer
     
     extern RenderPassBuffer shadow_gen_pass_buffer;//Creates shadow maps
     extern RenderPassBuffer gbuffer_pass_buffer;//creates diffuse normal etc.. buffers
-    
-    
     
     extern RenderPassBuffer stencil_lighting_pass_buffer;//writes the lit areas to the stencil buffer
     extern RenderPassBuffer lighting_accumulation_pass_buffer;//does lighting 
@@ -34,7 +46,6 @@ namespace DefferedRenderer
     extern GPUBuffer uniform_buffer;
     
     void Init(RenderCamera* cam,PlatformState* ps);
-    //void InitPerProjPass(RenderCamera* cam,PlatformState* ps,DefferedRenderPass* pass);
     
     void ExecutePasses();
 };

@@ -249,13 +249,19 @@ namespace MetaFiles
                 Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
                 float4 bcvalue = float4(1);
                 Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+//TODO(Ray):FOr PBR materials we will need to add defaults for rougness specular and others.
+/*
+                Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+                float4 bcvalue = float4(1);
+                Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+*/
                 
                 inputs_array.PushBack(input_object,allocator);
                 
                 mat_obj.AddMember("inputs",inputs_array,allocator);                
 
                 materials_array.PushBack(mat_obj,allocator);
-                
+
                 obj.AddMember("materials",materials_array, allocator); // 
                 //TODO(Ray):Create a default shader/materialdefinition
 
