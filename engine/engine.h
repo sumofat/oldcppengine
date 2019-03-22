@@ -19,12 +19,9 @@
 
 namespace Engine
 {
-    
     void Init(float2 window_dim);
     void Update();
 }
- 
-
     
 #define ENGINE_H
 #endif

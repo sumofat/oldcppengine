@@ -33,7 +33,8 @@ GameViewController* view_controller;
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
    // NSRect frame = NSMakeRect(0, 0, 200, 200);
     NSRect frame = [NSScreen mainScreen].frame;
     BorderlessWindow* window  = [[[BorderlessWindow alloc] initWithContentRect:frame
@@ -47,18 +48,11 @@ GameViewController* view_controller;
     [[window standardWindowButton:NSWindowCloseButton] setHidden:YES];
     [[window standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
     [[window standardWindowButton:NSWindowZoomButton] setHidden:YES];
-    //[window setBackgroundColor: NSColor.whiteColor];
-    //[window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [window setFrame:frame display:YES];
     
     int windowLevel = CGShieldingWindowLevel();
     [window setLevel:windowLevel];
     view_controller = [[GameViewController alloc] init];
-    //[window toggleFullScreen:view_controller.view];
-    //[view_controller setFrameSize:frame.size];
-    //[window setFrame:frame display:YES animate:YES];
-    //window.styleMask
-    //view_controller = [[GameViewController alloc] init];
     [window setContentViewController:view_controller];
 }
 

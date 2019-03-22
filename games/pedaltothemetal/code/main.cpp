@@ -1,7 +1,7 @@
 
 #include "engineapi.h"
 
-bool game_log = true;
+bool game_log = false;
     
 extern "C" void gameInit()
 {

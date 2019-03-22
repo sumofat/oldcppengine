@@ -34,6 +34,11 @@ namespace DefferedRenderer
 
     bool output_log = false;
 
+    void Init(bool is_log)
+    {
+        output_log = is_log;
+    }
+    
     void ExecuteFullScreenQuadCommands(RenderPass* pass,RenderCommandBuffer* buffer,void* command_params_)
     {
         PlatformOutput(output_log,"Executing FullScreen Quad Command.\n");

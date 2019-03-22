@@ -37,7 +37,11 @@ extern "C" void gameUpdate();
 namespace Engine
 {
     YoyoVector test_vector;
-    bool engine_log = true;
+
+    bool engine_log = false;
+    bool renderer_log = false;
+    bool asset_log = true;
+    
     PlatformState ps = {};
 
     ModelAsset testmodel;
@@ -51,11 +55,11 @@ namespace Engine
     SceneBuffer scene_buffer;
     Scene* default_empty_scene;
     
-    
     void Init(float2 window_dim)
     {
         PlatformOutput(engine_log,"Engine Init Begin\n");
-        
+        RendererCode::SetGraphicsOutputLog(false);
+        EngineInput::log = false;
 //1. Set options
         APIFileOptions::data_dir = "/data/";
 //2. Init Base systems 
@@ -84,7 +88,8 @@ namespace Engine
         //NOTE(Ray):Here we are test loading a scene and instanting object based on scene description
         //loading them into a sence hierarchy and than we will test grab a ref to the objects via some lookup
         //api.
-        Yostr* test_scene_meta_file = MetaFiles::GetMetaFile("test_scene");
+#if 1
+        Yostr* test_scene_meta_file = MetaFiles::GetMetaFile(CreateStringFromLiteral("scene_example", &StringsHandler::transient_string_memory));
         Document sdoc;
         sdoc.Parse((char*)test_scene_meta_file->String);
         if(!sdoc.IsObject())
@@ -94,45 +99,55 @@ namespace Engine
         }
  
         const Value& scene_name = sdoc["name"];
-        PlatformOutput(engine_log,"processing metafile %s\n",scene_name.GetString());
+        PlatformOutput(asset_log,"processing metafile %s\n",scene_name.GetString());
         const Value& nodes = sdoc["nodes"];
         for (auto& node : nodes.GetArray())
         {
             const Value& node_name = node["name"];
-            PlatformOutput(engine_log,"processing node %s\n",node_name.GetString());
+            PlatformOutput(asset_log,"processing node %s\n",node_name.GetString());
 
             const Value& p_ = node["p"];
             const Value& s_ = node["s"];
             const Value& r_ = node["r"];
             float3 p = float3(p_["x"].GetFloat(),p_["y"].GetFloat(),p_["z"].GetFloat());
-            float3 s = float3(s_["x"].GetFloat,s_["y"].GetFloat(),s_["z"].GetFloat());
+            float3 s = float3(s_["x"].GetFloat(),s_["y"].GetFloat(),s_["z"].GetFloat());
             quaternion r = quaternion(r_["x"].GetFloat(),r_["y"].GetFloat(),r_["z"].GetFloat(),r_["w"].GetFloat());
-            AddSceneObject(&scene_buffer,p,s,r);
+            //SceneObjectCode::AddSceneObject(&scene_buffer,p,s,r);
+
+            PlatformOutput(asset_log,"root_node p %f %f %f\n",p.x(),p.y(),p.z());
+            PlatformOutput(asset_log,"root_node r %f %f %f %f\n",r.x(),r.y(),r.z(),r.w());
+            PlatformOutput(asset_log,"root_node s %f %f %f\n",s.x(),s.y(),s.z());
 
             const Value& child_nodes = node["nodes"];
-            if(child_nodes.GetCount() > 0)
+            //if(child_nodes.GetCount() > 0)
+            //if(child_nodes)
             {
                 for (auto& child_node : child_nodes.GetArray())
                 {
                     const Value& child_node_name = child_node["name"];
-                    PlatformOutput(engine_log,"processing node %s\n",child_node_name.GetString());
+                    PlatformOutput(asset_log,"processing node %s\n",child_node_name.GetString());
 
                     const Value& cp_ = node["p"];
                     const Value& cs_ = node["s"];
                     const Value& cr_ = node["r"];
                     float3 cp = float3(cp_["x"].GetFloat(),cp_["y"].GetFloat(),cp_["z"].GetFloat());
-                    float3 cs = float3(cs_["x"].GetFloat,cs_["y"].GetFloat(),cs_["z"].GetFloat());
+                    float3 cs = float3(cs_["x"].GetFloat(),cs_["y"].GetFloat(),cs_["z"].GetFloat());
                     quaternion cr = quaternion(cr_["x"].GetFloat(),cr_["y"].GetFloat(),cr_["z"].GetFloat(),cr_["w"].GetFloat());
-                    AddChildToSceneObject(parent_index,&scene_buffer,cp,cs,cr);
+                    //AddChildToSceneObject(parent_index,&scene_buffer,cp,cs,cr);
+
+                    PlatformOutput(asset_log,"root_node p %f %f %f\n",p.x(),p.y(),p.z());
+                    PlatformOutput(asset_log,"root_node r %f %f %f %f\n",r.x(),r.y(),r.z(),r.w());
+                    PlatformOutput(asset_log,"root_node s %f %f %f\n",s.x(),s.y(),s.z());
                 }
             }
         }                
+#endif
         
         char* name = "dodge_challenger_model.fbx";
         Yostr* path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
         Yostr* buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         path = AppendString(*buildpath,*path,&StringsHandler::transient_string_memory);
-        k
+        
         if(AssetSystem::FBXSDKLoadModel(path->String,&testmodel))
         {
             
@@ -149,7 +164,7 @@ namespace Engine
             }
  
             const Value& metamodelname = d["model_file"];
-            PlatformOutput(engine_log,"processing metafile %s\n",metamodelname.GetString());
+            PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
 //            Yostr* r = CreateStringFromLiteralConst(d["Meshes"].GetString(),&StringsHandler::transient_string_memory);
 //            Yostr* final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(r->String,&ps->string_state.transient_string_memory), &StringsHandler::transient_string_memory);
             // 
@@ -185,35 +200,35 @@ namespace Engine
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
                 
                 const Value& meshname = mesh["meshname"];
-                PlatformOutput(engine_log,"mesh name%s\n",meshname.GetString());
+                PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
             
                 const Value& materials = mesh["materials"];            
                 for (auto& material : materials.GetArray())
                 {
                     const Value& material_name = material["material_name"];                    
-                    PlatformOutput(engine_log,"material name %s\n",material_name.GetString());
+                    PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
 
                     uint32_t strlen = material_name.GetStringLength();
                     Yostr matstring;
                     matstring.Length = strlen;
                     matstring.String = (char*)material_name.GetString();
                     matstring.NullTerminated = true;
-                    RenderMaterial* render_material;
+                    RenderMaterial render_material;
                     Yostr vs_name;
                     Yostr fs_name;
                     float4 base_color_input;
                     if(MaterialCache::DoesMaterialExist(&matstring))
                     {
                         render_material = MaterialCache::GetMaterial(&matstring);
-                        rendermesh->r_material = *render_material;
+                        rendermesh->r_material = render_material;
                     }
                     else
                     {
-                        MaterialCache::AddMaterial(&matstring,render_material);
+                        MaterialCache::AddMaterial(&matstring,&render_material);
                         //Getmaterial file
                         Yostr* meta_file_json = MetaFiles::GetMetaFile(&matstring);
                         //Create RenderMaterial based on this and add it to the cache
-                        PlatformOutput(engine_log,"Processing meta file");
+                        PlatformOutput(asset_log,"Processing meta file");
 // 1. Parse a JSON string into DOM.
                         Document rd;
                         rd.Parse((char*)meta_file_json->String);
@@ -223,21 +238,21 @@ namespace Engine
                             Assert(false);
                         }
                         const Value& meta_mat_name = rd["material_name"];
-                        PlatformOutput(engine_log,"processing metafile %s\n",meta_mat_name.GetString());
+                        PlatformOutput(asset_log,"processing metafile %s\n",meta_mat_name.GetString());
                         
                         const Value& shaders = rd["shaders"];
                         for (auto& shader : shaders.GetArray())
                         {
 
                             const Value& shader_type = shader["type"];                    
-                            PlatformOutput(engine_log,"shader type %s\n",shader_type.GetString());
+                            PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
                             Yostr shader_type_string = {};
                             shader_type_string.Length = shader_type.GetStringLength();
                             shader_type_string.String = (char*)shader_type.GetString();
                             shader_type_string.NullTerminated = true;
                             
                             const Value& shader_name = shader["name"];
-                            PlatformOutput(engine_log,"shader name %s\n",shader_name.GetString());
+                            PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
 
                             if(Compare(shader_type_string, *CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
                             {
@@ -251,17 +266,16 @@ namespace Engine
                                 fs_name.NullTerminated = true;
                                 fs_name.String = (char*)shader_name.GetString();
                             }
-                           
 
                             const Value& input_slots = shader["input_slot"];
                             
                             for (auto& input_slot : input_slots.GetArray())
                             {
                                 const Value& input_slot_name = input_slot["name"];                    
-                                PlatformOutput(engine_log,"shader name %s\n",input_slot_name.GetString());
+                                PlatformOutput(asset_log,"shader name %s\n",input_slot_name.GetString());
 
                                 const Value& input_slot_type = input_slot["type"];                    
-                                PlatformOutput(engine_log,"shader name %s\n",input_slot_type.GetString());
+                                PlatformOutput(asset_log,"shader name %s\n",input_slot_type.GetString());
                             }
                         }
                     }
@@ -270,7 +284,7 @@ namespace Engine
                     for (auto& input : inputs.GetArray())
                     {
                         const Value& input_name = input["name"];                    
-                        PlatformOutput(engine_log,"input name %s\n",input_name.GetString());
+                        PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
 
                         uint32_t instrlen = input_name.GetStringLength();
                         Yostr input_name_string;
@@ -305,8 +319,8 @@ namespace Engine
                                 value_index++;
                             }
                             float4 result = float4(results[0],results[1],results[2],results[3]);
-                            PlatformOutput(engine_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
-                            render_material->inputs.base_color = result;
+                            PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                            render_material.inputs.base_color = result;
                             base_color_input = result;
                         }
                         
@@ -326,7 +340,7 @@ namespace Engine
                             results = (float)value.GetDouble();
                             float result = float(result);
                             
-                            PlatformOutput(engine_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                            PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
                             if(Compare(input_name_string,CreateStringFromLiteral("specular"),&StringsHandler::transient_string_memory))
                             {
                                 render_material.inputs.specular = result;
@@ -476,7 +490,6 @@ namespace Engine
          mesh_index++;
          */
         AssetSystem::UploadModelAssetToGPU(&testmodel);
-            
         
         //TODO(Ray):Set Asset or file system to hold this 
 //        es.base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);
@@ -517,9 +530,7 @@ namespace Engine
     {
         if(!is_init)return;
         PlatformOutput(engine_log,"Engine Update Begin\n");
-        
         EngineInput::PullMouseState(&ps);
-
         gameUpdate();
 
 //Game UI

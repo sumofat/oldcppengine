@@ -162,12 +162,22 @@ namespace AssetSystem
                         uint element_count = lPolygonCount * lPolygonSize;
                         uint32_t float_size = sizeof(float);
                         uint32_t int_size = sizeof(uint32_t);
+#if 0
+                        vertex_vector = YoyoInitVectorWithAligment(float_count, float,false,4);
+                        element_vector = YoyoInitVectorWithAligment(element_count, uint32_t,false,4);
+                        normal_vector = YoyoInitVectorWithAligment(float_count, float,false,4);
+                        uv_vector = YoyoInitVectorWithAligment(uv_count, float,false,4);
+                        tangent_vector = YoyoInitVectorWithAligment(t_b_float_count, float,false,4);
+                        bitangent_vector = YoyoInitVectorWithAligment(t_b_float_count, float,false,4);
+#else
+                        
                         vertex_vector = YoyoInitVector(float_count, float,false);
                         element_vector = YoyoInitVector(element_count, uint32_t,false);
                         normal_vector = YoyoInitVector(float_count, float,false);
                         uv_vector = YoyoInitVector(uv_count, float,false);
                         tangent_vector = YoyoInitVector(t_b_float_count, float,false);
                         bitangent_vector = YoyoInitVector(t_b_float_count, float,false);
+#endif
 
                         int vertexId = 0;
                         for (int pi = 0; pi < lPolygonCount; ++pi)

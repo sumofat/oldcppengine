@@ -1,6 +1,3 @@
-[submodule "engine/yoyo"]
-	path = engine/yoyo
-	url = https://github.com/godratio/yoyo.git
 [submodule "engine/external/imgui"]
 	path = engine/external/imgui
 	url = https://github.com/ocornut/imgui.git
