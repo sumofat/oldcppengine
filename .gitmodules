@@ -4,3 +4,6 @@
 [submodule "engine/external/rapidjson"]
 	path = engine/external/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
+[submodule "engine/metalizer"]
+	path = engine/metalizer
+	url = https://github.com/godratio/Metalizer.git

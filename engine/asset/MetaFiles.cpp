@@ -25,30 +25,30 @@ namespace MetaFiles
     void Init()
     {
         Yostr* asset_path = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-        file_write_path = *AppendString(*asset_path,*CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
+        file_write_path = *AppendString(*asset_path,CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
     }
     
-    ShaderValueType::Type GetShaderType(Yostr* type)
+    ShaderValueType::Type GetShaderType(Yostr type)
     {
         for(auto element : ShaderValueType::as_array)
         {
-            if(CompareStringtoChar(*type,"float4"))
+            if(CompareStringtoChar(type,"float4"))
             {
                 return ShaderValueType::float4;                                    
             }
-            else if(CompareStringtoChar(*type,"float3"))
+            else if(CompareStringtoChar(type,"float3"))
             {
                 return ShaderValueType::float3;                                    
             }
-            else if(CompareStringtoChar(*type,"float2"))
+            else if(CompareStringtoChar(type,"float2"))
             {
                 return ShaderValueType::float2;                                    
             }
-            else if(CompareStringtoChar(*type,"float"))
+            else if(CompareStringtoChar(type,"float"))
             {
                 return ShaderValueType::afloat;                                    
             }
-            else if(CompareStringtoChar(*type,"texture"))
+            else if(CompareStringtoChar(type,"texture"))
             {
                 return ShaderValueType::texture;                                    
             }
@@ -60,19 +60,19 @@ namespace MetaFiles
         return ShaderValueType::unknown;
     }
     
-    MetaFileType::Type GetFileExtensionType(Yostr* file)
+    MetaFileType::Type GetFileExtensionType(Yostr file)
     {
         for(auto element : MetaFileType::as_array)
         {
-            if(CompareStringtoChar(*file,"fbx"))
+            if(CompareStringtoChar(file,"fbx"))
             {
                 return MetaFileType::FBX;                                    
             }
-            else if(CompareStringtoChar(*file,"psd"))
+            else if(CompareStringtoChar(file,"psd"))
             {
                 return MetaFileType::PSD;                                    
             }
-            else if(CompareStringtoChar(*file,"png"))
+            else if(CompareStringtoChar(file,"png"))
             {
                 return MetaFileType::PNG;                                    
             }
@@ -84,12 +84,12 @@ namespace MetaFiles
         return MetaFileType::NONE;
     }
 
-    Yostr* GetMetaFile(Yostr* path_to_asset)
+    Yostr* GetMetaFile(Yostr path_to_asset)
     {
         Yostr* result;
         Yostr file_name = GetFilenameFromPath(path_to_asset, &StringsHandler::transient_string_memory);
         Yostr* file_namenoext = StripExtension(&file_name, &StringsHandler::transient_string_memory);
-        file_namenoext = AppendString(*file_namenoext, *CreateStringFromLiteral(".mat", &StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
+        file_namenoext = AppendString(*file_namenoext, CreateStringFromLiteral(".mat", &StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
         Yostr* path_to_meta_file = AppendStringToChar(game_data_meta_dir,*file_namenoext,&StringsHandler::transient_string_memory);
         read_file_result meta_file_result = PlatformReadEntireFile(path_to_meta_file);
         result = CreateStringFromLength((char*)meta_file_result.Content,meta_file_result.ContentSize,&StringsHandler::transient_string_memory);
@@ -113,14 +113,14 @@ namespace MetaFiles
         base_color_name.SetString(name->String,(SizeType)name->Length,allocator);
         input_object.AddMember("name",base_color_name,allocator);
 
-        Yostr* type_text;
+        Yostr type_text;
         switch(input_type)
         {
             case shader_input_float:
             {
                 type_text = CreateStringFromLiteral("float",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
-                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
                 float final_value = *((float*)value);
                 Value base_color_value(kArrayType);
@@ -131,7 +131,7 @@ namespace MetaFiles
             {
                 type_text = CreateStringFromLiteral("float2",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
-                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
                 float2 final_value = *((float2*)value);
                 Value base_color_value(kArrayType);
@@ -142,7 +142,7 @@ namespace MetaFiles
             {
                 type_text = CreateStringFromLiteral("float3",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
-                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
                 float3 final_value = *((float3*)value);
                 Value base_color_value(kArrayType);
@@ -153,7 +153,7 @@ namespace MetaFiles
             {
                 type_text = CreateStringFromLiteral("float4",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
-                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
                 float4 final_value = *((float4*)value);
                 Value base_color_value(kArrayType);
@@ -165,7 +165,7 @@ namespace MetaFiles
 #if 0
                 type_text = CreateStringFromLiteral("texture",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
-                base_color_type.SetString(type_text->String,(SizeType)type_text->Length,allocator);
+                base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
 
                 Texture final_value = *((Texture*)value);
@@ -185,7 +185,7 @@ namespace MetaFiles
         return input_object;
     }
     
-    Yostr* CreateDefaultModelMetaFile(Yostr* filepath,ModelAsset* model)
+    Yostr* CreateDefaultModelMetaFile(Yostr filepath,ModelAsset* model)
     {
         //Create a new material if we couldnt find the one at data
 //        if(mat_file_result.ContentSize <= 0)
@@ -235,9 +235,9 @@ namespace MetaFiles
                 Value mat_obj(kObjectType);
                 Value mat_val(kObjectType);
 
-                Yostr* default_mat_string = CreateStringFromLiteral("default_material",&StringsHandler::transient_string_memory);
+                Yostr default_mat_string = CreateStringFromLiteral("default_material",&StringsHandler::transient_string_memory);
                 
-                mat_val.SetString(default_mat_string->String,(SizeType)default_mat_string->Length,allocator);
+                mat_val.SetString(default_mat_string.String,(SizeType)default_mat_string.Length,allocator);
                 mat_obj.AddMember("material_name",mat_val,allocator);
                 
                 Value materials_array(rapidjson::kArrayType);
@@ -246,9 +246,9 @@ namespace MetaFiles
                 //base color float4(1)
                 //textures empty
 
-                Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+                Yostr bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
                 float4 bcvalue = float4(1);
-                Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+                Value input_object = AddInputEntryToArray(&bcname,shader_input_float4,&bcvalue,allocator);
 //TODO(Ray):FOr PBR materials we will need to add defaults for rougness specular and others.
 /*
                 Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
@@ -306,24 +306,23 @@ namespace MetaFiles
 
             Yostr filename = GetFilenameFromPath(filepath,&StringsHandler::transient_string_memory);
             Yostr* filenamenoext = StripExtension(&filename,&StringsHandler::transient_string_memory);
-            Yostr* final_filename = AppendString(*filenamenoext,*CreateStringFromLiteral(".mat",&StringsHandler::transient_string_memory),&StringsHandler::transient_string_memory);
+            Yostr* final_filename = AppendString(*filenamenoext,CreateStringFromLiteral(".mat",&StringsHandler::transient_string_memory),&StringsHandler::transient_string_memory);
             PlatformFilePointer file{};
             Yostr* final_output_path = AppendStringToChar(game_data_meta_dir,*final_filename,&StringsHandler::transient_string_memory);
             PlatformWriteMemoryToFile(&file,final_output_path->String,(void*)output,length,true,"w+");
             Yostr* result = CreateStringFromLength((char*)output, length, &StringsHandler::transient_string_memory);
-            *result = NullTerminate(*result);
             PlatformOutput(log_output,"%s",result->String); 
             return result;
         }
     }
        
-    Yostr* GetOrCreateDefaultModelMetaFile(Yostr* file,ModelAsset* model)
+    Yostr* GetOrCreateDefaultModelMetaFile(Yostr file,ModelAsset* model)
     {
         Yostr* result = GetMetaFile(file);
         if(result->Length == 0 && model)//no meta file make one
         {
-            Yostr* file_ext = GetExtension(file,&StringsHandler::transient_string_memory,false);
-            if(MetaFileType::FBX == GetFileExtensionType(file_ext))
+            Yostr* file_ext = GetExtension(&file,&StringsHandler::transient_string_memory,false);
+            if(MetaFileType::FBX == GetFileExtensionType(*file_ext))
             {
                 result = CreateDefaultModelMetaFile(file,model);
             }

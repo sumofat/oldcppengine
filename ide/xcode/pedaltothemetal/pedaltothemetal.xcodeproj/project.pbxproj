@@ -11,36 +11,29 @@
 		942F477521F85B6500B5D83A /* libfbxsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9459AF2321F7308000B59C75 /* libfbxsdk.a */; };
 		942F477621F85B6500B5D83A /* libfbxsdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9459B01F21F8261700B59C75 /* libfbxsdk.dylib */; };
 		942F477921F85BF500B5D83A /* libfbxsdk.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 942F477821F85BF500B5D83A /* libfbxsdk.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		9452F9DF21E8DE4900B07061 /* libmetalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FD921E6CA7F00054E9C /* libmetalize.a */; };
-		9452F9E021E8DE9800B07061 /* libmetalize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FD921E6CA7F00054E9C /* libmetalize.a */; };
 		9452F9E121E8DEB400B07061 /* libengine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FD121E6C89000054E9C /* libengine.a */; };
 		9452F9E221E8DEC000B07061 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7C21E6C01300054E9C /* AppDelegate.m */; };
 		9452F9E321E8DEC000B07061 /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7921E6C01300054E9C /* GameViewController.mm */; };
 		9452F9E821E8DFCB00B07061 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8F7B21E6C01300054E9C /* main.m */; };
 		9459B02021F8261700B59C75 /* libfbxsdk.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9459B01F21F8261700B59C75 /* libfbxsdk.dylib */; };
 		9472753C21F8519C002C8B98 /* libfbxsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9459AF2321F7308000B59C75 /* libfbxsdk.a */; };
+		9498125922459471003D1855 /* libmetalizerosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 949AB29E22458A5F00133C88 /* libmetalizerosx.a */; };
 		949AB29522451FDB00133C88 /* base.metal in Sources */ = {isa = PBXBuildFile; fileRef = 949AB29422451FDA00133C88 /* base.metal */; };
+		949AB2A322458BB400133C88 /* RendererInclude.h in Headers */ = {isa = PBXBuildFile; fileRef = 949AB2A222458BB400133C88 /* RendererInclude.h */; };
+		949AB2A622458BE700133C88 /* MTKViewDelegateView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 949AB2A422458BE700133C88 /* MTKViewDelegateView.mm */; };
+		949AB2A722458BE700133C88 /* native_graphics_api_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 949AB2A522458BE700133C88 /* native_graphics_api_metal.mm */; };
+		949AB2A822458C0300133C88 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDF21E6CC0E00054E9C /* Metal.framework */; };
+		949AB2A922458C0300133C88 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */; };
 		94A0148D21F23586004A9DF2 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 94A0148C21F23583004A9DF2 /* data */; };
 		94A0148E21F23654004A9DF2 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 94A0148C21F23583004A9DF2 /* data */; };
 		94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */; };
 		94A841E921E9F0D30051DB13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94A841E221E9F0BB0051DB13 /* main.cpp */; };
 		94A842CC21EC7A5B0051DB13 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94A8427E21EC27E70051DB13 /* imgui_impl_metal.mm */; };
 		94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6721E631C100054E9C /* Assets.xcassets */; };
-		94FD8FE021E6CC0E00054E9C /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */; };
-		94FD8FE121E6CC0E00054E9C /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FD8FDF21E6CC0E00054E9C /* Metal.framework */; };
-		94FD8FE221E6CC2A00054E9C /* MTKViewDelegateView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8FA921E6C01300054E9C /* MTKViewDelegateView.mm */; };
-		94FD8FE321E6CC3000054E9C /* native_graphics_api_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8FAF21E6C01300054E9C /* native_graphics_api_metal.mm */; };
 		94FD8FE621E6CDC100054E9C /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8FBB21E6C01300054E9C /* engine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9452F9DD21E8DD3100B07061 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94FD8F5021E631C000054E9C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94FD8FD821E6CA7F00054E9C;
-			remoteInfo = metalize;
-		};
 		9452F9E521E8DED100B07061 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 94FD8F5021E631C000054E9C /* Project object */;
@@ -54,6 +47,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9452F9F021E8E5BB00B07061;
 			remoteInfo = pedaltothemetal;
+		};
+		9498125322458C3C003D1855 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 94FD8F5021E631C000054E9C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 949AB29D22458A5F00133C88;
+			remoteInfo = metalizerosx;
 		};
 		94A841E521E9F0BB0051DB13 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -103,13 +103,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 94B7751721E5D7A50035861E;
 			remoteInfo = metalizermac;
-		};
-		94FD8FE421E6CDB500054E9C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 94FD8F5021E631C000054E9C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 94FD8FD821E6CA7F00054E9C;
-			remoteInfo = metalize;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -422,6 +415,12 @@
 		9472753321F84341002C8B98 /* engineapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engineapi.h; sourceTree = "<group>"; };
 		9486891D21FB4A14004304B4 /* engine_runtime_app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = engine_runtime_app.entitlements; sourceTree = "<group>"; };
 		949AB29422451FDA00133C88 /* base.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = base.metal; path = ../games/pedaltothemetal/code/base.metal; sourceTree = "<group>"; };
+		949AB2962245826300133C88 /* libmetalizer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmetalizer.a; path = "../../../../../Library/Developer/Xcode/DerivedData/metalizermactest-fjdgehnejfunhqbfmyovkufpjndj/Build/Products/Debug-iphoneos/libmetalizer.a"; sourceTree = "<group>"; };
+		949AB2982245884900133C88 /* libmetalizermac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmetalizermac.a; path = "../../../../../Library/Developer/Xcode/DerivedData/metalizermactest-fjdgehnejfunhqbfmyovkufpjndj/Build/Products/Debug/libmetalizermac.a"; sourceTree = "<group>"; };
+		949AB29E22458A5F00133C88 /* libmetalizerosx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmetalizerosx.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		949AB2A222458BB400133C88 /* RendererInclude.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RendererInclude.h; path = ../../../engine/metalizer/RendererInclude.h; sourceTree = "<group>"; };
+		949AB2A422458BE700133C88 /* MTKViewDelegateView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MTKViewDelegateView.mm; path = ../../../engine/metalizer/renderer/MTKViewDelegateView.mm; sourceTree = "<group>"; };
+		949AB2A522458BE700133C88 /* native_graphics_api_metal.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = native_graphics_api_metal.mm; path = ../../../engine/metalizer/renderer/native_graphics_api_metal.mm; sourceTree = "<group>"; };
 		94A0148C21F23583004A9DF2 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = data; sourceTree = "<group>"; };
 		94A0149021F37B06004A9DF2 /* editor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = editor.h; sourceTree = "<group>"; };
 		94A0149121F37B06004A9DF2 /* editorgui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = editorgui.h; sourceTree = "<group>"; };
@@ -958,7 +957,6 @@
 		94FD8FCB21E6C84F00054E9C /* input.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = input.h; sourceTree = "<group>"; };
 		94FD8FCC21E6C86D00054E9C /* input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = input.cpp; sourceTree = "<group>"; };
 		94FD8FD121E6C89000054E9C /* libengine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libengine.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		94FD8FD921E6CA7F00054E9C /* libmetalize.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmetalize.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		94FD8FDE21E6CC0E00054E9C /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		94FD8FDF21E6CC0E00054E9C /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -971,16 +969,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		949AB29C22458A5F00133C88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				949AB2A822458C0300133C88 /* Metal.framework in Frameworks */,
+				949AB2A922458C0300133C88 /* MetalKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94FD8F5521E631C000054E9C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9498125922459471003D1855 /* libmetalizerosx.a in Frameworks */,
 				942DDBA121FABC6900F73447 /* libc++.1.tbd in Frameworks */,
 				942F477521F85B6500B5D83A /* libfbxsdk.a in Frameworks */,
 				942F477621F85B6500B5D83A /* libfbxsdk.dylib in Frameworks */,
 				94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */,
 				9452F9E121E8DEB400B07061 /* libengine.a in Frameworks */,
-				9452F9DF21E8DE4900B07061 /* libmetalize.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,16 +997,6 @@
 			files = (
 				9472753C21F8519C002C8B98 /* libfbxsdk.a in Frameworks */,
 				9459B02021F8261700B59C75 /* libfbxsdk.dylib in Frameworks */,
-				9452F9E021E8DE9800B07061 /* libmetalize.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		94FD8FD721E6CA7F00054E9C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94FD8FE021E6CC0E00054E9C /* MetalKit.framework in Frameworks */,
-				94FD8FE121E6CC0E00054E9C /* Metal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2692,6 +2689,9 @@
 		94FD8F4F21E631C000054E9C = {
 			isa = PBXGroup;
 			children = (
+				949AB2A422458BE700133C88 /* MTKViewDelegateView.mm */,
+				949AB2A522458BE700133C88 /* native_graphics_api_metal.mm */,
+				949AB2A222458BB400133C88 /* RendererInclude.h */,
 				9486891D21FB4A14004304B4 /* engine_runtime_app.entitlements */,
 				942F477821F85BF500B5D83A /* libfbxsdk.dylib */,
 				9452F9E921E8E1F700B07061 /* games */,
@@ -2708,8 +2708,8 @@
 			children = (
 				94FD8F5821E631C000054E9C /* engine_runtime_app.app */,
 				94FD8FD121E6C89000054E9C /* libengine.a */,
-				94FD8FD921E6CA7F00054E9C /* libmetalize.a */,
 				9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */,
+				949AB29E22458A5F00133C88 /* libmetalizerosx.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2961,6 +2961,8 @@
 		94FD8FDD21E6CC0E00054E9C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				949AB2982245884900133C88 /* libmetalizermac.a */,
+				949AB2962245826300133C88 /* libmetalizer.a */,
 				942DDB9E21FABBDE00F73447 /* libc++.tbd */,
 				942DDB9C21FABBC100F73447 /* libc++.1.tbd */,
 				9459B01F21F8261700B59C75 /* libfbxsdk.dylib */,
@@ -2982,14 +2984,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94FD8FCD21E6C89000054E9C /* Headers */ = {
+		949AB29A22458A5F00133C88 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				949AB2A322458BB400133C88 /* RendererInclude.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94FD8FD521E6CA7F00054E9C /* Headers */ = {
+		94FD8FCD21E6C89000054E9C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -3017,6 +3020,23 @@
 			productReference = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		949AB29D22458A5F00133C88 /* metalizerosx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 949AB29F22458A5F00133C88 /* Build configuration list for PBXNativeTarget "metalizerosx" */;
+			buildPhases = (
+				949AB29A22458A5F00133C88 /* Headers */,
+				949AB29B22458A5F00133C88 /* Sources */,
+				949AB29C22458A5F00133C88 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = metalizerosx;
+			productName = metalizerosx;
+			productReference = 949AB29E22458A5F00133C88 /* libmetalizerosx.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		94FD8F5721E631C000054E9C /* engine_runtime_app */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 94FD8F7221E631C200054E9C /* Build configuration list for PBXNativeTarget "engine_runtime_app" */;
@@ -3029,9 +3049,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				9498125422458C3C003D1855 /* PBXTargetDependency */,
 				9452F9F721E8E5DC00B07061 /* PBXTargetDependency */,
 				9452F9E621E8DED100B07061 /* PBXTargetDependency */,
-				9452F9DE21E8DD3100B07061 /* PBXTargetDependency */,
 			);
 			name = engine_runtime_app;
 			productName = pedaltothemetal;
@@ -3049,28 +3069,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				94FD8FE521E6CDB500054E9C /* PBXTargetDependency */,
 			);
 			name = engine;
 			productName = engine;
 			productReference = 94FD8FD121E6C89000054E9C /* libengine.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		94FD8FD821E6CA7F00054E9C /* metalize */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 94FD8FDA21E6CA7F00054E9C /* Build configuration list for PBXNativeTarget "metalize" */;
-			buildPhases = (
-				94FD8FD521E6CA7F00054E9C /* Headers */,
-				94FD8FD621E6CA7F00054E9C /* Sources */,
-				94FD8FD721E6CA7F00054E9C /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = metalize;
-			productName = metalize;
-			productReference = 94FD8FD921E6CA7F00054E9C /* libmetalize.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -3085,6 +3087,9 @@
 					9452F9F021E8E5BB00B07061 = {
 						CreatedOnToolsVersion = 10.1;
 					};
+					949AB29D22458A5F00133C88 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					94FD8F5721E631C000054E9C = {
 						CreatedOnToolsVersion = 10.1;
 						SystemCapabilities = {
@@ -3094,9 +3099,6 @@
 						};
 					};
 					94FD8FD021E6C89000054E9C = {
-						CreatedOnToolsVersion = 10.1;
-					};
-					94FD8FD821E6CA7F00054E9C = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
@@ -3131,7 +3133,7 @@
 				9452F9F021E8E5BB00B07061 /* pedaltothemetal */,
 				94FD8F5721E631C000054E9C /* engine_runtime_app */,
 				94FD8FD021E6C89000054E9C /* engine */,
-				94FD8FD821E6CA7F00054E9C /* metalize */,
+				949AB29D22458A5F00133C88 /* metalizerosx */,
 			);
 		};
 /* End PBXProject section */
@@ -3217,6 +3219,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		949AB29B22458A5F00133C88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				949AB2A622458BE700133C88 /* MTKViewDelegateView.mm in Sources */,
+				949AB2A722458BE700133C88 /* native_graphics_api_metal.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		94FD8F5421E631C000054E9C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3237,23 +3248,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		94FD8FD621E6CA7F00054E9C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				94FD8FE221E6CC2A00054E9C /* MTKViewDelegateView.mm in Sources */,
-				94FD8FE321E6CC3000054E9C /* native_graphics_api_metal.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9452F9DE21E8DD3100B07061 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 94FD8FD821E6CA7F00054E9C /* metalize */;
-			targetProxy = 9452F9DD21E8DD3100B07061 /* PBXContainerItemProxy */;
-		};
 		9452F9E621E8DED100B07061 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 94FD8FD021E6C89000054E9C /* engine */;
@@ -3264,10 +3261,10 @@
 			target = 9452F9F021E8E5BB00B07061 /* pedaltothemetal */;
 			targetProxy = 9452F9F621E8E5DC00B07061 /* PBXContainerItemProxy */;
 		};
-		94FD8FE521E6CDB500054E9C /* PBXTargetDependency */ = {
+		9498125422458C3C003D1855 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 94FD8FD821E6CA7F00054E9C /* metalize */;
-			targetProxy = 94FD8FE421E6CDB500054E9C /* PBXContainerItemProxy */;
+			target = 949AB29D22458A5F00133C88 /* metalizerosx */;
+			targetProxy = 9498125322458C3C003D1855 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3329,6 +3326,50 @@
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		949AB2A022458A5F00133C88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7W6L9J77EJ;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					OSX,
+					YOYOIMPL,
+				);
+				HEADER_SEARCH_PATHS = "/Users/ray.garner/work/**";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-maes",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		949AB2A122458A5F00133C88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7W6L9J77EJ;
+				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = "/Users/ray.garner/work/**";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-maes",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3581,55 +3622,6 @@
 			};
 			name = Release;
 		};
-		94FD8FDB21E6CA7F00054E9C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7W6L9J77EJ;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					OSX,
-					YOYOIMPL,
-				);
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
-				KEEP_PRIVATE_EXTERNS = YES;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-ObjC",
-					"-maes",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = Debug;
-		};
-		94FD8FDC21E6CA7F00054E9C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7W6L9J77EJ;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
-				KEEP_PRIVATE_EXTERNS = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(OTHER_CFLAGS)",
-					"-ObjC",
-					"-maes",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3638,6 +3630,15 @@
 			buildConfigurations = (
 				9452F9F321E8E5BB00B07061 /* Debug */,
 				9452F9F421E8E5BB00B07061 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		949AB29F22458A5F00133C88 /* Build configuration list for PBXNativeTarget "metalizerosx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				949AB2A022458A5F00133C88 /* Debug */,
+				949AB2A122458A5F00133C88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3665,15 +3666,6 @@
 			buildConfigurations = (
 				94FD8FD321E6C89000054E9C /* Debug */,
 				94FD8FD421E6C89000054E9C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		94FD8FDA21E6CA7F00054E9C /* Build configuration list for PBXNativeTarget "metalize" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				94FD8FDB21E6CA7F00054E9C /* Debug */,
-				94FD8FDC21E6CA7F00054E9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

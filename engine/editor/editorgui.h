@@ -67,7 +67,7 @@ namespace EditorGUI
                     {
                         LoadedTexture tex;
                         Yostr* file_ext = GetExtension(&f_info->Name,&StringsHandler::transient_string_memory,false);
-                        MetaFileType::Type type = MetaFiles::GetFileExtensionType(file_ext);
+                        MetaFileType::Type type = MetaFiles::GetFileExtensionType(*file_ext);
                         if(MetaFileType::PNG == type || MetaFileType::PSD == type)
                         {
                             if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))

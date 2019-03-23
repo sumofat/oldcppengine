@@ -1,19 +1,28 @@
 
-//
-//  Shaders.metal
-//  pedaltothemetalios
-//
-//  Created by Ray Olen Garner on 2018/07/07.
-//  Copyright © 2018 DENA. All rights reserved.
-//
-
-// File for Metal kernel and shader functions
-
 #include <metal_stdlib>
+    
+#ifdef __METAL_VERSION__
+#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#define NSInteger metal::int32_t
+#else
+#import <Foundation/Foundation.h>
+#endif
+
+#include <simd/simd.h>
+using namespace metal;
+    
+#ifdef __METAL_VERSION__
+#define NS_ENUM(_type, _name) enum _name : _type _name; enum _name : _type
+#define NSInteger metal::int32_t
+#else
+#import <Foundation/Foundation.h>
+#endif
+    
 #include <simd/simd.h>
 
-// Including header shared between this Metal shader code and Swift/C code executing Metal API commands
-#import "BasicShaderTypes.h"
+
+#import "../../../engine/metalizer/BasicShaderTypes.h"//metalizer builtin
+#import "ShaderTypes.h"
 
 using namespace metal;
 
@@ -186,9 +195,9 @@ ShaderInputs GetDefaultInputs()
 {
     ShaderInputs result;
     result.base_color = float4(1,1,1,1);
-    result.metallic = 0.3f;
-    result.specular = 0.5f;
-    result.roughness = 0.3f;
+  //  result.metallic = 0.3f;
+    //result.specular = 0.5f;
+    //result.roughness = 0.3f;
 }
 
 Light GetDefaultLight()
@@ -235,7 +244,7 @@ float4 DoBRDF(float4 frag_p,float4 normal,float4 view_p,float4 surface_color)
 }
 
 vertex ColorInOut diffuse_vs(Vertex in [[stage_in]],
-                             constant Uniforms& uniforms[[buffer(buffer_uniforms)]])
+                             constant Uniforms& uniforms[[buffer(3)]])
 {
     ColorInOut out;
     float4 position = uniforms.pcm_mat * float4(in.p, 1.0) ;
@@ -247,8 +256,8 @@ vertex ColorInOut diffuse_vs(Vertex in [[stage_in]],
 }
 
 fragment float4 diffuse_fs(ColorInOut in [[stage_in]],
-                           constant Uniforms& uniforms[[buffer(buffer_uniforms)]],
-                           texture2d<float> base_color_texture[[ texture(base_color_texture) ]])
+                           constant Uniforms& uniforms[[buffer(3)]],
+                           texture2d<float> base_color_texture[[ texture(0) ]])
 {
     Light light = GetDefaultLight();
     constexpr sampler base_sampler(address::repeat);
@@ -262,8 +271,8 @@ fragment float4 diffuse_fs(ColorInOut in [[stage_in]],
 }
 
 fragment float4 diffuse_color_fs(ColorInOut in [[stage_in]],
-                           constant Uniforms& uniforms[[buffer(buffer_uniforms)]],
-                           texture2d<float> base_color_texture[[ texture(base_color_texture) ]])
+                           constant Uniforms& uniforms[[buffer(3)]],
+                           texture2d<float> base_color_texture[[ texture(0) ]])
 {
     Light light = GetDefaultLight();
     constexpr sampler base_sampler(address::repeat);
@@ -278,7 +287,7 @@ fragment float4 diffuse_color_fs(ColorInOut in [[stage_in]],
 }
 
 vertex ColorInOut carbonfiber_vs(Vertex in [[stage_in]],
-                             constant Uniforms& uniforms[[buffer(buffer_uniforms)]])
+                             constant Uniforms& uniforms[[buffer(3)]])
 {
     ColorInOut out;
     out.p = uniforms.pcm_mat * float4(in.p, 1.0) ;
@@ -297,7 +306,7 @@ vertex ColorInOut composite_vs(FullScreenVertex in [[stage_in]])
 }
 // NOTE(Ray):Not compositing anything at the moment but will be.
 fragment float4 composite_fs(ColorInOut in[[stage_in]],
-                                 texture2d<float> base_color_texture[[texture(base_color_texture)]])
+                                 texture2d<float> base_color_texture[[texture(0)]])
 {
     constexpr sampler base_sampler(address::repeat);
     float4 base_color = base_color_texture.sample(base_sampler, in.uv);
@@ -305,8 +314,8 @@ fragment float4 composite_fs(ColorInOut in[[stage_in]],
 }
 
 fragment float4 carbonfiber_fs(ColorInOut in [[stage_in]],
-                               constant Uniforms& uniforms[[buffer(buffer_uniforms)]],
-                               texture2d<float> base_color_texture[[ texture(base_color_texture) ]])
+                               constant Uniforms& uniforms[[buffer(3)]],
+                               texture2d<float> base_color_texture[[ texture(0) ]])
 {
     Light light = GetDefaultLight();
     constexpr sampler base_sampler(address::repeat);
@@ -321,7 +330,7 @@ fragment float4 carbonfiber_fs(ColorInOut in [[stage_in]],
 }
 /*
 fragment float4 Composite(ColorInOut in [[stage_in]],
-                          constant Uniforms& uniforms[[buffer(buffer_uniforms)]],
+                          constant Uniforms& uniforms[[buffer(3)]],
                           texture2d<float> texture_one[[ texture(base_color_texture) ]],
                           texture2d<float> texture_two[[ texture(base_color_texture_two) ]])
 {

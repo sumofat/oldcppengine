@@ -1,8 +1,8 @@
 
 #import "GameViewController.h"
 
-#include "../../yoyo/RendererInclude.h"
-#import  "MTKViewDelegateView.h"
+#include "../../metalizer/RendererInclude.h"
+#import  "../../metalizer/renderer/MTKViewDelegateView.h"
 
 //NOTE(Ray):
 //#import "SpriteExample.h"

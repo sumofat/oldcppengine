@@ -144,11 +144,11 @@ namespace Engine
 #endif
         
         char* name = "dodge_challenger_model.fbx";
-        Yostr* path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
+        Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
         Yostr* buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-        path = AppendString(*buildpath,*path,&StringsHandler::transient_string_memory);
+        path = *AppendString(*buildpath,path,&StringsHandler::transient_string_memory);
         
-        if(AssetSystem::FBXSDKLoadModel(path->String,&testmodel))
+        if(AssetSystem::FBXSDKLoadModel(path.String,&testmodel))
         {
             
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
@@ -226,7 +226,7 @@ namespace Engine
                     {
                         MaterialCache::AddMaterial(&matstring,&render_material);
                         //Getmaterial file
-                        Yostr* meta_file_json = MetaFiles::GetMetaFile(&matstring);
+                        Yostr* meta_file_json = MetaFiles::GetMetaFile(matstring);
                         //Create RenderMaterial based on this and add it to the cache
                         PlatformOutput(asset_log,"Processing meta file");
 // 1. Parse a JSON string into DOM.
@@ -254,13 +254,13 @@ namespace Engine
                             const Value& shader_name = shader["name"];
                             PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
 
-                            if(Compare(shader_type_string, *CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
+                            if(Compare(shader_type_string, CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
                             {
                                 vs_name.Length = shader_name.GetStringLength();
                                 vs_name.NullTerminated = true;
                                 vs_name.String = (char*)shader_name.GetString();
                             }
-                            else if(Compare(shader_type_string, *CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
+                            else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
                             {
                                 fs_name.Length = shader_name.GetStringLength();
                                 fs_name.NullTerminated = true;
@@ -299,7 +299,7 @@ namespace Engine
                         typestring.Length = strlen;
                         typestring.String = (char*)type.GetString();
                         typestring.NullTerminated = true;
-                        ShaderValueType::Type value_type = MetaFiles::GetShaderType(&typestring);
+                        ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
 
                         //TODO(Ray):For the time being we only have one float4 it is base color...
                         //but will want to make this more flexible later

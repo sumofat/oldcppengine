@@ -131,7 +131,7 @@ namespace AssetSystem
                     {
                         PlatformOutput(asset_system_log, "MeshNAME:: %s", current_node->GetName());
                         const char* s = current_node->GetName();
-                        node_name = *CreateStringFromLiteral((char*)s,&StringsHandler::string_memory);
+                        node_name = CreateStringFromLiteral((char*)s,&StringsHandler::string_memory);
                 
                         FbxMesh* mesh = current_node->GetMesh();
                         //TODO(Ray):Later log any non triangular meshes for now we need to know.
@@ -139,7 +139,7 @@ namespace AssetSystem
                         {
                             PlatformOutput("Mesh is not triangulated :: %s \n", model->model_name.String);
                             //TODO(ray):Log this and output error.
-                            Yostr* error_string = AppendString(*CreateStringFromLiteral("NonTriangulatedMesh :: ", &StringsHandler::transient_string_memory), model->model_name, &StringsHandler::transient_string_memory);
+                            Yostr* error_string = AppendString(CreateStringFromLiteral("NonTriangulatedMesh :: ", &StringsHandler::transient_string_memory), model->model_name, &StringsHandler::transient_string_memory);
                             error_strings[error_count++] = error_string;
                             return;
                         }
@@ -162,13 +162,14 @@ namespace AssetSystem
                         uint element_count = lPolygonCount * lPolygonSize;
                         uint32_t float_size = sizeof(float);
                         uint32_t int_size = sizeof(uint32_t);
-#if 0
-                        vertex_vector = YoyoInitVectorWithAligment(float_count, float,false,4);
-                        element_vector = YoyoInitVectorWithAligment(element_count, uint32_t,false,4);
-                        normal_vector = YoyoInitVectorWithAligment(float_count, float,false,4);
-                        uv_vector = YoyoInitVectorWithAligment(uv_count, float,false,4);
-                        tangent_vector = YoyoInitVectorWithAligment(t_b_float_count, float,false,4);
-                        bitangent_vector = YoyoInitVectorWithAligment(t_b_float_count, float,false,4);
+#if 1
+                        uint32_t alignment = 0;
+                        vertex_vector = YoyoInitVectorWithAligment(float_count, sizeof(float),false,alignment);
+                        element_vector = YoyoInitVectorWithAligment(element_count, sizeof(uint32_t),false,alignment);
+                        normal_vector = YoyoInitVectorWithAligment(float_count, sizeof(float),false,alignment);
+                        uv_vector = YoyoInitVectorWithAligment(uv_count, sizeof(float),false,alignment);
+                        tangent_vector = YoyoInitVectorWithAligment(t_b_float_count, sizeof(float),false,alignment);
+                        bitangent_vector = YoyoInitVectorWithAligment(t_b_float_count, sizeof(float),false,alignment);
 #else
                         
                         vertex_vector = YoyoInitVector(float_count, float,false);
@@ -614,7 +615,7 @@ namespace AssetSystem
         PlatformOutput(asset_system_log, "TestLoading with FBXSDK");
         //ModelAsset result = {};
         bool is_success = false;
-        result->model_name = *CreateStringFromLiteral(file_path, &StringsHandler::transient_string_memory);
+        result->model_name = CreateStringFromLiteral(file_path, &StringsHandler::transient_string_memory);
         is_success = LoadScene(file_path, result);
         return is_success;
     }

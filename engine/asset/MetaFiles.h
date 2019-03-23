@@ -32,8 +32,8 @@ namespace ShaderValueType
 
 namespace MetaFiles
 {
-    MetaFileType::Type GetFileExtensionType(Yostr* file);
-    ShaderValueType::Type GetShaderType(Yostr* type);
+    MetaFileType::Type GetFileExtensionType(Yostr file);
+    ShaderValueType::Type GetShaderType(Yostr type);
 }
 
 #define METAFILE_H
