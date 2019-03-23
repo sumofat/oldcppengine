@@ -16,7 +16,7 @@ namespace AssetSystem
 
     bool asset_system_log = false;
 
-    Yostr* error_strings[1000];
+    Yostr error_strings[1000];
     u32 error_count = 0;
     
     void InitializeSdkObjects()
@@ -139,7 +139,7 @@ namespace AssetSystem
                         {
                             PlatformOutput("Mesh is not triangulated :: %s \n", model->model_name.String);
                             //TODO(ray):Log this and output error.
-                            Yostr* error_string = AppendString(CreateStringFromLiteral("NonTriangulatedMesh :: ", &StringsHandler::transient_string_memory), model->model_name, &StringsHandler::transient_string_memory);
+                            Yostr error_string = AppendString(CreateStringFromLiteral("NonTriangulatedMesh :: ", &StringsHandler::transient_string_memory), model->model_name, &StringsHandler::transient_string_memory);
                             error_strings[error_count++] = error_string;
                             return;
                         }

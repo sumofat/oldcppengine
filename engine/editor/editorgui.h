@@ -62,12 +62,11 @@ namespace EditorGUI
                 file_info* f_info;
                 while ((f_info = IterateVector(&result.Files, file_info)))
                 {
-
                     if(ImGui::Button(f_info->Name.String, ImVec2(-1.0f, 0.0f)))
                     {
                         LoadedTexture tex;
-                        Yostr* file_ext = GetExtension(&f_info->Name,&StringsHandler::transient_string_memory,false);
-                        MetaFileType::Type type = MetaFiles::GetFileExtensionType(*file_ext);
+                        Yostr file_ext = GetExtension(&f_info->Name,&StringsHandler::transient_string_memory,false);
+                        MetaFileType::Type type = MetaFiles::GetFileExtensionType(file_ext);
                         if(MetaFileType::PNG == type || MetaFileType::PSD == type)
                         {
                             if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))

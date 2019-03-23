@@ -89,9 +89,9 @@ namespace Engine
         //loading them into a sence hierarchy and than we will test grab a ref to the objects via some lookup
         //api.
 #if 1
-        Yostr* test_scene_meta_file = MetaFiles::GetMetaFile(CreateStringFromLiteral("scene_example", &StringsHandler::transient_string_memory));
+        Yostr test_scene_meta_file = MetaFiles::GetMetaFile(CreateStringFromLiteral("scene_example", &StringsHandler::transient_string_memory));
         Document sdoc;
-        sdoc.Parse((char*)test_scene_meta_file->String);
+        sdoc.Parse((char*)test_scene_meta_file.String);
         if(!sdoc.IsObject())
         {
             //Error handling
@@ -145,18 +145,18 @@ namespace Engine
         
         char* name = "dodge_challenger_model.fbx";
         Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
-        Yostr* buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-        path = *AppendString(*buildpath,path,&StringsHandler::transient_string_memory);
+        Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
+        path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
         
         if(AssetSystem::FBXSDKLoadModel(path.String,&testmodel))
         {
             
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
-            Yostr* model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(path,&testmodel);
+            Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(path,&testmodel);
 
 // 1. Parse a JSON string into DOM.
             Document d;
-            d.Parse((char*)model_meta_file->String);
+            d.Parse((char*)model_meta_file.String);
             if(!d.IsObject())
             {
                 //Error handling
@@ -226,12 +226,12 @@ namespace Engine
                     {
                         MaterialCache::AddMaterial(&matstring,&render_material);
                         //Getmaterial file
-                        Yostr* meta_file_json = MetaFiles::GetMetaFile(matstring);
+                        Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
                         //Create RenderMaterial based on this and add it to the cache
                         PlatformOutput(asset_log,"Processing meta file");
 // 1. Parse a JSON string into DOM.
                         Document rd;
-                        rd.Parse((char*)meta_file_json->String);
+                        rd.Parse((char*)meta_file_json.String);
                         if(!rd.IsObject())
                         {
                             //Error handling

@@ -24,8 +24,8 @@ namespace MetaFiles
 
     void Init()
     {
-        Yostr* asset_path = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-        file_write_path = *AppendString(*asset_path,CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
+        Yostr asset_path = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
+        file_write_path = AppendString(asset_path,CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
     }
     
     ShaderValueType::Type GetShaderType(Yostr type)
@@ -84,14 +84,14 @@ namespace MetaFiles
         return MetaFileType::NONE;
     }
 
-    Yostr* GetMetaFile(Yostr path_to_asset)
+    Yostr GetMetaFile(Yostr path_to_asset)
     {
-        Yostr* result;
+        Yostr result;
         Yostr file_name = GetFilenameFromPath(path_to_asset, &StringsHandler::transient_string_memory);
-        Yostr* file_namenoext = StripExtension(&file_name, &StringsHandler::transient_string_memory);
-        file_namenoext = AppendString(*file_namenoext, CreateStringFromLiteral(".mat", &StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
-        Yostr* path_to_meta_file = AppendStringToChar(game_data_meta_dir,*file_namenoext,&StringsHandler::transient_string_memory);
-        read_file_result meta_file_result = PlatformReadEntireFile(path_to_meta_file);
+        Yostr file_namenoext = StripExtension(&file_name, &StringsHandler::transient_string_memory);
+        file_namenoext = AppendString(file_namenoext, CreateStringFromLiteral(".mat", &StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
+        Yostr path_to_meta_file = AppendStringToChar(game_data_meta_dir,file_namenoext,&StringsHandler::transient_string_memory);
+        read_file_result meta_file_result = PlatformReadEntireFile(&path_to_meta_file);
         result = CreateStringFromLength((char*)meta_file_result.Content,meta_file_result.ContentSize,&StringsHandler::transient_string_memory);
 //ok as long as we are an ascii string//1 byte = 1 character
         return result;
@@ -185,7 +185,7 @@ namespace MetaFiles
         return input_object;
     }
     
-    Yostr* CreateDefaultModelMetaFile(Yostr filepath,ModelAsset* model)
+    Yostr CreateDefaultModelMetaFile(Yostr filepath,ModelAsset* model)
     {
         //Create a new material if we couldnt find the one at data
 //        if(mat_file_result.ContentSize <= 0)
@@ -203,8 +203,8 @@ namespace MetaFiles
             //agnostic
 
             Yostr name = GetFilenameFromPath(filepath,&StringsHandler::transient_string_memory);
-            Yostr* namenoext = StripExtension(&name,&StringsHandler::transient_string_memory);
-            Value n(namenoext->String, allocator);            
+            Yostr namenoext = StripExtension(&name,&StringsHandler::transient_string_memory);
+            Value n(namenoext.String, allocator);            
             d.AddMember("model_file", n, allocator);
 
             Value meshes_json(kArrayType);
@@ -305,24 +305,24 @@ namespace MetaFiles
             uint32_t length = String_GetLength_Char((char*)output);
 
             Yostr filename = GetFilenameFromPath(filepath,&StringsHandler::transient_string_memory);
-            Yostr* filenamenoext = StripExtension(&filename,&StringsHandler::transient_string_memory);
-            Yostr* final_filename = AppendString(*filenamenoext,CreateStringFromLiteral(".mat",&StringsHandler::transient_string_memory),&StringsHandler::transient_string_memory);
+            Yostr filenamenoext = StripExtension(&filename,&StringsHandler::transient_string_memory);
+            Yostr final_filename = AppendString(filenamenoext,CreateStringFromLiteral(".mat",&StringsHandler::transient_string_memory),&StringsHandler::transient_string_memory);
             PlatformFilePointer file{};
-            Yostr* final_output_path = AppendStringToChar(game_data_meta_dir,*final_filename,&StringsHandler::transient_string_memory);
-            PlatformWriteMemoryToFile(&file,final_output_path->String,(void*)output,length,true,"w+");
-            Yostr* result = CreateStringFromLength((char*)output, length, &StringsHandler::transient_string_memory);
-            PlatformOutput(log_output,"%s",result->String); 
+            Yostr final_output_path = AppendStringToChar(game_data_meta_dir,final_filename,&StringsHandler::transient_string_memory);
+            PlatformWriteMemoryToFile(&file,final_output_path.String,(void*)output,length,true,"w+");
+            Yostr result = CreateStringFromLength((char*)output, length, &StringsHandler::transient_string_memory);
+            PlatformOutput(log_output,"%s",result.String); 
             return result;
         }
     }
        
-    Yostr* GetOrCreateDefaultModelMetaFile(Yostr file,ModelAsset* model)
+    Yostr GetOrCreateDefaultModelMetaFile(Yostr file,ModelAsset* model)
     {
-        Yostr* result = GetMetaFile(file);
-        if(result->Length == 0 && model)//no meta file make one
+        Yostr result = GetMetaFile(file);
+        if(result.Length == 0 && model)//no meta file make one
         {
-            Yostr* file_ext = GetExtension(&file,&StringsHandler::transient_string_memory,false);
-            if(MetaFileType::FBX == GetFileExtensionType(*file_ext))
+            Yostr file_ext = GetExtension(&file,&StringsHandler::transient_string_memory,false);
+            if(MetaFileType::FBX == GetFileExtensionType(file_ext))
             {
                 result = CreateDefaultModelMetaFile(file,model);
             }
