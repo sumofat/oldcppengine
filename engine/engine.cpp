@@ -54,6 +54,8 @@ namespace Engine
 
     SceneBuffer scene_buffer;
     Scene* default_empty_scene;
+
+    AnythingCache material_cache;
     
     void Init(float2 window_dim)
     {
@@ -66,8 +68,9 @@ namespace Engine
         StringsHandler::Init();
         
         RenderCache::Init(3000);
-        MaterialCache::Init(3000);
-        MetaFiles::Init();
+        //MaterialCache::Init(3000);
+AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
+MetaFiles::Init();
         SceneCode::InitScene(&scene_buffer,10);
         default_empty_scene = SceneCode::CreateEmptyScene(&scene_buffer);
         
@@ -217,14 +220,17 @@ namespace Engine
                     Yostr vs_name;
                     Yostr fs_name;
                     float4 base_color_input;
-                    if(MaterialCache::DoesMaterialExist(&matstring))
+
+                    uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
+                    if(AnythingCacheCode::DoesThingExist(&material_cache,&mat_key))
                     {
-                        render_material = MaterialCache::GetMaterial(&matstring);
+                        render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&material_cache,&mat_key);//MaterialCache::GetMaterial(&matstring);
                         rendermesh->r_material = render_material;
                     }
                     else
                     {
-                        MaterialCache::AddMaterial(&matstring,&render_material);
+//                        MaterialCache::AddMaterial(&matstring,&render_material);
+                        AnythingCacheCode::AddThing(&material_cache,&mat_key,&render_material);
                         //Getmaterial file
                         Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
                         //Create RenderMaterial based on this and add it to the cache

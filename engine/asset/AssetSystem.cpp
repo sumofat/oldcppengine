@@ -18,6 +18,8 @@ namespace AssetSystem
 
     Yostr error_strings[1000];
     u32 error_count = 0;
+
+    AnythingCache texture_cache;
     
     void InitializeSdkObjects()
     {
@@ -50,9 +52,11 @@ namespace AssetSystem
     void Init()
     {
         InitializeSdkObjects();
-        TextureCache::Init(3000);
-        ModelCache::Init(3000);
+        //TextureCache::Init(3000);
+        //ModelCache::Init(3000);
         GPUResourceCache::Init(3000);
+        AnythingCacheCode::Init(&texture_cache,3000,sizeof(LoadedTexture),sizeof(uint64_t));
+        
     }
 
     void UploadModelAssetToGPU(ModelAsset* ma)
@@ -636,23 +640,28 @@ namespace AssetSystem
         bool bool_result = false;
         //result = nullptr;
         //TODO(Ray):Propery handling of a unfound asset
-        if(!TextureCache::DoesTextureExist(&path))
+        //if(!TextureCache::DoesTextureExist(&path))
+        uint64_t t_key = StringsHandler::StringHash(path.String,path.Length);
+        if(!AnythingCacheCode::DoesThingExist(&texture_cache,&t_key))
         {
             //TODO(Ray):This gets it from disk but we should be able to get it from anywhere .. network stream etc...
             //We will add a facility for tagging assets and retrieving base on criteria and only the asset retriever
             //(Serializer) like system will be the only one to deal with what we are getting it from.
-            LoadedTexture tex = YoyoSpriteBatchRenderer::GetLoadedImage(path.String,&StringsHandler::transient_string_memory);
+           // LoadedTexture tex = Resource::GetLoadedImage(path.String);
+            LoadedTexture tex = Resource::GetLoadedImage(path.String, 4);
             if(tex.texels)
             {
                 tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
-                TextureCache::AddTexture(&path,&tex);
+                AnythingCacheCode::AddThing(&texture_cache,&t_key,&tex);
+//TextureCache::AddTexture(&path,&tex);
                 *result = tex;
                 bool_result = true;
             }
         }
         else
         {
-            LoadedTexture* tex = TextureCache::GetTexture(&path);
+            //LoadedTexture* tex = TextureCache::GetTexture(&path);
+            LoadedTexture*tex = (LoadedTexture*)AnythingCacheCode::GetThing(&texture_cache,&t_key);
             if(tex)
             {
                 *result = *tex;
@@ -680,7 +689,7 @@ namespace AssetSystem
         shader.texture_slots[0] = slot;
         
         RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,1);
-        render_pipeline_descriptor.label = "test";
+        //render_pipeline_descriptor.label = "test";
         render_pipeline_descriptor.vertex_function = shader.vs_object;
         render_pipeline_descriptor.fragment_function = shader.ps_object;
         render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
@@ -783,7 +792,7 @@ namespace AssetSystem
         shader.texture_slots[0] = slot;
 
         RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,1);
-        render_pipeline_descriptor.label = "test";
+//        render_pipeline_descriptor.label = "test";
         render_pipeline_descriptor.vertex_function = shader.vs_object;
         render_pipeline_descriptor.fragment_function = shader.ps_object;
         render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;
@@ -887,7 +896,7 @@ namespace AssetSystem
         shader.texture_slots[0] = slot;
 
         RenderPipelineStateDesc render_pipeline_descriptor = RenderEncoderCode::CreatePipelineDescriptor(nullptr,nullptr,0);
-        render_pipeline_descriptor.label = "test";
+//        render_pipeline_descriptor.label = "test";
         render_pipeline_descriptor.vertex_function = shader.vs_object;
         render_pipeline_descriptor.fragment_function = shader.ps_object;
         render_pipeline_descriptor.depthAttachmentPixelFormat = PixelFormatDepth32Float_Stencil8;

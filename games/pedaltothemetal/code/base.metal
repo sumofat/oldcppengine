@@ -95,7 +95,7 @@ constant float clearcoatGloss = 0.0;//float3(0, 1, 1);
 
 float SchlickFresnel(float u)
 {
-    float m = clamp(1-u, 0, 1);
+    float m = clamp((float)1-u, 0.0, 1.0);
     float m2 = m*m;
     return m2*m2*m; // pow(m,5)
 }

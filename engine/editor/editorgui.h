@@ -60,7 +60,7 @@ namespace EditorGUI
                 dir_files_result result = PlatformGetAllAssetFilesInDir(Directory_None,&StringsHandler::transient_string_memory,true,true);
                 int i =0;
                 file_info* f_info;
-                while ((f_info = IterateVector(&result.Files, file_info)))
+                while ((f_info = YoyoIterateVector(&result.Files, file_info)))
                 {
                     if(ImGui::Button(f_info->Name.String, ImVec2(-1.0f, 0.0f)))
                     {
@@ -81,7 +81,7 @@ namespace EditorGUI
 //                ImGui::Text("%04d: %s", i++,f_info->Name.String);
 //                    PlatformOutput(true, f_info->Name.String);
                 }
-                FreeVectorMem(&result.Files);
+                YoyoFreeVectorMem(&result.Files);
                 ImGui::EndChild();
                 ImGui::PopStyleVar();
             }

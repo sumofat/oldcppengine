@@ -5,7 +5,7 @@ using namespace rapidjson;
 struct MetaScenes
 {
     uint32_t entry_scene_index;//this scene will be the one loaded after the engine is inited
-    vector scenes;//Yostrings
+    YoyoVector scenes;//Yostrings
 };
 
             //we will put all metafiles in one big dump folder for now
@@ -19,7 +19,7 @@ namespace MetaFiles
 {
     bool log_output = true;
     char* game_data_dir = "~/work/pedaltothemetal/games/pedaltothemetal/data/";
-    char* game_data_meta_dir = "/Users/ray.garner/work/pedaltothemetal/games/pedaltothemetal/data/metafiles/";
+    char* game_data_meta_dir = "/Users/ray.garner/work/mar/games/pedaltothemetal/data/metafiles/";
     Yostr file_write_path;
 
     void Init()
