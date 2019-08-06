@@ -7,6 +7,3 @@
 [submodule "engine/metalizer"]
 	path = engine/metalizer
 	url = https://github.com/godratio/Metalizer.git
-[submodule "PhysX"]
-	path = PhysX
-	url = https://github.com/NVIDIAGameWorks/PhysX.git
