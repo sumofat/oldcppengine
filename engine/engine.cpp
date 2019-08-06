@@ -75,8 +75,29 @@ namespace Engine
         SceneCode::InitScene(&scene_buffer,10);
         default_empty_scene = SceneCode::CreateEmptyScene(&scene_buffer);
 
-        PhysicsCode::Init();        
+        PhysicsCode::Init();
+        
+        static SoundClip bgm_soundclip;
         SoundCode::Init();
+        SoundAssetCode::Init();
+        SoundCode::SetDefaultListener();
+        char* file_name = "Master_Bank.strings.bank";
+        Yostr base_path_to_data = BuildPathToAssets(&StringsHandler::string_memory, Directory_None);
+        Yostr mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(file_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
+        
+        SoundAssetCode::CreateSoundBank(mat_final_path.String);
+        
+        char* bsfile_name = "Master_Bank.bank";
+        mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(bsfile_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
+        SoundAssetCode::CreateSoundBank(mat_final_path.String);
+        
+        char* afile_name = "bgm.bank";
+        mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(afile_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
+        SoundAssetCode::CreateSoundBank(mat_final_path.String);
+        SoundAssetCode::LoadBankSampleData();
+        SoundAssetCode::GetBus("bus:/bgm");
+        SoundAssetCode::GetEvent("event:/bgm",&bgm_soundclip);
+
 //order of importantce
         //TODO(Ray):FBXSDK inclusion .. set up precompiled headers
         AssetSystem::Init();
