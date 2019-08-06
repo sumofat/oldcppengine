@@ -30,6 +30,8 @@
 
 #include "asset/AssetSystem.cpp"
 #include "asset/MetaFiles.cpp"
+#include "physics/physics.cpp"
+#include "audio/SoundInterface.cpp"
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
@@ -66,21 +68,20 @@ namespace Engine
         APIFileOptions::data_dir = "/data/";
 //2. Init Base systems 
         StringsHandler::Init();
-        
         RenderCache::Init(3000);
         //MaterialCache::Init(3000);
-AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
-MetaFiles::Init();
+        AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
+        MetaFiles::Init();
         SceneCode::InitScene(&scene_buffer,10);
         default_empty_scene = SceneCode::CreateEmptyScene(&scene_buffer);
-        
-        //order of importantce
+
+        PhysicsCode::Init();        
+        SoundCode::Init();
+//order of importantce
         //TODO(Ray):FBXSDK inclusion .. set up precompiled headers
         AssetSystem::Init();
-        
         //TODO(Ray):Go ahead and set up physx and fmod see how compile times will fair    
         //TODO(Ray):AssetSystem:loading serializing meta prefabs shaders loading etc etc..
-
         //TODO(Ray):Graphics:Deffered needs some assets first.
         //TODO(Ray):Physx and Audio integration
         //TODO(Ray):Multi threading facilities

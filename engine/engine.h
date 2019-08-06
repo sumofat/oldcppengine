@@ -17,6 +17,8 @@
 #define FBXSDK_SHARED
 #include <fbxsdk.h>
 
+#include "physics/physics.h"
+#include "audio/SoundInterface.h"
 namespace Engine
 {
     void Init(float2 window_dim);
