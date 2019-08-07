@@ -2,9 +2,6 @@
 
 #define _DEBUG
 #include "PxPhysicsAPI.h"
-//#include "fmod_studio.h"
-//#include "fmod_studio.hpp"
-//#include "fmod_errors.h"
 
 //NOTE(Ray): API is defined here but the hardwork is done by NVIDIA physics lib.
 using namespace physx;

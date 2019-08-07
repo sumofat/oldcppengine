@@ -75,36 +75,23 @@ namespace Engine
         SceneCode::InitScene(&scene_buffer,10);
         default_empty_scene = SceneCode::CreateEmptyScene(&scene_buffer);
 
+        //Physics
         PhysicsCode::Init();
-        
-        static SoundClip bgm_soundclip;
+
+        //Audio
         SoundCode::Init();
         SoundAssetCode::Init();
         SoundCode::SetDefaultListener();
-        char* file_name = "Master_Bank.strings.bank";
-        Yostr base_path_to_data = BuildPathToAssets(&StringsHandler::string_memory, Directory_None);
-        Yostr mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(file_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
         
-        SoundAssetCode::CreateSoundBank(mat_final_path.String);
-        
-        char* bsfile_name = "Master_Bank.bank";
-        mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(bsfile_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
-        SoundAssetCode::CreateSoundBank(mat_final_path.String);
-        
-        char* afile_name = "bgm.bank";
-        mat_final_path = AppendString(base_path_to_data, CreateStringFromLiteral(afile_name,&StringsHandler::transient_string_memory), &StringsHandler::transient_string_memory);
-        SoundAssetCode::CreateSoundBank(mat_final_path.String);
-        SoundAssetCode::LoadBankSampleData();
-        SoundAssetCode::GetBus("bus:/bgm");
-        SoundAssetCode::GetEvent("event:/bgm",&bgm_soundclip);
-
 //order of importantce
         //TODO(Ray):FBXSDK inclusion .. set up precompiled headers
         AssetSystem::Init();
-        //TODO(Ray):Go ahead and set up physx and fmod see how compile times will fair    
+
+//NOTE(Ray):Physx and Audio integration
+//NOTE(Ray):we have  set up physx and fmod see how compile times will dont change much but suffer for other reasons.
+
         //TODO(Ray):AssetSystem:loading serializing meta prefabs shaders loading etc etc..
         //TODO(Ray):Graphics:Deffered needs some assets first.
-        //TODO(Ray):Physx and Audio integration
         //TODO(Ray):Multi threading facilities
         //TODO(Ray):Memory tracking system
         //TODO(Ray):Profiling System
@@ -560,7 +547,8 @@ namespace Engine
         PlatformOutput(engine_log,"Engine Update Begin\n");
         EngineInput::PullMouseState(&ps);
         gameUpdate();
-
+        
+        SoundCode::Update();
 //Game UI
 #if 0
     HotNodeState* hot_node_state = &ui->hot_node_state;

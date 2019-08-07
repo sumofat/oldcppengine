@@ -2,7 +2,6 @@
 #include "deffered.h"
 #include "imguirender.h"
 
-
 #ifdef ENGINEIMPL
 namespace DefferedRenderer
 {
@@ -44,20 +43,16 @@ namespace DefferedRenderer
         PlatformOutput(output_log,"Executing FullScreen Quad Command.\n");
         RenderCommandEncoder re = pass->render_encoder;
         RenderWithFullScreenCommand* command;
-        
         while (command = YoyoIterateVector(&buffer->buffer, RenderWithFullScreenCommand))
         {
             RenderMaterial material = command->material;
             RenderEncoderCode::SetRenderPipelineState(&re,material.pipeline_state.state);
             RenderEncoderCode::SetDepthStencilState(&re,&material.depth_stencil_state);
-
             RenderEncoderCode::SetFragmentTexture(&re,&command->texture,0);
-
             RenderEncoderCode::SetVertexBuffer(&re,&command->resource,0,0);
             RenderEncoderCode::DrawPrimitives(&re,primitive_type_triangle,0,6);
         }
         YoyoClearVector(&buffer->buffer);
-//        YoyoResetVectorIterator(&buffer->buffer);        
     }
     
     void InitPerProjPass(RenderCamera* cam,PlatformState* ps,DefferedRenderPass* pass,Texture* texture)
@@ -200,6 +195,8 @@ namespace DefferedRenderer
         
         passes.buffer = YoyoInitVector(10, RenderPassBuffer, false);
         InitPerProjPass(cam, ps, &gbufferpass,&render_tex);
+        //TODO(Ray):Wwe should initialize once but reset and recompile our pass orders every frame allowing more flexibility
+        //in the overall composite and order.
         YoyoPushBack(&passes.buffer, gbufferpass);
         
         //imgui

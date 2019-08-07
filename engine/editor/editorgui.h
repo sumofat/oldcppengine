@@ -120,7 +120,7 @@ namespace EditorGUI
         }
         ImGui::End();
     }
-
+    
     void ShowTheMainMenuBar()
     {
         if(ImGui::BeginMainMenuBar())
@@ -133,12 +133,23 @@ namespace EditorGUI
             }            
             if (ImGui::BeginMenu("Assets"))
             {
+                if (ImGui::BeginMenu("GameControls"))
+                {
+                    if(ImGui::MenuItem("StartNewGame"))
+                    {
+                        PlatformOutput(true,"Starting new game.\n");
+                    }
+                    if(ImGui::MenuItem("SaveGame"))
+                    {
+                        PlatformOutput(true,"Saving game.\n");
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::Separator();//Seperate the window from the rest of the options.
                 if (ImGui::MenuItem("AssetLibraryWindow", "CTRL+A"))
                 {
                     show_asset_library_window = ~show_asset_library_window;
-                }
-                ImGui::Separator();//Seperate the window from the rest of the options.
-                
+                }                
                 ImGui::EndMenu();
             }
             if(ImGui::BeginMenu("Debug"))

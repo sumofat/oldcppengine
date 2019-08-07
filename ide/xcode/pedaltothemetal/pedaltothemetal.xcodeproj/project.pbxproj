@@ -50,6 +50,7 @@
 		94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */; };
 		94A841E921E9F0D30051DB13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94A841E221E9F0BB0051DB13 /* main.cpp */; };
 		94A842CC21EC7A5B0051DB13 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94A8427E21EC27E70051DB13 /* imgui_impl_metal.mm */; };
+		94D3F22F22FACE2100423CA1 /* sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F22E22FACE2100423CA1 /* sprite.metal */; };
 		94FD8F6821E631C100054E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94FD8F6721E631C100054E9C /* Assets.xcassets */; };
 		94FD8FE621E6CDC100054E9C /* engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FD8FBB21E6C01300054E9C /* engine.cpp */; };
 /* End PBXBuildFile section */
@@ -472,6 +473,8 @@
 		94A842CE21ECB5B80051DB13 /* imguirender.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imguirender.cpp; sourceTree = "<group>"; };
 		94A842CF21ECB5D20051DB13 /* imgui_impl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_impl.cpp; sourceTree = "<group>"; };
 		94A842D021ECB5D20051DB13 /* imgui_impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imgui_impl.h; sourceTree = "<group>"; };
+		94D3F22C22FAC16C00423CA1 /* code */ = {isa = PBXFileReference; lastKnownFileType = folder; path = code; sourceTree = "<group>"; };
+		94D3F22E22FACE2100423CA1 /* sprite.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = sprite.metal; path = ../../../engine/metalizer/sprite.metal; sourceTree = "<group>"; };
 		94D5864522F9140E00060A78 /* fmod_studio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fmod_studio.h; sourceTree = "<group>"; };
 		94D5864622F9140E00060A78 /* fmod_studio.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fmod_studio.hpp; sourceTree = "<group>"; };
 		94D5864722F9140E00060A78 /* fmod_studio_common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fmod_studio_common.h; sourceTree = "<group>"; };
@@ -921,6 +924,7 @@
 		9452F9EA21E8E1F700B07061 /* pedaltothemetal */ = {
 			isa = PBXGroup;
 			children = (
+				94D3F22C22FAC16C00423CA1 /* code */,
 				94A0148C21F23583004A9DF2 /* data */,
 				94A841E121E9F0BB0051DB13 /* code */,
 			);
@@ -2440,6 +2444,7 @@
 		94FD8F4F21E631C000054E9C = {
 			isa = PBXGroup;
 			children = (
+				94D3F22E22FACE2100423CA1 /* sprite.metal */,
 				9491985822F9A82A00E2450D /* libfmodstudio.dylib */,
 				9491985722F9A82A00E2450D /* libfmodstudioL.dylib */,
 				9491984C22F95BEF00E2450D /* libPhysXCharacterKinematic_64.a */,
@@ -3010,6 +3015,7 @@
 			files = (
 				949AB29522451FDB00133C88 /* base.metal in Sources */,
 				9452F9E821E8DFCB00B07061 /* main.m in Sources */,
+				94D3F22F22FACE2100423CA1 /* sprite.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3085,6 +3091,7 @@
 					"$(inherited)",
 					OSX,
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3100,6 +3107,7 @@
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

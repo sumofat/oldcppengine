@@ -1,3 +1,4 @@
+
 #if !defined(SOUNDINTERFACE_H)
 
 #include "fmod_studio.h"
@@ -15,12 +16,10 @@ struct SoundClip
 
 struct SoundBuffer
 {
-    
 };
 
 struct SoundDevice
 {
-    
 };
 
 struct SoundListener
@@ -56,12 +55,12 @@ struct SoundBusBuffer
 namespace SoundCode
 {
 //    static FMOD::Studio::System* sound_system = NULL;
-    static void Init();
+    void Init();
     //GOOD for 2d sound effects
-    static void SetDefaultListener();
-    static void ContinousPlay(SoundClip* sample);
-    static void Stop(SoundClip* sample);
-    static void Update();
+    void SetDefaultListener();
+    void ContinousPlay(SoundClip* sample);
+    void Stop(SoundClip* sample);
+    void Update();
 }
 
 namespace SoundAssetCode
@@ -69,14 +68,15 @@ namespace SoundAssetCode
     //NOTE(Ray):This is here for convience.
 //    static SoundBankBuffer bank_buffer;
     //static SoundBusBuffer bus_buffer;     
-    static bool Init();
-    static void CreateSoundBank(SoundBankBuffer* buffer,char* bank_name);
-    static void CreateSoundBank(char* bank_name);
-    static void LoadBankSampleData(SoundBank* bank);
-    static void LoadBankSampleData();
-    static void GetBus(SoundBusBuffer* buffer,char* bus_name);
-    static void GetBus(char* bus_name);
-    static bool GetEvent(char* event_name,SoundClip* clip);
+    bool Init();
+    void CreateSoundBank(SoundBankBuffer* buffer,char* bank_name);
+    void CreateSoundBank(char* bank_name);
+    void LoadBankSampleData(SoundBank* bank);
+    void LoadBankSampleData();
+    void GetBus(SoundBusBuffer* buffer,char* bus_name);
+    void GetBus(char* bus_name);
+    bool GetEvent(char* event_name,SoundClip* clip);
 }
 #define SOUNDINTERFACE_H
 #endif
+
