@@ -6,8 +6,10 @@
 //NOTE(Ray):
 //#import "SpriteExample.h"
 #import "../../engine.h"
+#if OSX
 #import "../../external/imgui/examples/imgui_impl_osx.h"
 #import "../../external/imgui/examples/imgui_impl_osx.mm"
+
 //Things in the platform layer just return or fill out the raw results.
 //The engine will tranlate those to useful resutls.
 static NSView *globalview;
@@ -16,7 +18,9 @@ void OnIMGUIEvent(NSEvent* event)
 {
     ImGui_ImplOSX_HandleEvent(event, globalview);
 }
-
+#elif IOS
+static UIView *globalview;
+#endif
 @implementation GameViewController
 {
 }
@@ -28,14 +32,16 @@ void OnIMGUIEvent(NSEvent* event)
     {
 #if OSX
         CGRect screenFrame = [[NSScreen mainScreen]frame];
+        float2 dim = float2(screenFrame.size.width,screenFrame.size.height);
 #elif IOS
         CGRect screenFrame = [[UIScreen mainScreen]bounds];
+        float2 dim = float2(screenFrame.size.width,screenFrame.size.height) * [UIScreen mainScreen].nativeScale;
 #endif
-        float2 dim = float2(screenFrame.size.width,screenFrame.size.height);
+       
         CreateDeviceResult device_create_result = RendererCode::InitGraphics(dim,0);
         if(device_create_result.is_init)
         {
-            self.view = (MTKViewDelegateView*)PlatformGraphicsAPI_Metal::GetView();
+            self.view = (__bridge MTKViewDelegateView*)PlatformGraphicsAPI_Metal::GetView();
             globalview = self.view;
 #if OSX
             //[self.view.window makeFirstResponder:self.view];

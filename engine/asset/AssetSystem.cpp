@@ -14,12 +14,19 @@ namespace AssetSystem
     FbxManager* fbx_manager = NULL;
     FbxScene* fbx_scene = NULL;
 
-    bool asset_system_log = false;
+    bool asset_system_log = true;
 
     Yostr error_strings[1000];
     u32 error_count = 0;
 
     AnythingCache texture_cache;
+
+    Yostr GetDataPath(const char* file,MemoryArena arena)
+    {
+        Yostr path = BuildPathToAssets(&arena,0);
+        Yostr FinalPathToAsset = AppendString(path,CreateStringFromLiteral(file,&arena),&arena);
+        return FinalPathToAsset;
+    }
     
     void InitializeSdkObjects()
     {
@@ -66,22 +73,22 @@ namespace AssetSystem
             int is_valid = 0;
             GPUMeshResource mesh_r;
             MeshAsset* mesh = (MeshAsset*)ma->meshes.base + i;
-            if(mesh->vertices.count > 0)
+            if(mesh->vertices.set_count > 0)
             {
-                mesh_r.vertex_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->vertices.count,ResourceStorageModeShared,12,mesh->vertices.count);
-                RenderGPUMemory::UploadBufferData(&mesh_r.vertex_buff,(void*)mesh->vertices.base,sizeof(f32) * mesh->vertices.count);
+                mesh_r.vertex_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->vertices.set_count,ResourceStorageModeShared,12,mesh->vertices.set_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.vertex_buff,(void*)mesh->vertices.base,sizeof(f32) * mesh->vertices.set_count);
                 is_valid++;
             }
-            if(mesh->normals.count > 0)
+            if(mesh->normals.set_count > 0)
             {
-                mesh_r.normal_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->normals.count,ResourceStorageModeShared,12,mesh->normals.count);
-                RenderGPUMemory::UploadBufferData(&mesh_r.normal_buff,(void*)mesh->normals.base,sizeof(float) * mesh->normals.count);
+                mesh_r.normal_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->normals.set_count,ResourceStorageModeShared,12,mesh->normals.set_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.normal_buff,(void*)mesh->normals.base,sizeof(float) * mesh->normals.set_count);
                 is_valid++;
             }
-            if(mesh->uvs.count > 0)
+            if(mesh->uvs.set_count > 0)
             {
-                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uvs.count,ResourceStorageModeShared,12,mesh->uvs.count);
-                RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uvs.base,sizeof(float) * mesh->uvs.count);
+                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uvs.set_count,ResourceStorageModeShared,12,mesh->uvs.set_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uvs.base,sizeof(float) * mesh->uvs.set_count);
                 is_valid++;
             }
             if(mesh->elements.count > 0)

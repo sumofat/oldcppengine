@@ -3,6 +3,8 @@
 namespace EngineInput
 {
     bool log = true;
+    
+#ifdef OSX || WIN
     void PullMouseState(PlatformState* ps)
     {
         Input* input = &ps->input;
@@ -19,6 +21,8 @@ namespace EngineInput
             PlatformOutput(log,"mousep: %f:%f\n",mp.x(),mp.y());
         }
     }
+#endif
+    
 }
 
 #endif

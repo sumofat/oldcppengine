@@ -1,4 +1,4 @@
-
+#include "../../metalizer/glemu/glemu.h"
 #include "deffered.h"
 #include "imguirender.h"
 
@@ -36,6 +36,7 @@ namespace DefferedRenderer
     void Init(bool is_log)
     {
         output_log = is_log;
+        
     }
     
     void ExecuteFullScreenQuadCommands(RenderPass* pass,RenderCommandBuffer* buffer,void* command_params_)
@@ -197,15 +198,23 @@ namespace DefferedRenderer
         InitPerProjPass(cam, ps, &gbufferpass,&render_tex);
         //TODO(Ray):Wwe should initialize once but reset and recompile our pass orders every frame allowing more flexibility
         //in the overall composite and order.
+
         YoyoPushBack(&passes.buffer, gbufferpass);
-        
+#ifdef OSX || WINDOWS
         //imgui
         IMGUIRender::Init(&imguipass,ps,&render_tex);
         YoyoPushBack(&passes.buffer, imguipass);
-
+#endif
         //Composite pass will combine all passes and blit to drawable texture
         InitFullScreenQuadPass(&full_screen_quad_cam,ps,&composite_pass);
         YoyoPushBack(&passes.buffer, composite_pass);
+        
+        OpenGLEmu::Init();
+    }
+    
+    void PreframeSetup()
+    {
+        OpenGLEmu::PreFrameSetup();
     }
     
     //TODO(Ray):Later we should have a render graph that would have intimate knowledge of the passes to be executed
@@ -217,14 +226,15 @@ namespace DefferedRenderer
         command_with_material.material     = full_screen_quad_material;
         command_with_material.resource     = full_screen_quad_resource;
 
+#if 1
         void* c_buffer = RenderEncoderCode::CommandBuffer();
         Drawable current_drawable;
-        
         RenderPassBuffer* render_pass = {};
         while (render_pass = YoyoIterateVector(&passes.buffer, RenderPassBuffer))
         {
             if(render_pass->ExecutePasses)
             {
+#if 1
                 if(render_pass->id == (uint32_t)pass_composite)//will be last pass
                 {
                     current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();
@@ -234,6 +244,7 @@ namespace DefferedRenderer
                     render_pass->ExecutePasses(render_pass,c_buffer,(void*)&current_drawable.texture);                    
                 }
                 else
+#endif
                 {
                     render_pass->ExecutePasses(render_pass,c_buffer,0);                    
                 }
@@ -243,9 +254,14 @@ namespace DefferedRenderer
         
         if(current_drawable.state)
         {
-            RenderEncoderCode::PresentDrawable(c_buffer,current_drawable.state);
+//            RenderEncoderCode::PresentDrawable(c_buffer,current_drawable.state);
         }
-        RenderEncoderCode::Commit(c_buffer);
+//                RenderEncoderCode::(c_buffer);
+//        RenderEncoderCode::Commit(c_buffer);
+#endif
+        
+        OpenGLEmu::Execute(c_buffer);        
+
     }
 
 };

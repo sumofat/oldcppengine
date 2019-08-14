@@ -26,6 +26,9 @@ namespace MetaFiles
     {
         Yostr asset_path = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         file_write_path = AppendString(asset_path,CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
+#ifdef IOS
+        game_data_meta_dir = file_write_path.String;
+#endif
     }
     
     ShaderValueType::Type GetShaderType(Yostr type)

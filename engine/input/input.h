@@ -88,7 +88,9 @@ struct PlatformState;
 namespace EngineInput
 {
     extern bool log;
+#ifdef OSX || WINDOWS
     void PullMouseState(PlatformState* ps);
+#endif
 }
 
 #define INPUT_H

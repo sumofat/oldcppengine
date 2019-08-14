@@ -6,9 +6,8 @@
 #include "input/input.cpp"
 
 #ifdef ENGINEIMPL
-
 #include "graphics/camera.cpp"
-#include    "graphics/deffered/deffered.cpp"
+#include "graphics/deffered/deffered.cpp"
 #include "external/imgui/imgui.cpp"
 #include "external/imgui/imgui_draw.cpp"
 #include "external/imgui/imgui_widgets.cpp"
@@ -32,6 +31,7 @@
 #include "asset/MetaFiles.cpp"
 #include "physics/physics.cpp"
 #include "audio/SoundInterface.cpp"
+
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
@@ -96,7 +96,7 @@ namespace Engine
         //TODO(Ray):Memory tracking system
         //TODO(Ray):Profiling System
         //TODO(Ray):Networking 
-
+        
         //NOTE(Ray):Here we are test loading a scene and instanting object based on scene description
         //loading them into a sence hierarchy and than we will test grab a ref to the objects via some lookup
         //api.
@@ -177,8 +177,8 @@ namespace Engine
  
             const Value& metamodelname = d["model_file"];
             PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
-//            Yostr* r = CreateStringFromLiteralConst(d["Meshes"].GetString(),&StringsHandler::transient_string_memory);
-//            Yostr* final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(r->String,&ps->string_state.transient_string_memory), &StringsHandler::transient_string_memory);
+//          Yostr* r = CreateStringFromLiteralConst(d["Meshes"].GetString(),&StringsHandler::transient_string_memory);
+//          Yostr* final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(r->String,&ps->string_state.transient_string_memory), &StringsHandler::transient_string_memory);
             // 
         //After getting model get material definition from disk
 /*
@@ -213,21 +213,21 @@ namespace Engine
                 
                 const Value& meshname = mesh["meshname"];
                 PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
-            
+                Yostr vs_name = {};
+                Yostr fs_name = {};
                 const Value& materials = mesh["materials"];            
                 for (auto& material : materials.GetArray())
                 {
-                    const Value& material_name = material["material_name"];                    
+                    const Value& material_name = material["material_name"];
                     PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
 
                     uint32_t strlen = material_name.GetStringLength();
                     Yostr matstring;
                     matstring.Length = strlen;
-                    matstring.String = (char*)material_name.GetString();
-                    matstring.NullTerminated = true;
+                    matstring = CreateStringFromLength((char*)material_name.GetString(), material_name.GetStringLength(), &StringsHandler::transient_string_memory);
+                    //matstring.NullTerminated = true;
                     RenderMaterial render_material;
-                    Yostr vs_name;
-                    Yostr fs_name;
+                    
                     float4 base_color_input;
 
                     uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
@@ -235,11 +235,11 @@ namespace Engine
                     {
                         render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&material_cache,&mat_key);//MaterialCache::GetMaterial(&matstring);
                         rendermesh->r_material = render_material;
+                        
                     }
                     else
                     {
-//                        MaterialCache::AddMaterial(&matstring,&render_material);
-                        AnythingCacheCode::AddThing(&material_cache,&mat_key,&render_material);
+//
                         //Getmaterial file
                         Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
                         //Create RenderMaterial based on this and add it to the cache
@@ -263,8 +263,8 @@ namespace Engine
                             PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
                             Yostr shader_type_string = {};
                             shader_type_string.Length = shader_type.GetStringLength();
-                            shader_type_string.String = (char*)shader_type.GetString();
-                            shader_type_string.NullTerminated = true;
+                            shader_type_string = CreateStringFromLength((char*)shader_type.GetString(), shader_type.GetStringLength(), &StringsHandler::transient_string_memory);
+                            //shader_type_string.NullTerminated = true;
                             
                             const Value& shader_name = shader["name"];
                             PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
@@ -273,13 +273,18 @@ namespace Engine
                             {
                                 vs_name.Length = shader_name.GetStringLength();
                                 vs_name.NullTerminated = true;
-                                vs_name.String = (char*)shader_name.GetString();
+                                vs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
+                                
                             }
                             else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
                             {
                                 fs_name.Length = shader_name.GetStringLength();
                                 fs_name.NullTerminated = true;
-                                fs_name.String = (char*)shader_name.GetString();
+                                fs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
+                            }
+                            else
+                            {
+                                Assert(false);//Not supported
                             }
 
                             const Value& input_slots = shader["input_slot"];
@@ -293,54 +298,58 @@ namespace Engine
                                 PlatformOutput(asset_log,"shader name %s\n",input_slot_type.GetString());
                             }
                         }
+                        const Value& inputs = material["inputs"];
+                        for (auto& input : inputs.GetArray())
+                        {
+                            const Value& input_name = input["name"];
+                            PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
+                            
+                            uint32_t instrlen = input_name.GetStringLength();
+                            Yostr input_name_string;
+                            input_name_string.Length = instrlen;
+                            input_name_string.String = (char*)input_name.GetString();
+                            input_name_string.NullTerminated = true;
+                            
+                            const Value& type = input["type"];
+                            if(!type.IsString())Assert(false);
+                            uint32_t strlen = type.GetStringLength();
+                            Yostr typestring;
+                            typestring.Length = strlen;
+                            typestring.String = (char*)type.GetString();
+                            typestring.NullTerminated = true;
+                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
+                            
+                            //TODO(Ray):For the time being we only have one float4 it is base color...
+                            //but will want to make this more flexible later
+                            if(value_type == ShaderValueType::float4)
+                            {
+                                float results[4];
+                                const Value& values = input["value"];
+                                int value_index = 0;
+                                for (auto& value : values.GetArray())
+                                {
+                                    if(!value.IsDouble() || value_index > 3)
+                                    {
+                                        //Must be a float here if not better chweck whqt went wrong
+                                        Assert(false);
+                                    }
+                                    results[value_index] = (float)value.GetDouble();
+                                    value_index++;
+                                }
+                                float4 result = float4(results[0],results[1],results[2],results[3]);
+                                PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                                render_material.inputs.base_color = result;
+                                base_color_input = result;
+                            }
+                            
+                            RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
+                            rendermesh->r_material = final_mat;
+                            render_material = final_mat;
+                            //MaterialCache::AddMaterial(&matstring,&render_material);
+                            AnythingCacheCode::AddThing(&material_cache,&mat_key,&render_material);
                     }
                      
-                    const Value& inputs = material["inputs"];
-                    for (auto& input : inputs.GetArray())
-                    {
-                        const Value& input_name = input["name"];                    
-                        PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
-
-                        uint32_t instrlen = input_name.GetStringLength();
-                        Yostr input_name_string;
-                        input_name_string.Length = instrlen;
-                        input_name_string.String = (char*)input_name.GetString();
-                        input_name_string.NullTerminated = true;
-                        
-                        const Value& type = input["type"];
-                        if(!type.IsString())Assert(false);
-                        uint32_t strlen = type.GetStringLength();
-                        Yostr typestring;
-                        typestring.Length = strlen;
-                        typestring.String = (char*)type.GetString();
-                        typestring.NullTerminated = true;
-                        ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
-
-                        //TODO(Ray):For the time being we only have one float4 it is base color...
-                        //but will want to make this more flexible later
-                        if(value_type == ShaderValueType::float4)
-                        {
-                            float results[4];
-                            const Value& values = input["value"];
-                            int value_index = 0;
-                            for (auto& value : values.GetArray())
-                            {
-                                if(!value.IsDouble() || value_index > 3)
-                                {
-//Must be a float here if not better chweck whqt went wrong                                      
-                                    Assert(false);
-                                }
-                                results[value_index] = (float)value.GetDouble();
-                                value_index++;
-                            }
-                            float4 result = float4(results[0],results[1],results[2],results[3]);
-                            PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
-                            render_material.inputs.base_color = result;
-                            base_color_input = result;
-                        }
-                        
-                        RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
-                        rendermesh->r_material = final_mat;
+                    
 /*
                         if(value_type == ShaderValueType::afloat)
                         {
@@ -521,11 +530,7 @@ namespace Engine
         //Init Renderer
         Camera::Init();
         DefferedRenderer::Init(&Camera::main, &ps);
-        //Init Audio
-        //Init Physics
-        //Init TIme
-        //Init Multithreading
-        
+
         test_vector = YoyoInitVector(1,float2,false);
         test_vector.resize_ratio = 0.5f;
 //TODO(Ray):
@@ -545,10 +550,13 @@ namespace Engine
     {
         if(!is_init)return;
         PlatformOutput(engine_log,"Engine Update Begin\n");
+#ifdef OSX
         EngineInput::PullMouseState(&ps);
+#endif
+        DefferedRenderer::PreframeSetup();
         gameUpdate();
-        
         SoundCode::Update();
+        
 //Game UI
 #if 0
     HotNodeState* hot_node_state = &ui->hot_node_state;
@@ -612,6 +620,7 @@ namespace Engine
     //the renderer
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
 //    for(int i = 0;i < it_count;++i) 
+#if 1
     {
         ModelAsset* model = &testmodel;//(ModelAsset*)AssetSystem::runtime_assets.base + 0;
         //NOTE(Ray)://TODO(Ray):Here is where you would split out your meshes to the renderer
@@ -642,17 +651,19 @@ namespace Engine
             }
         }
     }
-        
+#endif
+    
 #if TARGET_OS_OSX
     ImGui_ImplOSX_NewFrame();
 #endif
+#ifdef OSX || WINDOWS
     ImGui::NewFrame();
-        
+
     Editor::Update();
         
     // Pre render data preparation.
     ImGui::Render();
-        
+#endif
     //TODO(ray):Find a place to give this a more rigourous test.
     //PlatformOutput(engine_log,"Test vec size %d \n",test_vector.max_size);
     //float2 newf2 = float2(100,100);

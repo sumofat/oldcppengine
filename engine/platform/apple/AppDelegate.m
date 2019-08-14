@@ -2,7 +2,7 @@
 @class GameViewController;
 #import "AppDelegate.h"
 #import "GameViewController.h"
-
+#if OSX
 @interface BorderlessWindow : NSWindow
 {
 }
@@ -22,11 +22,12 @@
 }
 
 @end
-#if OSX
+#endif
+
+//#if OSX
 //NSWindow *window;
 GameViewController* view_controller;
-
-#endif
+//#endif
 @interface AppDelegate ()
 
 @end
@@ -35,6 +36,7 @@ GameViewController* view_controller;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+#if OSX
    // NSRect frame = NSMakeRect(0, 0, 200, 200);
     NSRect frame = [NSScreen mainScreen].frame;
     BorderlessWindow* window  = [[[BorderlessWindow alloc] initWithContentRect:frame
@@ -54,14 +56,24 @@ GameViewController* view_controller;
     [window setLevel:windowLevel];
     view_controller = [[GameViewController alloc] init];
     [window setContentViewController:view_controller];
+#elif IOS
+    CGRect frame = [UIScreen mainScreen].bounds;
+    self.window = [[UIWindow alloc] initWithFrame:frame];
+    self.window.backgroundColor = [UIColor blueColor];
+    GameViewController *vc = [[GameViewController alloc] init];//:@"ViewController" bundle:nil];
+    self.window.rootViewController = vc;
+    [self.window makeKeyAndVisible];
+#endif
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
 }
 
+#ifdef OSX
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;
 }
+#endif
 
 @end

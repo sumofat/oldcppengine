@@ -46,7 +46,7 @@ namespace DefferedRenderer
     extern GPUBuffer uniform_buffer;
     
     void Init(RenderCamera* cam,PlatformState* ps);
-    
+    void PreframeSetup();    
     void ExecutePasses();
 };
 

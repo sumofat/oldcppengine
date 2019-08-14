@@ -1,6 +1,5 @@
 #if !defined(ENGINE_H)
 //NOTE(Ray):Here will be all the declarations for the engine.
-
 #include "metalizer/RendererInclude.h"
 
 #include "input.h"

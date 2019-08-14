@@ -15,7 +15,9 @@
 #ifdef ENGINEIMPL
 #include "imgui.h"
 #include "imgui_impl.h"
-
+#ifdef IOS
+#include <CoreFoundation/CoreFoundation.h>
+#endif
 struct MetalContext
 {
     DepthStencilState depthStencilState;
@@ -95,7 +97,7 @@ RenderPipelineState InitRenderPipelineStateForFramebufferDescriptor(MetalContext
     
     void* library = RendererCode::CompileShader(shaderSource);
     
-    if (library == nil)
+    if (library == nullptr)
     {
         PlatformOutput(true,"Could not compile imgui shader.\n");
         //        NSLog(@"Error: failed to create Metal library: %@", error);
