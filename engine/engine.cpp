@@ -17,10 +17,10 @@
 
 #include "external/imgui/imgui_demo.cpp"
 #include "graphics/deffered/imguirender.cpp"
-
 #include "graphics/deffered/imgui_impl.cpp"
 
-#include "editor/editor.h"
+#include "editor/editor.cpp"
+#include "editor/editorgui.cpp"
 
 #include "external/rapidjson/include/rapidjson/document.h"
 #include "external/rapidjson/include/rapidjson/writer.h"
@@ -32,6 +32,7 @@
 #include "physics/physics.cpp"
 #include "audio/SoundInterface.cpp"
 
+#include "asset/JSONHelper.h"
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
@@ -100,7 +101,8 @@ namespace Engine
         //NOTE(Ray):Here we are test loading a scene and instanting object based on scene description
         //loading them into a sence hierarchy and than we will test grab a ref to the objects via some lookup
         //api.
-#if 1
+
+#if 0
         Yostr test_scene_meta_file = MetaFiles::GetMetaFile(CreateStringFromLiteral("scene_example", &StringsHandler::transient_string_memory));
         Document sdoc;
         sdoc.Parse((char*)test_scene_meta_file.String);
@@ -154,8 +156,20 @@ namespace Engine
             }
         }                
 #endif
+
+//hardcoded default material
+#if 0
+        Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
+        Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
+        float4 d_base_color = float4(0.5f,0.5f,0.5f,1.0f);
+        Yostr d_mat_string = CreateStringFromLiteral("standard_hardcoded_default_material",&StringsHandler::transient_string_memory);
+        uint64_t d_mat_key = StringsHandler::StringHash(d_mat_string.String,d_mat_string.Length);
+        RenderMaterial d_default_mat = AssetSystem::CreateMaterialFromDescription(&d_vs_name,&d_fs_name,d_base_color);
+        AnythingCacheCode::AddThing(&material_cache,&d_mat_key,&d_default_mat);
+#endif
         
-        char* name = "dodge_challenger_model.fbx";
+    //char* name = "dodge_challenger_model.fbx";
+        char* name = "export.fbx";
         Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
         Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
@@ -210,9 +224,10 @@ namespace Engine
             for (auto& mesh : meshes.GetArray())
             {
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
-                
+                rendermesh->r_material = d_default_mat;
                 const Value& meshname = mesh["meshname"];
                 PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
+
                 Yostr vs_name = {};
                 Yostr fs_name = {};
                 const Value& materials = mesh["materials"];            
@@ -220,22 +235,45 @@ namespace Engine
                 {
                     const Value& material_name = material["material_name"];
                     PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
-
+                    
                     uint32_t strlen = material_name.GetStringLength();
                     Yostr matstring;
-                    matstring.Length = strlen;
-                    matstring = CreateStringFromLength((char*)material_name.GetString(), material_name.GetStringLength(), &StringsHandler::transient_string_memory);
-                    //matstring.NullTerminated = true;
-                    RenderMaterial render_material;
-                    
-                    float4 base_color_input;
+                    matstring = JSONHelper::GetString(material_name);
 
+                    RenderMaterial render_material;
+                    float4 base_color_input;
                     uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
                     if(AnythingCacheCode::DoesThingExist(&material_cache,&mat_key))
                     {
                         render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&material_cache,&mat_key);//MaterialCache::GetMaterial(&matstring);
-                        rendermesh->r_material = render_material;
                         
+                        const Value& inputs = material["inputs"];
+                        for (auto& input : inputs.GetArray())
+                        {
+                            const Value& input_name = input["name"];
+                            PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
+                            
+                            Yostr input_name_string = JSONHelper::GetString(input_name);
+                            const Value& type = input["type"];
+                            if(!type.IsString())Assert(false);
+                            Yostr typestring = JSONHelper::GetString(type);
+                            
+                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
+                            
+                            //TODO(Ray):For the time being we only have one float4 it is base color...
+                            //but will want to make this more flexible later
+                            if(value_type == ShaderValueType::float4)
+                            {
+                                const Value& values = input["value"];
+                                float4 result = JSONHelper::GetFloat4(values);
+
+                                PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                                render_material.inputs.base_color = result;
+                                base_color_input = result;
+                            }
+                        }
+
+                        rendermesh->r_material = render_material;
                     }
                     else
                     {
@@ -258,29 +296,28 @@ namespace Engine
                         const Value& shaders = rd["shaders"];
                         for (auto& shader : shaders.GetArray())
                         {
-
                             const Value& shader_type = shader["type"];                    
                             PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
-                            Yostr shader_type_string = {};
-                            shader_type_string.Length = shader_type.GetStringLength();
-                            shader_type_string = CreateStringFromLength((char*)shader_type.GetString(), shader_type.GetStringLength(), &StringsHandler::transient_string_memory);
-                            //shader_type_string.NullTerminated = true;
+                            Yostr shader_type_string = JSONHelper::GetString(shader_type);
+//                            shader_type_string.Length = shader_type.GetStringLength();
+//                            shader_type_string = CreateStringFromLength((char*)shader_type.GetString(), shader_type.GetStringLength(), &StringsHandler::transient_string_memory);
                             
                             const Value& shader_name = shader["name"];
                             PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
 
                             if(Compare(shader_type_string, CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
                             {
-                                vs_name.Length = shader_name.GetStringLength();
-                                vs_name.NullTerminated = true;
-                                vs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
-                                
+                                vs_name = JSONHelper::GetString(shader_name);
+//                                vs_name.Length = shader_name.GetStringLength();
+//                                vs_name.NullTerminated = true;
+//                                vs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
                             }
                             else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
                             {
-                                fs_name.Length = shader_name.GetStringLength();
-                                fs_name.NullTerminated = true;
-                                fs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
+                                fs_name = JSONHelper::GetString(shader_name);
+//                                fs_name.Length = shader_name.GetStringLength();
+//                                fs_name.NullTerminated = true;
+//                                fs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
                             }
                             else
                             {
@@ -288,55 +325,33 @@ namespace Engine
                             }
 
                             const Value& input_slots = shader["input_slot"];
-                            
                             for (auto& input_slot : input_slots.GetArray())
                             {
                                 const Value& input_slot_name = input_slot["name"];                    
                                 PlatformOutput(asset_log,"shader name %s\n",input_slot_name.GetString());
-
                                 const Value& input_slot_type = input_slot["type"];                    
                                 PlatformOutput(asset_log,"shader name %s\n",input_slot_type.GetString());
                             }
                         }
+                        
                         const Value& inputs = material["inputs"];
                         for (auto& input : inputs.GetArray())
                         {
                             const Value& input_name = input["name"];
                             PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
                             
-                            uint32_t instrlen = input_name.GetStringLength();
-                            Yostr input_name_string;
-                            input_name_string.Length = instrlen;
-                            input_name_string.String = (char*)input_name.GetString();
-                            input_name_string.NullTerminated = true;
-                            
+                            Yostr input_name_string = JSONHelper::GetString(input_name);
                             const Value& type = input["type"];
                             if(!type.IsString())Assert(false);
-                            uint32_t strlen = type.GetStringLength();
-                            Yostr typestring;
-                            typestring.Length = strlen;
-                            typestring.String = (char*)type.GetString();
-                            typestring.NullTerminated = true;
-                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
+                            Yostr typestring = JSONHelper::GetString(type);
                             
+                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
                             //TODO(Ray):For the time being we only have one float4 it is base color...
                             //but will want to make this more flexible later
                             if(value_type == ShaderValueType::float4)
                             {
-                                float results[4];
                                 const Value& values = input["value"];
-                                int value_index = 0;
-                                for (auto& value : values.GetArray())
-                                {
-                                    if(!value.IsDouble() || value_index > 3)
-                                    {
-                                        //Must be a float here if not better chweck whqt went wrong
-                                        Assert(false);
-                                    }
-                                    results[value_index] = (float)value.GetDouble();
-                                    value_index++;
-                                }
-                                float4 result = float4(results[0],results[1],results[2],results[3]);
+                                float4 result = JSONHelper::GetFloat4(values);
                                 PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
                                 render_material.inputs.base_color = result;
                                 base_color_input = result;
@@ -345,10 +360,8 @@ namespace Engine
                             RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
                             rendermesh->r_material = final_mat;
                             render_material = final_mat;
-                            //MaterialCache::AddMaterial(&matstring,&render_material);
                             AnythingCacheCode::AddThing(&material_cache,&mat_key,&render_material);
                     }
-                     
                     
 /*
                         if(value_type == ShaderValueType::afloat)
@@ -513,6 +526,7 @@ namespace Engine
          ma->material = mat_result;
          mesh_index++;
          */
+        
         AssetSystem::UploadModelAssetToGPU(&testmodel);
         
         //TODO(Ray):Set Asset or file system to hold this 
@@ -556,7 +570,6 @@ namespace Engine
         DefferedRenderer::PreframeSetup();
         gameUpdate();
         SoundCode::Update();
-        
 //Game UI
 #if 0
     HotNodeState* hot_node_state = &ui->hot_node_state;
@@ -653,14 +666,10 @@ namespace Engine
     }
 #endif
     
-#if TARGET_OS_OSX
-    ImGui_ImplOSX_NewFrame();
-#endif
 #ifdef OSX || WINDOWS
+    ImGui_ImplOSX_NewFrame();
     ImGui::NewFrame();
-
     Editor::Update();
-        
     // Pre render data preparation.
     ImGui::Render();
 #endif
@@ -671,10 +680,8 @@ namespace Engine
         
     //Update Graphics
     DefferedRenderer::ExecutePasses();
-    //Update Audio
-    //Update Physics
-    PlatformOutput(engine_log,"Engine Update Complete\n");
 
+    PlatformOutput(engine_log,"Engine Update Complete\n");
     StringsHandler::ResetTransientStrings();
     }
 };

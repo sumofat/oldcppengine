@@ -3,9 +3,9 @@
 
 #include "../../metalizer/RendererInclude.h"
 #import  "../../metalizer/renderer/MTKViewDelegateView.h"
-//NOTE(Ray):
-//#import "SpriteExample.h"
+
 #import "../../engine.h"
+
 #if OSX
 #import "../../external/imgui/examples/imgui_impl_osx.h"
 #import "../../external/imgui/examples/imgui_impl_osx.mm"
@@ -18,6 +18,7 @@ void OnIMGUIEvent(NSEvent* event)
 {
     ImGui_ImplOSX_HandleEvent(event, globalview);
 }
+
 #elif IOS
 static UIView *globalview;
 #endif
@@ -65,12 +66,11 @@ static UIView *globalview;
         {
             Assert(false);
         }
-        
-      
+
         //TODO(Ray):Ensure that we dont run update until after engine startup is complete.
         Engine::Init(dim);
 #if OSX
-        ImGui_ImplOSX_Init();
+        //ImGui_ImplOSX_Init();
 #elif IOS
 #endif
     }

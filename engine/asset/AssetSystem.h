@@ -13,7 +13,7 @@ namespace AssetSystem
     bool FBXSDKLoadModel(char* file_path,ModelAsset* result);
     void UploadModelAssetToGPU(ModelAsset* ma);
 
-    Yostr GetDataPath(const char* file,MemoryArena arena);
+    Yostr GetDataPath(const char* file,MemoryArena* arena);
     
     RenderMaterial CreateMaterialFromDescription(Yostr* vs_name,Yostr* as_name,float4 base_color);
     RenderMaterial CreateDefaultQuadMaterial();

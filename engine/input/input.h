@@ -91,6 +91,7 @@ namespace EngineInput
 #ifdef OSX || WINDOWS
     void PullMouseState(PlatformState* ps);
 #endif
+    Input GetInput();
 }
 
 #define INPUT_H

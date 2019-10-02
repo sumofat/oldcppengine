@@ -21,10 +21,10 @@ namespace AssetSystem
 
     AnythingCache texture_cache;
 
-    Yostr GetDataPath(const char* file,MemoryArena arena)
+    Yostr GetDataPath(const char* file,MemoryArena* arena)
     {
-        Yostr path = BuildPathToAssets(&arena,0);
-        Yostr FinalPathToAsset = AppendString(path,CreateStringFromLiteral(file,&arena),&arena);
+        Yostr path = BuildPathToAssets(arena,0);
+        Yostr FinalPathToAsset = AppendString(path,CreateStringFromLiteral(file,arena),arena);
         return FinalPathToAsset;
     }
     
@@ -140,7 +140,7 @@ namespace AssetSystem
                 {
                     case FbxNodeAttribute::eMesh:
                     {
-                        PlatformOutput(asset_system_log, "MeshNAME:: %s", current_node->GetName());
+                        PlatformOutput(asset_system_log, "MeshNAME:: %s \n", current_node->GetName());
                         const char* s = current_node->GetName();
                         node_name = CreateStringFromLiteral((char*)s,&StringsHandler::string_memory);
                 
@@ -148,11 +148,11 @@ namespace AssetSystem
                         //TODO(Ray):Later log any non triangular meshes for now we need to know.
                         if (!mesh->IsTriangleMesh())
                         {
-                            PlatformOutput("Mesh is not triangulated :: %s \n", model->model_name.String);
+                            PlatformOutput(true,"Mesh is not triangulated :: %s \n", model->model_name.String);
                             //TODO(ray):Log this and output error.
                             Yostr error_string = AppendString(CreateStringFromLiteral("NonTriangulatedMesh :: ", &StringsHandler::transient_string_memory), model->model_name, &StringsHandler::transient_string_memory);
                             error_strings[error_count++] = error_string;
-                            return;
+                            continue;
                         }
 
                         Assert(mesh->IsTriangleMesh());
@@ -166,6 +166,7 @@ namespace AssetSystem
                         //but we need to verify that every polygon is 3 sided.
                         //
                         int lPolygonSize = mesh->GetPolygonSize(node_i);
+                        if(lPolygonSize == -1)continue;//out of bounds
                         Assert(lPolygonSize == 3);
                         uint float_count = lPolygonCount * lPolygonSize * 3;
                         uint t_b_float_count = lPolygonCount * lPolygonSize * 4;
@@ -608,8 +609,11 @@ namespace AssetSystem
         FbxScene* lScene = FbxScene::Create(fbx_manager, "myScene");
         // Import the contents of the file into the scene.
         lImporter->Import(lScene);
-
+        
+        FbxCollection* collection = FbxCollection::Create(fbx_manager, "mycollection");
+        
         FbxNode* root = lScene->GetRootNode();
+        
         int mesh_count_in_scene = 0;
         GetMeshCount(root, &mesh_count_in_scene);
         if(mesh_count_in_scene > 0)

@@ -1,17 +1,9 @@
 #if !defined(EDITOR_H)
 
-#include "editorgui.h"
-
 namespace Editor
 {
-    void Init()
-    {
-    }
-
-    void Update()
-    {
-        EditorGUI::Update();
-    }
+    void Init();
+    void Update();
 };
 
 #define EDITOR_H

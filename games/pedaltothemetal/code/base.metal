@@ -20,7 +20,6 @@ using namespace metal;
     
 #include <simd/simd.h>
 
-
 #import "../../../engine/metalizer/BasicShaderTypes.h"//metalizer builtin
 #import "ShaderTypes.h"
 

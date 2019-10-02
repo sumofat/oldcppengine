@@ -3617,7 +3617,9 @@
 		9452F9F321E8E5BB00B07061 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				EXECUTABLE_PREFIX = lib;
@@ -3626,10 +3628,18 @@
 					"DEBUG=1",
 					"$(inherited)",
 					OSX,
+					YOYO_USE_PHYSX_EXT,
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"../../../engine/external/PhysX/physx/include/\"/**",
+					"\"../../../engine/external/PhysX/pxshared/include/\"/**",
 				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-maes";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3638,14 +3648,23 @@
 		9452F9F421E8E5BB00B07061 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../../engine/external/PhysX/physx/include/\"/**",
+					"\"../../../engine/external/PhysX/pxshared/include/\"/**",
+				);
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-maes";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3658,19 +3677,27 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 					OSX,
 					YOYOIMPL,
+					YOYO_USE_PHYSX_EXT,
 				);
-				HEADER_SEARCH_PATHS = "/Users/ray.garner/work/**";
+				HEADER_SEARCH_PATHS = (
+					"/Users/ray.garner/work/**",
+					"\"../../../engine/external/PhysX/physx/include/\"/**",
+					"\"../../../engine/external/PhysX/pxshared/include/\"/**",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-maes",
 					"-ObjC",
 				);
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -3683,13 +3710,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = "/Users/ray.garner/work/**";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/ray.garner/work/**",
+					"\"../../../engine/external/PhysX/physx/include/\"/**",
+					"\"../../../engine/external/PhysX/pxshared/include/\"/**",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-maes",
 					"-ObjC",
 				);
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -4049,6 +4083,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
@@ -4074,12 +4109,14 @@
 					"/Users/ray.garner/work/mar/engine/external/fmod/studio/osx/lib/**",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-maes";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
 					"-fno-objc-arc",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -4091,6 +4128,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7W6L9J77EJ;
@@ -4110,12 +4148,14 @@
 					"/Users/ray.garner/work/mar/engine/external/fmod/studio/osx/lib/**",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-maes";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
 					"-fno-objc-arc",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_BUNDLE_IDENTIFIER = "dena.denaray.-.pedaltothemetal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -4138,6 +4178,7 @@
 					"$(inherited)",
 					OSX,
 					ENGINEIMPL,
+					YOYO_USE_PHYSX_EXT,
 				);
 				HEADER_SEARCH_PATHS = (
 					"\"/Users/ray.garner/work/mar/engine/external/fbx/\"/**",
@@ -4152,14 +4193,16 @@
 					"\"/Users/ray.garner/work⁩/⁨mar⁩/engine⁩/⁨external⁩/⁨PhysX⁩/⁨physx⁩/⁨bin⁩/⁨mac.x86_64⁩/⁨checked/⁩\"/**",
 					"/Users/ray.garner/work/mar/engine/external/fmod/studio/osx/lib/**",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
 					"-fno-threadsafe-statics",
 					"-stdlib=libc++",
 					"-fno-objc-arc",
+					"-maes",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -4192,12 +4235,13 @@
 					"\"/Users/ray.garner/work⁩/⁨mar⁩/engine⁩/⁨external⁩/⁨PhysX⁩/⁨physx⁩/⁨bin⁩/⁨mac.x86_64⁩/⁨checked/⁩\"/**",
 					"/Users/ray.garner/work/mar/engine/external/fmod/studio/osx/lib/**",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-ObjC",
 					"-fno-threadsafe-statics",
 				);
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-maes";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;

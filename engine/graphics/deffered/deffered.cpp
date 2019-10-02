@@ -200,7 +200,7 @@ namespace DefferedRenderer
         //in the overall composite and order.
 
         YoyoPushBack(&passes.buffer, gbufferpass);
-#ifdef OSX || WINDOWS
+#ifdef OSX
         //imgui
         IMGUIRender::Init(&imguipass,ps,&render_tex);
         YoyoPushBack(&passes.buffer, imguipass);
