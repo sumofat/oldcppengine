@@ -122,12 +122,78 @@ namespace AssetSystem
         for (int node_i = 0; node_i < child_count; ++node_i)
         {
             FbxNode* at_node = node->GetChild(node_i);
-            FbxNodeAttribute* attribute = at_node->GetNodeAttribute();    
+            FbxNodeAttribute* attribute = at_node->GetNodeAttribute();
             if (attribute->GetAttributeType() == FbxNodeAttribute::eMesh)
             {
-                FbxNode* current_node = at_node;//at_node->GetChild(i);
-                Yostr node_name;
+                FbxNode* current_node = at_node;
+                int lMaterialIndex;
+                FbxProperty lProperty;
+                int lNbMat = at_node->GetSrcObjectCount<FbxSurfaceMaterial>();
+                int lMaterialCount = 0;
+                {
+                        lMaterialCount = at_node->GetMaterialCount();    
+                }
 
+                int lMtrlCount = 0;
+                FbxMesh* pMesh = at_node->GetMesh();
+                for (int l = 0; l < pMesh->GetElementMaterialCount(); l++)
+                {
+                    FbxGeometryElementMaterial* leMat = pMesh->GetElementMaterial( l);
+                    if (leMat)
+                    {
+                        int lMaterialCount = 0;
+                        if (leMat->GetReferenceMode() == FbxGeometryElement::eDirect)
+                        {
+                            lMaterialCount = lMtrlCount;
+                            int a = 0;
+                        }
+                        if(leMat->GetReferenceMode() == FbxGeometryElement::eIndexToDirect)
+                        {
+                            int a = 0;
+                        }
+                        if(leMat->GetMappingMode() == FbxGeometryElement::eAllSame)
+                        {
+                            int a = 0;
+                        }
+                        if(leMat->GetMappingMode() == FbxGeometryElement::eByPolygon)
+                        {
+                            int a = 0;
+                        }
+                        if (leMat->GetReferenceMode() == FbxGeometryElement::eIndex)
+                        {
+#if 0
+                            int i;
+                            lString = "           Indices: ";
+                            int lIndexArrayCount = leMat->GetIndexArray().GetCount();
+                            for (i = 0; i < lIndexArrayCount; i++)
+                            {
+                                lString += leMat->GetIndexArray().GetAt(i);
+                                if (i < lIndexArrayCount - 1)
+                                {
+                                    lString += ", ";
+                                }
+                            }
+                            lString += "\n";
+#endif
+                        }
+                    }
+                }
+
+                for (lMaterialIndex = 0; lMaterialIndex < lNbMat; lMaterialIndex++){
+                    FbxSurfaceMaterial *lMaterial = current_node->GetSrcObject<FbxSurfaceMaterial>(lMaterialIndex);
+                    bool lDisplayHeader = true;
+                    //go through all the possible textures
+                    if(lMaterial)
+                    {
+                        for(int lLayerIndex = 0;lLayerIndex < FbxLayerElement::sTypeTextureCount; lLayerIndex++)
+                        {
+                            lProperty = lMaterial->FindProperty(FbxLayerElement::sTextureChannelNames[lLayerIndex]);
+                            //FindAndDisplayTextureInfoByProperty(lProperty, lDisplayHeader, lMaterialIndex);
+                        }
+                    }//end if(lMaterial)
+                }// end for lMaterialIndex
+                
+                Yostr node_name;
                 YoyoVector vertex_vector;
                 YoyoVector element_vector;
                 YoyoVector normal_vector;
@@ -157,14 +223,12 @@ namespace AssetSystem
 
                         Assert(mesh->IsTriangleMesh());
                         int lPolygonCount = mesh->GetPolygonCount();
-
                         FbxVector4* lControlPoints = mesh->GetControlPoints();
                         int* polygon_vertices = mesh->GetPolygonVertices();
-
                         int pv_count = mesh->GetPolygonVertexCount();
                         //NOTE(Ray):Should be ok if we are a triangle mesh
                         //but we need to verify that every polygon is 3 sided.
-                        //
+                        
                         int lPolygonSize = mesh->GetPolygonSize(node_i);
                         if(lPolygonSize == -1)continue;//out of bounds
                         Assert(lPolygonSize == 3);
@@ -174,6 +238,7 @@ namespace AssetSystem
                         uint element_count = lPolygonCount * lPolygonSize;
                         uint32_t float_size = sizeof(float);
                         uint32_t int_size = sizeof(uint32_t);
+
 #if 1
                         uint32_t alignment = 0;
                         vertex_vector = YoyoInitVectorWithAligment(float_count, sizeof(float),false,alignment);
@@ -183,7 +248,6 @@ namespace AssetSystem
                         tangent_vector = YoyoInitVectorWithAligment(t_b_float_count, sizeof(float),false,alignment);
                         bitangent_vector = YoyoInitVectorWithAligment(t_b_float_count, sizeof(float),false,alignment);
 #else
-                        
                         vertex_vector = YoyoInitVector(float_count, float,false);
                         element_vector = YoyoInitVector(element_count, uint32_t,false);
                         normal_vector = YoyoInitVector(float_count, float,false);

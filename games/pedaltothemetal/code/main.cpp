@@ -23,7 +23,7 @@ PhysicsMaterial material;
 void* LoadTextureThread(void* data)
 {
     BeginTicketMutex(&ticket_mutex);
-    
+   
     //if(!OpenGLEmu::GLIsValidTexture(tex))
     {
         //tex = OpenGLEmu::TexImage2D(lt.texels, lt.dim, PixelFormatRGBA8Unorm, OpenGLEmu::GetDefaultDescriptor(), TextureUsageShaderRead);

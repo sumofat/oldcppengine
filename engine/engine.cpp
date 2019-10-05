@@ -158,7 +158,6 @@ namespace Engine
 #endif
 
 //hardcoded default material
-#if 0
         Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
         Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
         float4 d_base_color = float4(0.5f,0.5f,0.5f,1.0f);
@@ -166,10 +165,9 @@ namespace Engine
         uint64_t d_mat_key = StringsHandler::StringHash(d_mat_string.String,d_mat_string.Length);
         RenderMaterial d_default_mat = AssetSystem::CreateMaterialFromDescription(&d_vs_name,&d_fs_name,d_base_color);
         AnythingCacheCode::AddThing(&material_cache,&d_mat_key,&d_default_mat);
-#endif
         
     //char* name = "dodge_challenger_model.fbx";
-        char* name = "export.fbx";
+        char* name = "littlest-tokyo/source/lil_tokyo.fbx";
         Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
         Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
@@ -211,7 +209,12 @@ namespace Engine
             const Value& materials = d["Materials"];
             int mesh_index = 0;
 */
-
+            for(int i = 0;i < testmodel.meshes.count;++i)
+            {
+                MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + i;
+                rendermesh->r_material = d_default_mat;
+                
+            }
 //This next part gets and loads all the relevent information to render this object properly.
             //NOTE(Ray):
             //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
@@ -617,23 +620,25 @@ namespace Engine
     ObjectTransform mot;
     mot.p = float3(0,0,0) + viz_move;
     mot.r = axis_angle(float3(1,0,0),90) * axis_angle(float3(0,1,0),180);//quaternion::axis_angle(float3(0,0,1),0);
-    mot.s = float3(1);
+    mot.s = float3(0.1f);
     YoyoUpdateObjectTransform(&mot);
     float4x4 m_matrix = mot.m;
     
     float3 cam_p = float3(-3,0.4f,60);// + viz_move;
-    float3 new_p = cam_p;//float3(sin(radians(dummy_inc)) * -5,0,sin(radians(dummy_inc)) * -2) + render_cam_p;
-    float3 look_dir = mot.p - new_p;//model_ot[0].p - new_p;
+    float3 new_p = cam_p;
+    float3 look_dir = mot.p - new_p;
     ObjectTransform cam_ot;
     cam_ot.p = new_p;//render_cam_p;
-    cam_ot.r = quaternion::look_rotation(-look_dir,float3(0,1,0));//quaternion::identity();//axis_angle(float3(0,0,1),90);//
+    cam_ot.r = quaternion::look_rotation(-look_dir,float3(0,1,0));
     cam_ot.s = float3(1);
+
     Camera::main.matrix = YoyoSetCameraView(&cam_ot);//set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
     //model has a link to MeshAsset/Renderer we for ever sceneobject using model asset flatten out meshassets
     //the renderer
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
 //    for(int i = 0;i < it_count;++i) 
 #if 1
+    
     {
         ModelAsset* model = &testmodel;//(ModelAsset*)AssetSystem::runtime_assets.base + 0;
         //NOTE(Ray)://TODO(Ray):Here is where you would split out your meshes to the renderer
@@ -664,6 +669,7 @@ namespace Engine
             }
         }
     }
+
 #endif
     
 #ifdef OSX || WINDOWS

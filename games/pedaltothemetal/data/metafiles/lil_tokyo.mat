@@ -1,0 +1,545 @@
+{
+    "model_file": "lil_tokyo",
+    "Meshes": [
+        {
+            "meshname": "Object649",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire7",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object674",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object675",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane001",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane003",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane104",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane103",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane105",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane106",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane108",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane107",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane109",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane110",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane111",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Plane112",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object704",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire1",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire2",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire3",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire4",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "wire5",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object705",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object619",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object620",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object621",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "meshname": "Object622",
+            "materials": [
+                {
+                    "material_name": "default_material",
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
