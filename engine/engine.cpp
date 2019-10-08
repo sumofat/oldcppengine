@@ -27,6 +27,9 @@
 #include "external/rapidjson/include/rapidjson/stringbuffer.h"
 #include "external/rapidjson/include/rapidjson/prettywriter.h"
 
+#define CGLTF_IMPLEMENTATION
+#include "metalizer/cgltf/cgltf.h"
+
 #include "asset/AssetSystem.cpp"
 #include "asset/MetaFiles.cpp"
 #include "physics/physics.cpp"
@@ -171,10 +174,18 @@ namespace Engine
         Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
         Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
+
+        char* gltfname = "littlest-tokyo/source/littlest_tokyo.glb";
+        Yostr gltfpath = CreateStringFromLiteral(gltfname, &StringsHandler::transient_string_memory);
+        Yostr gltfbuildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
+        gltfpath = AppendString(gltfbuildpath,gltfpath,&StringsHandler::transient_string_memory);
+        if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
+        {
+            
+        }
         
         if(AssetSystem::FBXSDKLoadModel(path.String,&testmodel))
         {
-            
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
             Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(path,&testmodel);
 
@@ -213,8 +224,8 @@ namespace Engine
             {
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + i;
                 rendermesh->r_material = d_default_mat;
-                
             }
+
 //This next part gets and loads all the relevent information to render this object properly.
             //NOTE(Ray):
             //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
@@ -302,8 +313,6 @@ namespace Engine
                             const Value& shader_type = shader["type"];                    
                             PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
                             Yostr shader_type_string = JSONHelper::GetString(shader_type);
-//                            shader_type_string.Length = shader_type.GetStringLength();
-//                            shader_type_string = CreateStringFromLength((char*)shader_type.GetString(), shader_type.GetStringLength(), &StringsHandler::transient_string_memory);
                             
                             const Value& shader_name = shader["name"];
                             PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
@@ -311,16 +320,10 @@ namespace Engine
                             if(Compare(shader_type_string, CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
                             {
                                 vs_name = JSONHelper::GetString(shader_name);
-//                                vs_name.Length = shader_name.GetStringLength();
-//                                vs_name.NullTerminated = true;
-//                                vs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
                             }
                             else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
                             {
                                 fs_name = JSONHelper::GetString(shader_name);
-//                                fs_name.Length = shader_name.GetStringLength();
-//                                fs_name.NullTerminated = true;
-//                                fs_name = CreateStringFromLength((char*)shader_name.GetString(), shader_name.GetStringLength(), &StringsHandler::transient_string_memory);
                             }
                             else
                             {

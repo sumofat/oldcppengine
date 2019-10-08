@@ -18,14 +18,17 @@ struct MetaScenes
 namespace MetaFiles
 {
     bool log_output = true;
-    char* game_data_dir = "~/work/pedaltothemetal/games/pedaltothemetal/data/";
-    char* game_data_meta_dir = "/Users/ray.garner/work/mar/games/pedaltothemetal/data/metafiles/";
     Yostr file_write_path;
+    char* game_data_dir;// = "~/work/pedaltothemetal/games/pedaltothemetal/data/";
+    char* game_data_meta_dir;// = "/Users/ray.garner/work/mar/games/pedaltothemetal/data/metafiles/";
 
     void Init()
     {
         Yostr asset_path = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         file_write_path = AppendString(asset_path,CreateStringFromLiteral("/metafiles/",&StringsHandler::transient_string_memory),&StringsHandler::string_memory);
+        game_data_dir =      "/Users/ray.garner/work/mar/games/pedaltothemetal/data/";
+        game_data_meta_dir = "/Users/ray.garner/work/mar/games/pedaltothemetal/data/metafiles/";
+        
 #ifdef IOS
         game_data_meta_dir = file_write_path.String;
 #endif
@@ -165,19 +168,21 @@ namespace MetaFiles
             }break;
             case shader_input_texture:
             {
-#if 0
+#if 1
                 type_text = CreateStringFromLiteral("texture",&StringsHandler::transient_string_memory);
                 Value base_color_type(kObjectType);
                 base_color_type.SetString(type_text.String,(SizeType)type_text.Length,allocator);
                 input_object.AddMember("type",base_color_type,allocator);
 
-                Texture final_value = *((Texture*)value);
-                Value base_color_value(kArrayType);
-                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator).PushBack(final_value.w(),allocator);
+                char* final_value = ((char*)value);
+                uint32_t string_length = CalculateCharLength(final_value);
+                Value base_color_value(kObjectType);
+                base_color_value.SetString(final_value,(SizeType)string_length,allocator);
+//                base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator).PushBack(final_value.w(),allocator);
                 input_object.AddMember("value",base_color_value,allocator);
 #endif
                 //Not supported yet.
-                Assert(false);
+                //Assert(false);
             }break;
             default:
             {
@@ -186,6 +191,221 @@ namespace MetaFiles
             }break;
         }
         return input_object;
+    }
+    
+    struct AssetLoadingTextureKey
+    {
+        uint32_t offset;
+        uint64_t ptr_to_bin;
+    };
+
+    struct AssetLoadingTextureValue
+    {
+        LoadedTexture lt;
+        Yostr path;
+        Yostr name;
+    };
+    
+    void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath)
+    {
+        Assert(mf);
+        mf->d;
+        mf->d.SetObject();
+        mf->file_path = filepath;
+        AnythingCacheCode::Init(&mf->tex_cache, 4096,sizeof(AssetLoadingTextureValue),sizeof(AssetLoadingTextureKey));
+        
+        rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
+        size_t sz = allocator.Size();
+        Yostr name = GetFilenameFromPath(filepath,&StringsHandler::transient_string_memory);
+        Yostr namenoext = StripExtension(&name,&StringsHandler::transient_string_memory);
+        Value n(namenoext.String, allocator);            
+        mf->d.AddMember("model_file", n, allocator);        
+        Value meshes_json(kArrayType);
+        mf->meshes_json = meshes_json;
+        
+    }
+
+    void SetDefaultMaterial(InProgressMetaFile* mf,Value* obj)
+    {
+        rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
+        Value mat_obj(kObjectType);
+        Value mat_val(kObjectType);
+        Yostr default_mat_string = CreateStringFromLiteral("default_material",&StringsHandler::transient_string_memory);
+        mat_val.SetString(default_mat_string.String,(SizeType)default_mat_string.Length,allocator);
+        mat_obj.AddMember("material_name",mat_val,allocator);
+
+        Value materials_array(rapidjson::kArrayType);
+        Value inputs_array(rapidjson::kArrayType);
+        //Set defaults as
+        //base color float4(1)
+        //textures empty
+
+        Yostr bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+        float4 bcvalue = float4(1);
+        Value input_object = AddInputEntryToArray(&bcname,shader_input_float4,&bcvalue,allocator);
+//TODO(Ray):FOr PBR materials we will need to add defaults for rougness specular and others.
+/*
+  Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+  float4 bcvalue = float4(1);
+  Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+*/
+                
+        inputs_array.PushBack(input_object,allocator);
+        mat_obj.AddMember("inputs",inputs_array,allocator);                
+        materials_array.PushBack(mat_obj,allocator);
+                
+        obj->AddMember("materials",materials_array, allocator);
+    }
+    
+    void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh* ma)
+    {
+        rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
+        Value obj(kObjectType);
+        Value val(kObjectType);
+        uint32_t name_length = CalculateCharLength(ma->name);
+        val.SetString(ma->name,(SizeType)name_length,allocator);
+        obj.AddMember("meshname",val,allocator);
+
+        if(ma->primitives_count == 0)
+        {
+            SetDefaultMaterial(mf,&obj);            
+        }
+        else
+        {
+            //NOTE(Ray):Can a mesh have more than one material and can in the list of primitvies
+            //is there a case with more one material ... seems not likely
+            cgltf_material* mat = ma->primitives[0].material;
+            if(!mat)
+            {
+                SetDefaultMaterial(mf,&obj);                
+            }
+            
+            Value mat_obj(kObjectType);
+            Value mat_val(kObjectType);
+            Yostr default_mat_string = CreateStringFromLiteral(mat->name,&StringsHandler::transient_string_memory);
+            mat_val.SetString(default_mat_string.String,(SizeType)default_mat_string.Length,allocator);
+            mat_obj.AddMember("material_name",mat_val,allocator);
+                
+            Value materials_array(rapidjson::kArrayType);
+            Value inputs_array(rapidjson::kArrayType);
+            //Set defaults as
+            //base color float4(1)
+            //textures empty
+            
+            if(mat->has_pbr_metallic_roughness)
+            {
+                if(mat->pbr_metallic_roughness.base_color_texture.texture)
+                {
+                    cgltf_texture_view tv = mat->pbr_metallic_roughness.base_color_texture;                    
+                    //extract texture from memory location
+#if 1
+                    uint32_t offset = tv.texture->image->buffer_view->offset;
+                    void* tex_data = (uint8_t*)tv.texture->image->buffer_view->buffer->data + offset;
+                    uint64_t data_size = tv.texture->image->buffer_view->size;
+                    AssetLoadingTextureKey k = {offset,(uint64_t)tex_data};
+
+                    Yostr final_twrfp = {};
+                    AssetLoadingTextureValue ltv = {};
+                    
+                    if(!AnythingCacheCode::DoesThingExist(&mf->tex_cache, &k))
+                    {
+
+                        Yostr bcname = CreateStringFromLiteral("pbr_mettalic_roughness_texture",&StringsHandler::transient_string_memory);
+                        Yostr bccname =  AppendCharToString(bcname,ma->name,&StringsHandler::transient_string_memory);
+                        Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;//AssetSystem::GetDataPath(bccname.String, &StringsHandler::transient_string_memory);
+                        final_twrfp = AppendCharToString(texture_write_file_path,".png",&StringsHandler::transient_string_memory);
+                        
+                        LoadedTexture lt = {};
+                        
+                        Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
+
+                        ltv.name = bcname;
+                        ltv.lt = lt;
+                        ltv.path = final_twrfp;
+                        
+                        //write texture bin to disk
+                        PlatformFilePointer fp = {};
+                        PlatformWriteMemoryToFile(&fp, final_twrfp.String, lt.texels, lt.dim.x() * lt.dim.y() * lt.bytes_per_pixel,true,"w+");
+                        AnythingCacheCode::AddThing(&mf->tex_cache, &k, &ltv);
+                    }
+                    else
+                    {
+                        ltv = *GetThingPtr(&mf->tex_cache,&k,AssetLoadingTextureValue);
+                    }
+#endif
+                    
+                    //value to pass is the path
+                    char* bcvalue = ltv.path.String;//final_twrfp.String;
+                    Value input_object = AddInputEntryToArray(&ltv.name,shader_input_texture,bcvalue,allocator);
+
+                    inputs_array.PushBack(input_object,allocator);
+                    //Get path to textures on disk relative to data folder.
+                    char* name = tv.texture->name;
+                    char* uri = tv.texture->image->uri;
+                    cgltf_sampler* sampler = tv.texture->sampler;
+
+                }
+                if(mat->pbr_metallic_roughness.metallic_roughness_texture.texture)
+                {
+                    
+                }
+            }
+            if(mat->has_pbr_specular_glossiness)
+            {
+                if(mat->pbr_specular_glossiness.diffuse_texture.texture)
+                {
+                    
+                }
+                if(mat->pbr_specular_glossiness.specular_glossiness_texture.texture)
+                {
+                    
+                }
+            }
+
+//TODO(Ray):FOr PBR materials we will need to add defaults for rougness specular and others.
+/*
+  Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
+  float4 bcvalue = float4(1);
+  Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
+*/
+
+            mat_obj.AddMember("inputs",inputs_array,allocator);                
+            materials_array.PushBack(mat_obj,allocator);
+            obj.AddMember("materials",materials_array, allocator);
+
+            mf->meshes_json.PushBack(obj,allocator);
+        }
+#if 0
+        for(int j = 0;j < ma->primitives_count;++j)
+        {
+            cgltf_primitive prim = ma->primitives[j];
+            //Get material from gltfmesh data and fetch a compatible material or create a new one per
+            //If materials file does not exist for this model also creat the mata file for it.
+            //The model file has the currently assigned material by the engine.
+        }
+#endif
+    }
+    
+    void EndMetaFileCreation(InProgressMetaFile* mf)
+    {
+        rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
+        mf->d.AddMember("Meshes",mf->meshes_json , allocator);
+        // Convert JSON document to string
+
+        rapidjson::StringBuffer strbuf;
+        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(strbuf);
+        mf->d.Accept(writer);
+        const char* output = strbuf.GetString();
+        uint32_t length = String_GetLength_Char((char*)output);
+
+        Yostr filename = GetFilenameFromPath(mf->file_path,&StringsHandler::transient_string_memory);
+        Yostr filenamenoext = StripExtension(&filename,&StringsHandler::transient_string_memory);
+        Yostr final_filename = AppendString(filenamenoext,CreateStringFromLiteral(".mat",&StringsHandler::transient_string_memory),&StringsHandler::transient_string_memory);
+        PlatformFilePointer file{};
+        Yostr final_output_path = AppendStringToChar(game_data_meta_dir,final_filename,&StringsHandler::transient_string_memory);
+        PlatformWriteMemoryToFile(&file,final_output_path.String,(void*)output,length,true,"w+");
+        Yostr result = CreateStringFromLength((char*)output, length, &StringsHandler::transient_string_memory);
+        PlatformOutput(log_output,"%s",result.String);         
     }
     
     Yostr CreateDefaultModelMetaFile(Yostr filepath,ModelAsset* model)
@@ -260,11 +480,8 @@ namespace MetaFiles
 */
                 
                 inputs_array.PushBack(input_object,allocator);
-                
                 mat_obj.AddMember("inputs",inputs_array,allocator);                
-
                 materials_array.PushBack(mat_obj,allocator);
-
                 obj.AddMember("materials",materials_array, allocator); // 
                 //TODO(Ray):Create a default shader/materialdefinition
 

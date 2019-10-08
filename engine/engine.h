@@ -20,6 +20,9 @@
 #define FBXSDK_SHARED
 #include <fbxsdk.h>
 
+
+#include "metalizer/cgltf/cgltf.h"
+
 #include "physics/physics.h"
 #include "audio/SoundInterface.h"
 namespace Engine

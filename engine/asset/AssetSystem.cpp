@@ -689,6 +689,89 @@ namespace AssetSystem
         return lStatus;
     }
 
+    bool GLTFLoadModel(const char* file_path,ModelAsset* result)
+    {
+        PlatformOutput(asset_system_log, "TestLoading with CGLTF");
+        bool is_success = false;
+        result->model_name = CreateStringFromLiteral(file_path, &StringsHandler::transient_string_memory);
+
+        cgltf_options options = {};
+        cgltf_data* data = NULL;
+        cgltf_result aresult = cgltf_parse_file(&options,file_path, &data);
+        if (aresult == cgltf_result_success)
+        {
+#if 0
+                for(int i = 0;i < data->materials_count;++i)
+                {
+                    cgltf_material mat = data->materials[i];
+                    int a = 0;
+                }
+#endif            
+            /* TODO make awesome stuff */
+            for(int i = 0;i < data->buffers_count;++i)
+            {
+                
+                cgltf_result rs = cgltf_load_buffers(&options, data, data->buffers[i].uri);
+                InProgressMetaFile mf = {};
+                if(data->meshes_count > 0)
+                {
+                    MetaFiles::StartMetaFileCreation(&mf,CreateStringFromLiteral(file_path,&StringsHandler::transient_string_memory));
+                }
+                
+                for(int i = 0;i < data->meshes_count;++i)
+                {
+                    cgltf_mesh mes = data->meshes[i];
+                    MetaFiles::AddMeshToMetaFile(&mf,&mes);
+                    
+                    for(int j = 0;j < mes.primitives_count;++j)
+                    {
+                        cgltf_primitive prim = mes.primitives[j];
+                        //Get material from gltfmesh data and fetch a compatible material or create a new one per
+                        //If materials file does not exist for this model also creat the mata file for it.
+                        //The model file has the currently assigned material by the engine.
+                        cgltf_material* mat = prim.material;
+                        
+                        if(prim.type == cgltf_primitive_type_triangles)
+                        {
+                            for(int k = 0;k < prim.attributes_count;++k)
+                            {
+                                cgltf_attribute ac = prim.attributes[k];
+                                if(ac.type == cgltf_attribute_type_position ||
+                                   ac.type == cgltf_attribute_type_normal ||
+                                   ac.type == cgltf_attribute_type_tangent ||
+                                   ac.type == cgltf_attribute_type_texcoord ||
+                                   ac.type == cgltf_attribute_type_color)
+                                {
+                                    //cgltf_int index;
+                                    cgltf_accessor* acdata = ac.data;
+                                    PlatformOutput(true,ac.name);
+                                    if(acdata->type == cgltf_type_vec3)
+                                    {
+                                        cgltf_buffer_view* bf = acdata->buffer_view;
+                                        //if(bf->type == cgltf_buffer_view_type_vertices)
+                                        {
+                                            uint64_t start_offset = bf->offset;
+                                            uint32_t stride = bf->stride;
+                                            cgltf_buffer* buf = bf->buffer;
+                                            float* abc = (float*)buf->data;
+                                            int e = 0;
+                                            
+                                            //cgltf_result rs = cgltf_load_buffers(&options, buf->data, const char* gltf_path);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MetaFiles::EndMetaFileCreation(&mf);
+            }
+            cgltf_free(data);
+        }
+        return is_success;        
+    }
+    
     bool FBXSDKLoadModel(char* file_path,ModelAsset* result)
     {
         PlatformOutput(asset_system_log, "TestLoading with FBXSDK");
@@ -746,6 +829,42 @@ namespace AssetSystem
         return bool_result;
     }
 
+#if 0
+    bool AddOrGetTextureFromMemory(void* data,uint64_t size,LoadedTexture* result)
+    {
+        bool bool_result = false;
+        //result = nullptr;
+        //TODO(Ray):Propery handling of a unfound asset
+        uint64_t t_key = YoyoMeowHashFunction(data,size);//StringsHandler::StringHash(path.String,path.Length);
+        if(!AnythingCacheCode::DoesThingExist(&texture_cache,&t_key))
+        {
+            //TODO(Ray):This gets it from disk but we should be able to get it from anywhere .. network stream etc...
+            //We will add a facility for tagging assets and retrieving base on criteria and only the asset retriever
+            //(Serializer) like system will be the only one to deal with what we are getting it from.
+           // LoadedTexture tex = Resource::GetLoadedImage(path.String);
+            LoadedTexture tex = {};
+            Resource::GetImageFromMemory(data,size,&tex,4);
+            if(tex.texels)
+            {
+                tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
+                AnythingCacheCode::AddThing(&texture_cache,&t_key,&tex);
+                *result = tex;
+                bool_result = true;
+            }
+        }
+        else
+        {
+            LoadedTexture*tex = (LoadedTexture*)AnythingCacheCode::GetThing(&texture_cache,&t_key);
+            if(tex)
+            {
+                *result = *tex;
+                bool_result = true;
+            }
+        }
+        return bool_result;
+    }
+#endif
+    
 #if 1
     //Take in a json doc here
     RenderMaterial CreateMaterialFromDescription(Yostr* vs_name,Yostr* as_name,float4 base_color)
