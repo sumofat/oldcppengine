@@ -257,6 +257,58 @@ namespace MetaFiles
         obj->AddMember("materials",materials_array, allocator);
     }
     
+    void WriteAddTexture(InProgressMetaFile* mf,cgltf_texture_view tv,char* tex_name,Value* inputs_array,cgltf_mesh* ma)
+    {
+        rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
+        //cgltf_texture_view tv = mat->pbr_metallic_roughness.metallic_roughness_texture;
+        //extract texture from memory location
+
+        uint32_t offset = tv.texture->image->buffer_view->offset;
+        void* tex_data = (uint8_t*)tv.texture->image->buffer_view->buffer->data + offset;
+        uint64_t data_size = tv.texture->image->buffer_view->size;
+        AssetLoadingTextureKey k = {offset,(uint64_t)tex_data};
+
+        Yostr final_twrfp = {};
+        AssetLoadingTextureValue ltv = {};
+                    
+        if(!AnythingCacheCode::DoesThingExist(&mf->tex_cache, &k))
+        {
+
+            Yostr bcname = CreateStringFromLiteral(tex_name,&StringsHandler::transient_string_memory);
+            Yostr bccname =  AppendCharToString(bcname,ma->name,&StringsHandler::transient_string_memory);
+            Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;//AssetSystem::GetDataPath(bccname.String, &StringsHandler::transient_string_memory);
+            final_twrfp = AppendCharToString(texture_write_file_path,".png",&StringsHandler::transient_string_memory);
+                        
+            LoadedTexture lt = {};
+                        
+            Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
+
+            ltv.name = bcname;
+            ltv.lt = lt;
+            ltv.path = final_twrfp;
+                        
+            //write texture bin to disk
+            PlatformFilePointer fp = {};
+            PlatformWriteMemoryToFile(&fp, final_twrfp.String, lt.texels, lt.dim.x() * lt.dim.y() * lt.bytes_per_pixel,true,"w+");
+            AnythingCacheCode::AddThing(&mf->tex_cache, &k, &ltv);
+        }
+        else
+        {
+            ltv = *GetThingPtr(&mf->tex_cache,&k,AssetLoadingTextureValue);
+        }
+                    
+        //value to pass is the path
+        char* bcvalue = ltv.path.String;//final_twrfp.String;
+        Value input_object = AddInputEntryToArray(&ltv.name,shader_input_texture,bcvalue,allocator);
+
+        inputs_array->PushBack(input_object,allocator);
+        //Get path to textures on disk relative to data folder.
+        char* name = tv.texture->name;
+        char* uri = tv.texture->image->uri;
+        cgltf_sampler* sampler = tv.texture->sampler;
+
+    }
+    
     void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh* ma)
     {
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
@@ -296,69 +348,27 @@ namespace MetaFiles
             {
                 if(mat->pbr_metallic_roughness.base_color_texture.texture)
                 {
-                    cgltf_texture_view tv = mat->pbr_metallic_roughness.base_color_texture;                    
-                    //extract texture from memory location
-#if 1
-                    uint32_t offset = tv.texture->image->buffer_view->offset;
-                    void* tex_data = (uint8_t*)tv.texture->image->buffer_view->buffer->data + offset;
-                    uint64_t data_size = tv.texture->image->buffer_view->size;
-                    AssetLoadingTextureKey k = {offset,(uint64_t)tex_data};
-
-                    Yostr final_twrfp = {};
-                    AssetLoadingTextureValue ltv = {};
-                    
-                    if(!AnythingCacheCode::DoesThingExist(&mf->tex_cache, &k))
-                    {
-
-                        Yostr bcname = CreateStringFromLiteral("pbr_mettalic_roughness_texture",&StringsHandler::transient_string_memory);
-                        Yostr bccname =  AppendCharToString(bcname,ma->name,&StringsHandler::transient_string_memory);
-                        Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;//AssetSystem::GetDataPath(bccname.String, &StringsHandler::transient_string_memory);
-                        final_twrfp = AppendCharToString(texture_write_file_path,".png",&StringsHandler::transient_string_memory);
-                        
-                        LoadedTexture lt = {};
-                        
-                        Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
-
-                        ltv.name = bcname;
-                        ltv.lt = lt;
-                        ltv.path = final_twrfp;
-                        
-                        //write texture bin to disk
-                        PlatformFilePointer fp = {};
-                        PlatformWriteMemoryToFile(&fp, final_twrfp.String, lt.texels, lt.dim.x() * lt.dim.y() * lt.bytes_per_pixel,true,"w+");
-                        AnythingCacheCode::AddThing(&mf->tex_cache, &k, &ltv);
-                    }
-                    else
-                    {
-                        ltv = *GetThingPtr(&mf->tex_cache,&k,AssetLoadingTextureValue);
-                    }
-#endif
-                    
-                    //value to pass is the path
-                    char* bcvalue = ltv.path.String;//final_twrfp.String;
-                    Value input_object = AddInputEntryToArray(&ltv.name,shader_input_texture,bcvalue,allocator);
-
-                    inputs_array.PushBack(input_object,allocator);
-                    //Get path to textures on disk relative to data folder.
-                    char* name = tv.texture->name;
-                    char* uri = tv.texture->image->uri;
-                    cgltf_sampler* sampler = tv.texture->sampler;
-
+                    cgltf_texture_view tv = mat->pbr_metallic_roughness.base_color_texture;
+                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_base_color",&inputs_array,ma);
                 }
                 if(mat->pbr_metallic_roughness.metallic_roughness_texture.texture)
                 {
-                    
+                    cgltf_texture_view tv = mat->pbr_metallic_roughness.metallic_roughness_texture;
+                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_metallic_roughness",&inputs_array,ma);
                 }
             }
+            
             if(mat->has_pbr_specular_glossiness)
             {
                 if(mat->pbr_specular_glossiness.diffuse_texture.texture)
                 {
-                    
+                    cgltf_texture_view tv = mat->pbr_specular_glossiness.diffuse_texture;
+                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_diffuse_texture",&inputs_array,ma);
                 }
                 if(mat->pbr_specular_glossiness.specular_glossiness_texture.texture)
                 {
-                    
+                    cgltf_texture_view tv = mat->pbr_specular_glossiness.specular_glossiness_texture;
+                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_specular_glossiness_texture",&inputs_array,ma);
                 }
             }
 
