@@ -20,7 +20,22 @@ namespace AssetSystem
     u32 error_count = 0;
 
     AnythingCache texture_cache;
+    RenderMaterial default_mat;
+    AnythingCache material_cache;
+     
+    void InitDefaultMaterial()
+    {
+        
+//hardcoded default material
+        Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
+        Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
+        float4 d_base_color = float4(0.5f,0.5f,0.5f,1.0f);
+        Yostr d_mat_string = CreateStringFromLiteral("standard_hardcoded_default_material",&StringsHandler::transient_string_memory);
+        uint64_t d_mat_key = StringsHandler::StringHash(d_mat_string.String,d_mat_string.Length);
+        default_mat = AssetSystem::CreateMaterialFromDescription(&d_vs_name,&d_fs_name,d_base_color);
+        AnythingCacheCode::AddThing(&material_cache,&d_mat_key,&default_mat);
 
+    }
     Yostr GetDataPath(const char* file,MemoryArena* arena)
     {
         Yostr path = BuildPathToAssets(arena,0);
@@ -37,8 +52,12 @@ namespace AssetSystem
             PlatformOutput(asset_system_log, "Error: Unable to create FBX Manager!\n");
             exit(1);
         }
-        else PlatformOutput(asset_system_log, "Autodesk FBX SDK version %s\n", fbx_manager->GetVersion());
+        else
+        {
+            PlatformOutput(asset_system_log, "Autodesk FBX SDK version %s\n", fbx_manager->GetVersion());
+        }
 
+        
         //Create an IOSettings object. This object holds all import/export settings.
         FbxIOSettings* ios = FbxIOSettings::Create(fbx_manager, IOSROOT);
         fbx_manager->SetIOSettings(ios);
@@ -59,11 +78,56 @@ namespace AssetSystem
     void Init()
     {
         InitializeSdkObjects();
+
+        AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
+        InitDefaultMaterial();
+
         //TextureCache::Init(3000);
         //ModelCache::Init(3000);
         GPUResourceCache::Init(3000);
         AnythingCacheCode::Init(&texture_cache,3000,sizeof(LoadedTexture),sizeof(uint64_t));
         
+    }
+
+    void UploadModelAssetToGPUTest(ModelAsset* ma)
+    {
+        for(int i = 0;i < ma->meshes.count;++i)
+        {
+            int is_valid = 0;
+            GPUMeshResource mesh_r;
+            MeshAsset* mesh = (MeshAsset*)ma->meshes.base + i;
+            if(mesh->vertex_count > 0)
+            {
+                mesh_r.vertex_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->vertex_count,ResourceStorageModeShared,12,mesh->vertex_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.vertex_buff,(void*)mesh->vertex_data,sizeof(float) * mesh->vertex_count);
+                is_valid++;
+            }
+
+            if(mesh->normal_count > 0)
+            {
+                mesh_r.normal_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->normal_count,ResourceStorageModeShared,12,mesh->normal_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.normal_buff,(void*)mesh->normal_data,sizeof(float) * mesh->normal_count);
+                is_valid++;
+            }
+
+            if(mesh->uv_count > 0)
+            {
+                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uv_count,ResourceStorageModeShared,8,mesh->uv_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uv_data,sizeof(float) * mesh->uv_count);
+                is_valid++;
+            }
+            
+            if(mesh->index16_count > 0)
+            {
+                mesh_r.element_buff = RenderGPUMemory::NewBufferWithLength(sizeof(u16) * mesh->index16_count,ResourceStorageModeShared,4,mesh->index16_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.element_buff,(void*)mesh->index_16_data,sizeof(u16) * mesh->index16_count);
+                mesh_r.element_buff.index_type = IndexTypeUInt16;
+                is_valid++;
+            }
+            //NOTE(RAY):For now we require that you have met all the data criteria
+            if(is_valid == 4)
+                GPUResourceCache::AddGPUResource(mesh,mesh_r);
+        }
     }
 
     void UploadModelAssetToGPU(ModelAsset* ma)
@@ -87,14 +151,15 @@ namespace AssetSystem
             }
             if(mesh->uvs.set_count > 0)
             {
-                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uvs.set_count,ResourceStorageModeShared,12,mesh->uvs.set_count);
+                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uvs.set_count,ResourceStorageModeShared,8,mesh->uvs.set_count);
                 RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uvs.base,sizeof(float) * mesh->uvs.set_count);
                 is_valid++;
             }
             if(mesh->elements.count > 0)
             {
-                mesh_r.element_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->elements.count,ResourceStorageModeShared,4,mesh->elements.count);
+                mesh_r.element_buff = RenderGPUMemory::NewBufferWithLength(sizeof(uint32_t) * mesh->elements.count,ResourceStorageModeShared,4,mesh->elements.count);
                 RenderGPUMemory::UploadBufferData(&mesh_r.element_buff,(void*)mesh->elements.base,sizeof(u32) * mesh->elements.count);
+                mesh_r.element_buff.index_type = IndexTypeUInt32;
                 is_valid++;
             }
             if(is_valid == 4)
@@ -706,7 +771,8 @@ namespace AssetSystem
                     cgltf_material mat = data->materials[i];
                     int a = 0;
                 }
-#endif            
+#endif
+                
             /* TODO make awesome stuff */
             for(int i = 0;i < data->buffers_count;++i)
             {
@@ -715,59 +781,19 @@ namespace AssetSystem
                 InProgressMetaFile mf = {};
                 if(data->meshes_count > 0)
                 {
-                    MetaFiles::StartMetaFileCreation(&mf,CreateStringFromLiteral(file_path,&StringsHandler::transient_string_memory));
+                    MetaFiles::StartMetaFileCreation(&mf,CreateStringFromLiteral(file_path,&StringsHandler::transient_string_memory),data->meshes_count);
                 }
-                
+
                 for(int i = 0;i < data->meshes_count;++i)
                 {
                     cgltf_mesh mes = data->meshes[i];
-                    MetaFiles::AddMeshToMetaFile(&mf,&mes);
-                    
-                    for(int j = 0;j < mes.primitives_count;++j)
-                    {
-                        cgltf_primitive prim = mes.primitives[j];
-                        //Get material from gltfmesh data and fetch a compatible material or create a new one per
-                        //If materials file does not exist for this model also creat the mata file for it.
-                        //The model file has the currently assigned material by the engine.
-                        cgltf_material* mat = prim.material;
-                        
-                        if(prim.type == cgltf_primitive_type_triangles)
-                        {
-                            for(int k = 0;k < prim.attributes_count;++k)
-                            {
-                                cgltf_attribute ac = prim.attributes[k];
-                                if(ac.type == cgltf_attribute_type_position ||
-                                   ac.type == cgltf_attribute_type_normal ||
-                                   ac.type == cgltf_attribute_type_tangent ||
-                                   ac.type == cgltf_attribute_type_texcoord ||
-                                   ac.type == cgltf_attribute_type_color)
-                                {
-                                    //cgltf_int index;
-                                    cgltf_accessor* acdata = ac.data;
-                                    PlatformOutput(true,ac.name);
-                                    if(acdata->type == cgltf_type_vec3)
-                                    {
-                                        cgltf_buffer_view* bf = acdata->buffer_view;
-                                        //if(bf->type == cgltf_buffer_view_type_vertices)
-                                        {
-                                            uint64_t start_offset = bf->offset;
-                                            uint32_t stride = bf->stride;
-                                            cgltf_buffer* buf = bf->buffer;
-                                            float* abc = (float*)buf->data;
-                                            int e = 0;
-                                            
-                                            //cgltf_result rs = cgltf_load_buffers(&options, buf->data, const char* gltf_path);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    PlatformOutput(true, mes.name);                
+                    MetaFiles::AddMeshToMetaFile(&mf,mes);
                 }
-
+                *result = mf.model;
                 MetaFiles::EndMetaFileCreation(&mf);
             }
-            cgltf_free(data);
+//            cgltf_free(data);
         }
         return is_success;        
     }

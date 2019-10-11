@@ -60,9 +60,9 @@ namespace Engine
 
     SceneBuffer scene_buffer;
     Scene* default_empty_scene;
+//    AnythingCache material_cache;
 
-    AnythingCache material_cache;
-    
+   
     void Init(float2 window_dim)
     {
         PlatformOutput(engine_log,"Engine Init Begin\n");
@@ -74,7 +74,7 @@ namespace Engine
         StringsHandler::Init();
         RenderCache::Init(3000);
         //MaterialCache::Init(3000);
-        AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
+//        AnythingCacheCode::Init(&material_cache,3000,sizeof(RenderMaterial),sizeof(uint64_t));
         MetaFiles::Init();
         SceneCode::InitScene(&scene_buffer,10);
         default_empty_scene = SceneCode::CreateEmptyScene(&scene_buffer);
@@ -159,15 +159,6 @@ namespace Engine
             }
         }                
 #endif
-
-//hardcoded default material
-        Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
-        Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
-        float4 d_base_color = float4(0.5f,0.5f,0.5f,1.0f);
-        Yostr d_mat_string = CreateStringFromLiteral("standard_hardcoded_default_material",&StringsHandler::transient_string_memory);
-        uint64_t d_mat_key = StringsHandler::StringHash(d_mat_string.String,d_mat_string.Length);
-        RenderMaterial d_default_mat = AssetSystem::CreateMaterialFromDescription(&d_vs_name,&d_fs_name,d_base_color);
-        AnythingCacheCode::AddThing(&material_cache,&d_mat_key,&d_default_mat);
         
     //char* name = "dodge_challenger_model.fbx";
         char* name = "littlest-tokyo/source/lil_tokyo.fbx";
@@ -181,9 +172,9 @@ namespace Engine
         gltfpath = AppendString(gltfbuildpath,gltfpath,&StringsHandler::transient_string_memory);
         if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
         {
-            
         }
-        
+
+#if 0        
         if(AssetSystem::FBXSDKLoadModel(path.String,&testmodel))
         {
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
@@ -223,7 +214,7 @@ namespace Engine
             for(int i = 0;i < testmodel.meshes.count;++i)
             {
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + i;
-                rendermesh->r_material = d_default_mat;
+                rendermesh->r_material = AssetSystem::default_mat;
             }
 
 //This next part gets and loads all the relevent information to render this object properly.
@@ -238,7 +229,7 @@ namespace Engine
             for (auto& mesh : meshes.GetArray())
             {
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
-                rendermesh->r_material = d_default_mat;
+                rendermesh->r_material = AssetSystem::default_mat;
                 const Value& meshname = mesh["meshname"];
                 PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
 
@@ -402,6 +393,7 @@ namespace Engine
                 }
             }            
         }
+#endif
 
         /*
          if(mesh_index > new_model_asset->mesh_count - 1)Assert(false);//break;//TODO(Ray):materials need validation
@@ -533,7 +525,8 @@ namespace Engine
          mesh_index++;
          */
         
-        AssetSystem::UploadModelAssetToGPU(&testmodel);
+//        AssetSystem::UploadModelAssetToGPU(&testmodel);
+        AssetSystem::UploadModelAssetToGPUTest(&testmodel);
         
         //TODO(Ray):Set Asset or file system to hold this 
 //        es.base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);

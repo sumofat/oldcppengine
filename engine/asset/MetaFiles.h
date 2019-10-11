@@ -12,6 +12,7 @@ struct InProgressMetaFile
     Yostr file_path;
     rapidjson::Value meshes_json;
     AnythingCache tex_cache;
+    ModelAsset model;
 };
 
 namespace MetaFileType
@@ -52,8 +53,8 @@ namespace MetaFiles
     MetaFileType::Type GetFileExtensionType(Yostr file);
     ShaderValueType::Type GetShaderType(Yostr type);
     
-    void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath);
-    void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh* ma);    
+    void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath,uint32_t mesh_count);
+    void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh ma);    
     void EndMetaFileCreation(InProgressMetaFile* mf);
 }
 

@@ -111,12 +111,12 @@ namespace MetaFiles
         shader_input_float,
         shader_input_texture,
     };
-    
-    Value AddInputEntryToArray(Yostr* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
+
+    Value AddInputEntryToArray(char* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
     {
         Value input_object(kObjectType);
         Value base_color_name(kObjectType);
-        base_color_name.SetString(name->String,(SizeType)name->Length,allocator);
+        base_color_name.SetString(name,(SizeType)CalculateCharLength(name),allocator);
         input_object.AddMember("name",base_color_name,allocator);
 
         Yostr type_text;
@@ -190,7 +190,12 @@ namespace MetaFiles
                 Assert(false);
             }break;
         }
-        return input_object;
+        return input_object;        
+    }
+    
+    Value AddInputEntryToArray(Yostr* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
+    {
+        return AddInputEntryToArray(name->String,input_type,value,allocator);
     }
     
     struct AssetLoadingTextureKey
@@ -206,12 +211,14 @@ namespace MetaFiles
         Yostr name;
     };
     
-    void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath)
+    void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath,uint32_t mesh_count)
     {
         Assert(mf);
         mf->d;
         mf->d.SetObject();
         mf->file_path = filepath;
+        mf->model = {};
+        mf->model.meshes = YoyoInitVector(mesh_count, MeshAsset , false);
         AnythingCacheCode::Init(&mf->tex_cache, 4096,sizeof(AssetLoadingTextureValue),sizeof(AssetLoadingTextureKey));
         
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
@@ -225,7 +232,7 @@ namespace MetaFiles
         
     }
 
-    void SetDefaultMaterial(InProgressMetaFile* mf,Value* obj)
+    void SetDefaultMaterial(InProgressMetaFile* mf,Value* obj,MeshAsset* mesh)
     {
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
         Value mat_obj(kObjectType);
@@ -249,7 +256,11 @@ namespace MetaFiles
   float4 bcvalue = float4(1);
   Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
 */
-                
+
+        //NOTE(Ray):All meshes are assigned the defauilt material till we parse a better one from the gltf.
+        //Or extract one from engine meta data from engine created materials
+        mesh->r_material = AssetSystem::default_mat;
+        
         inputs_array.PushBack(input_object,allocator);
         mat_obj.AddMember("inputs",inputs_array,allocator);                
         materials_array.PushBack(mat_obj,allocator);
@@ -306,31 +317,23 @@ namespace MetaFiles
         char* name = tv.texture->name;
         char* uri = tv.texture->image->uri;
         cgltf_sampler* sampler = tv.texture->sampler;
-
     }
     
-    void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh* ma)
+    void AddMeshToMetaFile(InProgressMetaFile* mf,cgltf_mesh map)
     {
+        cgltf_mesh* ma = &map;
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
         Value obj(kObjectType);
         Value val(kObjectType);
         uint32_t name_length = CalculateCharLength(ma->name);
         val.SetString(ma->name,(SizeType)name_length,allocator);
         obj.AddMember("meshname",val,allocator);
-
-        if(ma->primitives_count == 0)
+           
+        //Extract mesh binary data
+        for(int j = 0;j < ma->primitives_count;++j)
         {
-            SetDefaultMaterial(mf,&obj);            
-        }
-        else
-        {
-            //NOTE(Ray):Can a mesh have more than one material and can in the list of primitvies
-            //is there a case with more one material ... seems not likely
-            cgltf_material* mat = ma->primitives[0].material;
-            if(!mat)
-            {
-                SetDefaultMaterial(mf,&obj);                
-            }
+            cgltf_primitive prim = ma->primitives[j];
+            cgltf_material* mat  = prim.material;
             
             Value mat_obj(kObjectType);
             Value mat_val(kObjectType);
@@ -340,9 +343,34 @@ namespace MetaFiles
                 
             Value materials_array(rapidjson::kArrayType);
             Value inputs_array(rapidjson::kArrayType);
+            Value mesh_array(rapidjson::kArrayType);
             //Set defaults as
             //base color float4(1)
             //textures empty
+            if(mat->normal_texture.texture)
+            {
+                cgltf_texture_view tv = mat->normal_texture;
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+            }
+
+            if(mat->occlusion_texture.texture)
+            {
+                cgltf_texture_view tv = mat->occlusion_texture;
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+            }
+
+            if(mat->emissive_texture.texture)
+            {
+                cgltf_texture_view tv = mat->emissive_texture;
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+//                cgltf_float emissive_factor[3];
+            }
+            /*
+             * 	cgltf_alpha_mode alpha_mode;
+             cgltf_float alpha_cutoff;
+             cgltf_bool double_sided;
+             cgltf_bool unlit;
+            */
             
             if(mat->has_pbr_metallic_roughness)
             {
@@ -356,6 +384,19 @@ namespace MetaFiles
                     cgltf_texture_view tv = mat->pbr_metallic_roughness.metallic_roughness_texture;
                     WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_metallic_roughness",&inputs_array,ma);
                 }
+
+                cgltf_float* bcf = mat->pbr_metallic_roughness.base_color_factor;
+                float4 base_color_value = float4(bcf[0],bcf[1],bcf[2],bcf[3]);
+                Value input_object = AddInputEntryToArray("base_color",shader_input_float4,(void*)&base_color_value,allocator);
+                inputs_array.PushBack(input_object,allocator);
+
+                cgltf_float* mf = &mat->pbr_metallic_roughness.metallic_factor;
+                Value mf_input_object = AddInputEntryToArray("metallic_factor",shader_input_float,(void*)&mf,allocator);
+                inputs_array.PushBack(mf_input_object,allocator);
+
+                cgltf_float* rf = &mat->pbr_metallic_roughness.roughness_factor;
+                Value rf_input_object = AddInputEntryToArray("roughness_factor",shader_input_float,(void*)&rf,allocator);
+                inputs_array.PushBack(rf_input_object,allocator);
             }
             
             if(mat->has_pbr_specular_glossiness)
@@ -370,30 +411,92 @@ namespace MetaFiles
                     cgltf_texture_view tv = mat->pbr_specular_glossiness.specular_glossiness_texture;
                     WriteAddTexture(mf,tv,"pbr_specular_glossiness_specular_glossiness_texture",&inputs_array,ma);
                 }
-            }
 
-//TODO(Ray):FOr PBR materials we will need to add defaults for rougness specular and others.
-/*
-  Yostr* bcname = CreateStringFromLiteral("base_color",&StringsHandler::transient_string_memory);
-  float4 bcvalue = float4(1);
-  Value input_object = AddInputEntryToArray(bcname,shader_input_float4,&bcvalue,allocator);
-*/
+                cgltf_float* dcf = mat->pbr_specular_glossiness.diffuse_factor;
+                float4 diffuse_value = float4(dcf[0],dcf[1],dcf[2],dcf[3]);
+                Value input_object = AddInputEntryToArray("diffuse_factor",shader_input_float4,(void*)&diffuse_value,allocator);
+                inputs_array.PushBack(input_object,allocator);
+
+                cgltf_float* sf = mat->pbr_specular_glossiness.specular_factor;
+                float3 specular_value = float3(sf[0],sf[1],sf[2]);
+                Value sf_input_object = AddInputEntryToArray("specular_factor",shader_input_float3,(void*)&specular_value,allocator);
+                inputs_array.PushBack(sf_input_object,allocator);
+
+                cgltf_float* gf = &mat->pbr_specular_glossiness.glossiness_factor;
+                Value gf_input_object = AddInputEntryToArray("glossiness_factor",shader_input_float,(void*)&gf,allocator);
+                inputs_array.PushBack(gf_input_object,allocator);
+            }
 
             mat_obj.AddMember("inputs",inputs_array,allocator);                
             materials_array.PushBack(mat_obj,allocator);
             obj.AddMember("materials",materials_array, allocator);
 
-            mf->meshes_json.PushBack(obj,allocator);
+            MeshAsset mesh = {};
+            mesh.name = CreateStringFromLiteral(ma->name,&StringsHandler::string_memory);
+            mesh.r_material = AssetSystem::default_mat;
+            //get buffer data from mesh
+            if(prim.type == cgltf_primitive_type_triangles)
+            {
+                for(int k = 0;k < prim.attributes_count;++k)
+                {
+                    cgltf_attribute ac = prim.attributes[k];
+                    //Get indices
+                    if(prim.indices->component_type == cgltf_component_type_r_16u)
+                    {
+                        // cgltf_attribute ac = prim.attributes[k];
+                        cgltf_buffer_view* ibf = prim.indices->buffer_view;
+                            
+                        uint64_t istart_offset = ibf->offset;
+                        cgltf_buffer* ibuf = ibf->buffer;
+                        uint16_t* indices_buffer = (uint16_t*)((uint8_t*)ibuf->data + istart_offset);
+                        mesh.index_16_data = indices_buffer;
+                        mesh.index_16_data_size = ibf->size;
+                        mesh.index16_count = prim.indices->count;
+                    }
+                    //Get verts
+                    cgltf_accessor* acdata = ac.data;
+                    uint64_t count = acdata->count;
+                    PlatformOutput(true,ac.name);
+                            
+                    cgltf_buffer_view* bf = acdata->buffer_view;
+                            
+                    //Get vertex buffer
+                    uint64_t start_offset = bf->offset;
+                    uint32_t stride = bf->stride;
+                    cgltf_buffer* buf = bf->buffer;
+                    float* buffer = (float*)((uint8_t*)buf->data + start_offset);
+                            
+                    if(ac.type == cgltf_attribute_type_position)
+                    {
+                        mesh.vertex_data = buffer;
+                        mesh.vertex_data_size = bf->size;
+                        mesh.vertex_count = count * 3;
+                    }
+                    else if(ac.type == cgltf_attribute_type_normal)
+                    {
+                        mesh.normal_data = buffer;
+                        mesh.normal_data_size = bf->size;
+                        mesh.normal_count = count * 3;
+                    }
+                    else if(ac.type == cgltf_attribute_type_tangent)
+                    {
+                        mesh.tangent_data = buffer;
+                        mesh.tangent_data_size = bf->size;
+                        mesh.tangent_count = count * 3;
+                    }
+                    else if(ac.type == cgltf_attribute_type_texcoord)
+                    {
+                        mesh.uv_data = buffer;
+                        mesh.uv_data_size = bf->size;
+                        mesh.uv_count = count * 2;
+                    }
+                }
+            }
+            YoyoStretchPushBack(&mf->model.meshes, mesh);
+            obj.AddMember("mesh",mesh_array,allocator);
         }
-#if 0
-        for(int j = 0;j < ma->primitives_count;++j)
-        {
-            cgltf_primitive prim = ma->primitives[j];
-            //Get material from gltfmesh data and fetch a compatible material or create a new one per
-            //If materials file does not exist for this model also creat the mata file for it.
-            //The model file has the currently assigned material by the engine.
-        }
-#endif
+
+        mf->meshes_json.PushBack(obj,allocator);
     }
     
     void EndMetaFileCreation(InProgressMetaFile* mf)
