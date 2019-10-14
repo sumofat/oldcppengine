@@ -1079,10 +1079,16 @@ namespace AssetSystem
 */
 
 //Create pipeline states    
-        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
+
+        PipelineOption options = (PipelineOption)(PipelineOptionArgumentInfo | PipelineOptionBufferTypeInfo);
+        RenderPipelineReflection ref_ptr;
+        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor,options,&ref_ptr);
         mat_result.pipeline_state = pipeline_state;
 
-//create depth states            
+//After we create the pipeline state we can now get the arguments from the shaders and match them with the material
+//The shader must have a slot for the material will match what it can        
+//create depth states
+        
         DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
         depth_desc.depthWriteEnabled = true;
         depth_desc.depthCompareFunction = compare_func_less;
@@ -1094,6 +1100,8 @@ namespace AssetSystem
 //        test_material = mat_result;
 
         //NOTE(Ray):Probably move this to a more renderer specific area
+
+        
         return mat_result;
     }
     

@@ -104,11 +104,11 @@ RenderPipelineState InitRenderPipelineStateForFramebufferDescriptor(MetalContext
         //return nullptr;
         Assert(false);
     }
-    
-    void* vertexFunction = RendererCode::NewFunctionWithName("vertex_main",library);
-    //[library newFunctionWithName:@"vertex_main"];
-    void* fragmentFunction = RendererCode::NewFunctionWithName("fragment_main",library);
-    //[library newFunctionWithName:@"fragment_main"];
+
+    ShaderFunction v_func = RendererCode::NewFunctionWithName("vertex_main",library);
+    void* vertexFunction = v_func.state;
+    ShaderFunction p_func = RendererCode::NewFunctionWithName("fragment_main",library);
+    void* fragmentFunction = p_func.state;
     
     if (vertexFunction == nullptr || fragmentFunction == nullptr)
     {

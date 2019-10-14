@@ -172,11 +172,6 @@ namespace Engine
         gltfpath = AppendString(gltfbuildpath,gltfpath,&StringsHandler::transient_string_memory);
         if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
         {
-        }
-
-#if 0        
-        if(AssetSystem::FBXSDKLoadModel(path.String,&testmodel))
-        {
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
             Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(path,&testmodel);
 
@@ -191,32 +186,15 @@ namespace Engine
  
             const Value& metamodelname = d["model_file"];
             PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
-//          Yostr* r = CreateStringFromLiteralConst(d["Meshes"].GetString(),&StringsHandler::transient_string_memory);
-//          Yostr* final_path = AppendString(*base_path_to_data, *CreateStringFromLiteral(r->String,&ps->string_state.transient_string_memory), &StringsHandler::transient_string_memory);
-            // 
-        //After getting model get material definition from disk
+//sould be already assigned defulat material on load
 /*
-        Entity* entity = PushStruct(&EntitySytem::runtime_entities, Entity);
-        entity->ot.p = float3(0, 0, 0);
-        entity->ot.s = float3(1, 1, 1);
-        entity->ot.r = axis_angle(float3(0, 1, 0), 0);
-        ModelAsset *new_model_asset = PushStruct(&runtime_assets, ModelAsset);
-        entity->asset = new_model_asset;
-        LoadedModelToModelAsset(loaded_model, new_model_asset);
-        //TODO(Ray):Why does this fail sometimes!!
-        UploadModelAssetToGPU(new_model_asset);
-        
-            Texture uploaded_texture;
-            RenderShader shader;
-            const Value& materials = d["Materials"];
-            int mesh_index = 0;
-*/
             for(int i = 0;i < testmodel.meshes.count;++i)
             {
                 MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + i;
                 rendermesh->r_material = AssetSystem::default_mat;
             }
-
+*/
+            
 //This next part gets and loads all the relevent information to render this object properly.
             //NOTE(Ray):
             //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
@@ -235,6 +213,7 @@ namespace Engine
 
                 Yostr vs_name = {};
                 Yostr fs_name = {};
+                //NOTE(Ray):Should only be one material per mesh
                 const Value& materials = mesh["materials"];            
                 for (auto& material : materials.GetArray())
                 {
@@ -248,9 +227,9 @@ namespace Engine
                     RenderMaterial render_material;
                     float4 base_color_input;
                     uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
-                    if(AnythingCacheCode::DoesThingExist(&material_cache,&mat_key))
+                    if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
                     {
-                        render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&material_cache,&mat_key);//MaterialCache::GetMaterial(&matstring);
+                        render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&AssetSystem::material_cache,&mat_key);
                         
                         const Value& inputs = material["inputs"];
                         for (auto& input : inputs.GetArray())
@@ -264,9 +243,6 @@ namespace Engine
                             Yostr typestring = JSONHelper::GetString(type);
                             
                             ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
-                            
-                            //TODO(Ray):For the time being we only have one float4 it is base color...
-                            //but will want to make this more flexible later
                             if(value_type == ShaderValueType::float4)
                             {
                                 const Value& values = input["value"];
@@ -282,12 +258,11 @@ namespace Engine
                     }
                     else
                     {
-//
+
                         //Getmaterial file
                         Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
                         //Create RenderMaterial based on this and add it to the cache
                         PlatformOutput(asset_log,"Processing meta file");
-// 1. Parse a JSON string into DOM.
                         Document rd;
                         rd.Parse((char*)meta_file_json.String);
                         if(!rd.IsObject())
@@ -357,7 +332,7 @@ namespace Engine
                             RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
                             rendermesh->r_material = final_mat;
                             render_material = final_mat;
-                            AnythingCacheCode::AddThing(&material_cache,&mat_key,&render_material);
+                            AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
                     }
                     
 /*
@@ -393,7 +368,6 @@ namespace Engine
                 }
             }            
         }
-#endif
 
         /*
          if(mesh_index > new_model_asset->mesh_count - 1)Assert(false);//break;//TODO(Ray):materials need validation
@@ -634,6 +608,8 @@ namespace Engine
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
 //    for(int i = 0;i < it_count;++i) 
 #if 1
+
+//Gather lights and make a list
     
     {
         ModelAsset* model = &testmodel;//(ModelAsset*)AssetSystem::runtime_assets.base + 0;
