@@ -10,6 +10,16 @@ namespace JSONHelper
         return matstring;
     }
 
+    float GetFloat(const Value& value)
+    {
+        if(!value.IsDouble())
+        {
+            //Must be a float here if not better chweck whqt went wrong
+            //Assert(false);
+        }
+        return(float)value.GetDouble();
+    }
+    
     float4 GetFloat4(const Value& values)
     {
         float results[4];

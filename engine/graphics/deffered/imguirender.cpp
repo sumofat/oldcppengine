@@ -68,7 +68,7 @@ namespace IMGUIRender
         io.DeltaTime = 1 / float(RendererCode::preferred_frame_per_second ?: 60);
         RenderPass* pass;
         //Here  you will do any setup for all the passes...
-        while(pass = YoyoIterateVector(&buffer->buffer,RenderPass))
+        while((pass = YoyoIterateVector(&buffer->buffer,RenderPass)))
         {
 
             Drawable current_drawable = RenderEncoderCode::GetDefaultDrawableFromView();

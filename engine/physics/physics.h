@@ -1,7 +1,16 @@
 #if !defined(PHYSICS_H)
+#if OSX || IOS
+//#define PHYSX_WARNINGS_SUPRESSED_CLANG 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wall"
+#endif
 
 #define _DEBUG
 #include "PxPhysicsAPI.h"
+
+#if OSX || IOS
+#pragma clang diagnostic pop
+#endif
 
 //NOTE(Ray): API is defined here but the hardwork is done by NVIDIA physics lib.
 using namespace physx;

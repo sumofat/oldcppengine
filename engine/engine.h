@@ -17,8 +17,18 @@
 #include "asset/MetaFiles.h"
 #include "asset/AssetSystem.h"
 
+#if OSX || IOS
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+#pragma clang diagnostic ignored "-Wnull-dereference"
+#endif
+
 #define FBXSDK_SHARED
 #include <fbxsdk.h>
+
+#if OSX || IOS
+#pragma clang diagnostic pop
+#endif
 
 
 #include "metalizer/cgltf/cgltf.h"

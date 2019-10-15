@@ -103,7 +103,7 @@ namespace SoundAssetCode
     void LoadBankSampleData()
     {
         SoundBank* bank = {};
-        while(bank = YoyoIterateVector(&bank_buffer.sound_banks,SoundBank))
+        while((bank = YoyoIterateVector(&bank_buffer.sound_banks,SoundBank)))
         {
             bank->state->loadSampleData();
         }

@@ -161,10 +161,10 @@ namespace Engine
 #endif
         
     //char* name = "dodge_challenger_model.fbx";
-        char* name = "littlest-tokyo/source/lil_tokyo.fbx";
-        Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
-        Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-        path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
+//        char* name = "littlest-tokyo/source/lil_tokyo.fbx";
+//        Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
+//        Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
+//        path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
 
         char* gltfname = "littlest-tokyo/source/littlest_tokyo.glb";
         Yostr gltfpath = CreateStringFromLiteral(gltfname, &StringsHandler::transient_string_memory);
@@ -173,7 +173,7 @@ namespace Engine
         if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
         {
             PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
-            Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(path,&testmodel);
+            Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(gltfpath,&testmodel);
 
 // 1. Parse a JSON string into DOM.
             Document d;
@@ -225,12 +225,13 @@ namespace Engine
                     matstring = JSONHelper::GetString(material_name);
 
                     RenderMaterial render_material;
-                    float4 base_color_input;
+//                    float4 base_color_input;
                     uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
-                    if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
+                    //if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
+                    if(true)
                     {
-                        render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&AssetSystem::material_cache,&mat_key);
-                        
+                        //render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&AssetSystem::material_cache,&mat_key);
+                        render_material = AssetSystem::default_mat;
                         const Value& inputs = material["inputs"];
                         for (auto& input : inputs.GetArray())
                         {
@@ -250,12 +251,34 @@ namespace Engine
 
                                 PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
                                 render_material.inputs.base_color = result;
-                                base_color_input = result;
+//                                base_color_input = result;
+                            }
+
+                            if(value_type == ShaderValueType::afloat)
+                            {
+                                const Value& values = input["value"];
+                                float result = JSONHelper::GetFloat(values);
+                                if(CompareCharToChar(input_name_string.String,"metallic_factor",100))
+                                {
+                                    PlatformOutput(asset_log,"metallic_factor %f\n",result);
+                                    render_material.inputs.metallic_factor = result;
+//                                    base_color_input = result;                                                                    
+                                }
+                                else if(CompareCharToChar(input_name_string.String,"roughness_factor",100))
+                                {
+                                    PlatformOutput(asset_log,"roughness_factor %f\n",result);
+                                    render_material.inputs.roughness_factor = result;
+                                    //                                  base_color_input = result;                                                                    
+                                }
+                            }
+                            if(value_type == ShaderValueType::texture)
+                            {
                             }
                         }
-
                         rendermesh->r_material = render_material;
                     }
+
+#if 0
                     else
                     {
 
@@ -326,7 +349,7 @@ namespace Engine
                                 float4 result = JSONHelper::GetFloat4(values);
                                 PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
                                 render_material.inputs.base_color = result;
-                                base_color_input = result;
+                                //sbase_color_input = result;
                             }
                             
                             RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
@@ -334,7 +357,7 @@ namespace Engine
                             render_material = final_mat;
                             AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
                     }
-                    
+
 /*
                         if(value_type == ShaderValueType::afloat)
                         {
@@ -365,6 +388,7 @@ namespace Engine
                         }
                         */
                     }
+#endif                    
                 }
             }            
         }

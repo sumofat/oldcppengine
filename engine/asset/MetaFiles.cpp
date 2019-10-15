@@ -214,7 +214,7 @@ namespace MetaFiles
     void StartMetaFileCreation(InProgressMetaFile* mf,Yostr filepath,uint32_t mesh_count)
     {
         Assert(mf);
-        mf->d;
+//        mf->d;
         mf->d.SetObject();
         mf->file_path = filepath;
         mf->model = {};

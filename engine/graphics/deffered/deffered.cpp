@@ -44,7 +44,7 @@ namespace DefferedRenderer
         PlatformOutput(output_log,"Executing FullScreen Quad Command.\n");
         RenderCommandEncoder re = pass->render_encoder;
         RenderWithFullScreenCommand* command;
-        while (command = YoyoIterateVector(&buffer->buffer, RenderWithFullScreenCommand))
+        while ((command = YoyoIterateVector(&buffer->buffer, RenderWithFullScreenCommand)))
         {
             RenderMaterial material = command->material;
             RenderEncoderCode::SetRenderPipelineState(&re,material.pipeline_state.state);
@@ -230,7 +230,7 @@ namespace DefferedRenderer
         void* c_buffer = RenderEncoderCode::CommandBuffer();
         Drawable current_drawable;
         RenderPassBuffer* render_pass = {};
-        while (render_pass = YoyoIterateVector(&passes.buffer, RenderPassBuffer))
+        while ((render_pass = YoyoIterateVector(&passes.buffer, RenderPassBuffer)))
         {
             if(render_pass->ExecutePasses)
             {

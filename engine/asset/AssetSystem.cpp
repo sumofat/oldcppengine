@@ -792,6 +792,7 @@ namespace AssetSystem
                 }
                 *result = mf.model;
                 MetaFiles::EndMetaFileCreation(&mf);
+                is_success = true;
             }
 //            cgltf_free(data);
         }
@@ -1082,7 +1083,7 @@ namespace AssetSystem
 
         PipelineOption options = (PipelineOption)(PipelineOptionArgumentInfo | PipelineOptionBufferTypeInfo);
         RenderPipelineReflection ref_ptr;
-        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor,options,&ref_ptr);
+        RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
         mat_result.pipeline_state = pipeline_state;
 
 //After we create the pipeline state we can now get the arguments from the shaders and match them with the material
@@ -1100,8 +1101,6 @@ namespace AssetSystem
 //        test_material = mat_result;
 
         //NOTE(Ray):Probably move this to a more renderer specific area
-
-        
         return mat_result;
     }
     
