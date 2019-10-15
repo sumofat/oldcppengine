@@ -206,7 +206,7 @@ namespace MetaFiles
 
     struct AssetLoadingTextureValue
     {
-        LoadedTexture lt;
+//        LoadedTexture lt;
         Yostr path;
         Yostr name;
     };
@@ -271,14 +271,11 @@ namespace MetaFiles
     void WriteAddTexture(InProgressMetaFile* mf,cgltf_texture_view tv,char* tex_name,Value* inputs_array,cgltf_mesh* ma)
     {
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
-        //cgltf_texture_view tv = mat->pbr_metallic_roughness.metallic_roughness_texture;
-        //extract texture from memory location
 
         uint32_t offset = tv.texture->image->buffer_view->offset;
         void* tex_data = (uint8_t*)tv.texture->image->buffer_view->buffer->data + offset;
         uint64_t data_size = tv.texture->image->buffer_view->size;
         AssetLoadingTextureKey k = {offset,(uint64_t)tex_data};
-
         Yostr final_twrfp = {};
         AssetLoadingTextureValue ltv = {};
                     
@@ -287,20 +284,18 @@ namespace MetaFiles
 
             Yostr bcname = CreateStringFromLiteral(tex_name,&StringsHandler::transient_string_memory);
             Yostr bccname =  AppendCharToString(bcname,ma->name,&StringsHandler::transient_string_memory);
-            Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;//AssetSystem::GetDataPath(bccname.String, &StringsHandler::transient_string_memory);
+            Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;
             final_twrfp = AppendCharToString(texture_write_file_path,".png",&StringsHandler::transient_string_memory);
-                        
             LoadedTexture lt = {};
-                        
-            Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
-
+//            Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
             ltv.name = bcname;
-            ltv.lt = lt;
+//            ltv.lt = lt;
             ltv.path = final_twrfp;
-                        
+
             //write texture bin to disk
             PlatformFilePointer fp = {};
-            PlatformWriteMemoryToFile(&fp, final_twrfp.String, lt.texels, lt.dim.x() * lt.dim.y() * lt.bytes_per_pixel,true,"w+");
+//            PlatformWriteMemoryToFile(&fp, final_twrfp.String, lt.texels, lt.dim.x() * lt.dim.y() * lt.bytes_per_pixel,true,"w+");
+            PlatformWriteMemoryToFile(&fp, final_twrfp.String, tex_data,data_size,true,"w+");
             AnythingCacheCode::AddThing(&mf->tex_cache, &k, &ltv);
         }
         else

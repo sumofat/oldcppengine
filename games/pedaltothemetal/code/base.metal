@@ -194,9 +194,8 @@ ShaderInputs GetDefaultInputs()
 {
     ShaderInputs result;
     result.base_color = float4(1,1,1,1);
-  //  result.metallic = 0.3f;
-    //result.specular = 0.5f;
-    //result.roughness = 0.3f;
+    result.metallic_factor = 0.3f;
+    result.roughness_factor = 0.5f;
 }
 
 Light GetDefaultLight()
@@ -274,9 +273,10 @@ fragment float4 diffuse_color_fs(ColorInOut in [[stage_in]],
                            texture2d<float> base_color_texture[[ texture(0) ]])
 {
     Light light = GetDefaultLight();
-    constexpr sampler base_sampler(address::repeat);
+    constexpr sampler base_sampler(address::clamp_to_zero);
+    float4 base_color = base_color_texture.sample(base_sampler, in.uv) * uniforms.inputs.base_color;
     ShaderInputs inputs;
-    inputs.base_color = uniforms.inputs.base_color;
+    inputs.base_color = base_color;
     float4 ambient = GetAmbience();
     float4 diffuse = DoDefaultDiffuseLighting(in.frag_p,in.n,inputs.base_color);
     float4 specular = DoDefaultSpecularLighting(in.frag_p,in.n,inputs.base_color,uniforms.view_p,float4(0.9f),128.0f);

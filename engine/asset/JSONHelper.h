@@ -10,14 +10,23 @@ namespace JSONHelper
         return matstring;
     }
 
-    float GetFloat(const Value& value)
+    float GetFloat(const Value& values)
     {
-        if(!value.IsDouble())
+        float results[1];
+        int value_index = 0;
+
+        for (auto& value : values.GetArray())
         {
-            //Must be a float here if not better chweck whqt went wrong
-            //Assert(false);
+            if(!value.IsDouble() || value_index > 3)
+            {
+                //Must be a float here if not better chweck whqt went wrong
+                Assert(false);
+            }
+            results[value_index] = (float)value.GetDouble();
+            value_index++;
         }
-        return(float)value.GetDouble();
+        float result = results[0];
+        return result;
     }
     
     float4 GetFloat4(const Value& values)

@@ -186,6 +186,7 @@ namespace Engine
  
             const Value& metamodelname = d["model_file"];
             PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
+
 //sould be already assigned defulat material on load
 /*
             for(int i = 0;i < testmodel.meshes.count;++i)
@@ -254,6 +255,23 @@ namespace Engine
 //                                base_color_input = result;
                             }
 
+#if 1
+                            if(value_type == ShaderValueType::texture)
+                            {
+                                const Value& values = input["value"];
+                                Yostr path = JSONHelper::GetString(values);
+
+                                PlatformOutput(asset_log,"result texture %s\n",path.String);
+
+                                LoadedTexture tex = {};
+                                if(AssetSystem::AddOrGetTexture(path,&tex))
+                                {
+                                    render_material.texture_slots[render_material.texture_count] = tex.texture;
+                                }
+                                render_material.texture_count++;
+                            }
+#endif
+                            
                             if(value_type == ShaderValueType::afloat)
                             {
                                 const Value& values = input["value"];
