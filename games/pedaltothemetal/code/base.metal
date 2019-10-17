@@ -126,6 +126,12 @@ float smithG_GGX(float NdotV, float alphaG)
     return 1 / (NdotV + sqrt(a + b - a*b));
 }
 
+float D_GGX(float NoH, float a) {
+    float a2 = a * a;
+    float f = (NoH * a2 - NoH) * NoH + 1.0;
+    return a2 / (PI * f * f);
+}
+
 float smithG_GGX_aniso(float NdotV, float VdotX, float VdotY, float ax, float ay)
 {
     return 1 / (NdotV + sqrt( sqr(VdotX*ax) + sqr(VdotY*ay) + sqr(NdotV) ));
@@ -201,15 +207,15 @@ ShaderInputs GetDefaultInputs()
 Light GetDefaultLight()
 {
     Light result;
-    result.intensity = 0.7f;
-    result.color = float4(0.8,0.8,0.8,1);
-    result.p = float4(5.0f,5.0f,15.0f,1);
+    result.intensity = 20.0f;
+    result.color = float4(1,1,1,1);
+    result.p = float4(0.0f,35.0f,0.0f,1);
     return result;
 }
 
 float4 GetAmbience()
 {
-    return float4(0.4f);
+    return float4(0.0f);
 }
 
 float4 DoDefaultSpecularLighting(float4 frag_p,float4 normal,float4 surface_color,float4 view_p,float4 specular,float shininess)//normal is assumed to be pre normalzied
@@ -232,22 +238,13 @@ float4 DoDefaultDiffuseLighting(float4 frag_p,float4 normal,float4 surface_color
     return diffuse_lighting;
 }
 
-float4 DoBRDF(float4 frag_p,float4 normal,float4 view_p,float4 surface_color)
-{
-    Light light  = GetDefaultLight();
-    float3 l = normalize(light.p - frag_p).xyz;
-    float3 v = normalize(view_p - frag_p).xyz;
-    float3 n = normal.xyz;
-    return float4(BRDF(l,v,n,0,0),1);
-}
-
 vertex ColorInOut diffuse_vs(Vertex in [[stage_in]],
                              constant Uniforms& uniforms[[buffer(3)]])
 {
     ColorInOut out;
     float4 position = uniforms.pcm_mat * float4(in.p, 1.0) ;
     out.p = position;
-    out.frag_p = uniforms.world_mat * float4(in.p,1.0f);
+    out.frag_p = uniforms.world_mat * float4(in.p,1.0);
     out.n = uniforms.world_mat * float4(in.n,0);
     out.uv = in.uv;
     return out;
@@ -268,6 +265,45 @@ fragment float4 diffuse_fs(ColorInOut in [[stage_in]],
     return ((ambient + diffuse + specular) * light.intensity) * inputs.base_color;
 }
 
+float Fd_Lambert() {
+    return 1.0 / PI;
+}
+
+float4 PDMBRDF(float3 l,float3 v,float3 n,float3 h,ShaderInputs inputs)
+{
+    Light light  = GetDefaultLight();
+    
+    float NoV = abs(dot(n, v)) + 1e-5;
+    float NoL = clamp(dot(n, l), 0.0, 1.0);
+    float NoH = clamp(dot(n, h), 0.0, 1.0);
+    float LoH = clamp(dot(l, h), 0.0, 1.0);
+
+    float LoN = clamp(dot(l, n), 0.0, 1.0);
+    //float D = D_GGX(NoH, a);
+    // perceptually linear roughness to roughness (see parameterization)
+    float roughness = inputs.roughness_factor * inputs.roughness_factor;
+    float4 Fd = inputs.base_color * Fd_Lambert();
+    
+    float illuminance = light.intensity * LoN;
+    float4 luminance = Fd * illuminance;
+
+    return luminance;
+}
+
+float4 DoBRDF(float4 frag_p,float4 normal,float4 view_p,ShaderInputs inputs)
+{
+    Light light  = GetDefaultLight();
+    float3 l = normalize(light.p.xyz - frag_p.xyz);
+    float3 v = normalize(view_p.xyz - frag_p.xyz);
+    float3 n = normal.xyz;
+    float3 h = normalize(v + l);
+
+    return PDMBRDF(l,v,n,h,inputs);
+
+//    float4 df = DoDefaultDiffuseLighting(frag_p,normal,inputs.base_color) * light.intensity;//normal is assumed to be pre normalzied
+//    return df;
+}
+
 fragment float4 diffuse_color_fs(ColorInOut in [[stage_in]],
                            constant Uniforms& uniforms[[buffer(3)]],
                            texture2d<float> base_color_texture[[ texture(0) ]])
@@ -278,11 +314,8 @@ fragment float4 diffuse_color_fs(ColorInOut in [[stage_in]],
     ShaderInputs inputs;
     inputs.base_color = base_color;
     float4 ambient = GetAmbience();
-    float4 diffuse = DoDefaultDiffuseLighting(in.frag_p,in.n,inputs.base_color);
-    float4 specular = DoDefaultSpecularLighting(in.frag_p,in.n,inputs.base_color,uniforms.view_p,float4(0.9f),128.0f);
-//    float4 brdf = DoBRDF(in.frag_p,in.n,uniforms.view_p,inputs.base_color);
-//    return ((brdf + ambient) * light.intensity);// * inputs.base_color;
-    return ((ambient + diffuse + specular) * light.intensity) * inputs.base_color;
+    float4 brdf = DoBRDF(in.frag_p,in.n,uniforms.view_p,inputs);
+    return brdf + ambient;
 }
 
 vertex ColorInOut carbonfiber_vs(Vertex in [[stage_in]],

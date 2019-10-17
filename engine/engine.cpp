@@ -51,17 +51,12 @@ namespace Engine
     PlatformState ps = {};
 
     ModelAsset testmodel;
-    RenderMaterial test_material;
-    RenderMaterial test_quad_material;
     
     float3 viz_move;
     bool is_init = false;
-    //NOTE(Ray):Here we init all the engine memory and ints "Subsystems"
 
     SceneBuffer scene_buffer;
     Scene* default_empty_scene;
-//    AnythingCache material_cache;
-
    
     void Init(float2 window_dim)
     {
@@ -159,256 +154,249 @@ namespace Engine
             }
         }                
 #endif
-        
-    //char* name = "dodge_challenger_model.fbx";
-//        char* name = "littlest-tokyo/source/lil_tokyo.fbx";
-//        Yostr path = CreateStringFromLiteral(name, &StringsHandler::transient_string_memory);
-//        Yostr buildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
-//        path = AppendString(buildpath,path,&StringsHandler::transient_string_memory);
 
         char* gltfname = "littlest-tokyo/source/littlest_tokyo.glb";
         Yostr gltfpath = CreateStringFromLiteral(gltfname, &StringsHandler::transient_string_memory);
         Yostr gltfbuildpath = BuildPathToAssets(&StringsHandler::transient_string_memory,0);
         gltfpath = AppendString(gltfbuildpath,gltfpath,&StringsHandler::transient_string_memory);
-        if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
+        uint64_t model_key = StringsHandler::StringHash(gltfpath.String,gltfpath.Length);        
+        if(AnythingCacheCode::DoesThingExist(&AssetSystem::render_asset_cache,&model_key))
         {
-            PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
-            Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(gltfpath,&testmodel);
+            testmodel = GetThingCopy(&AssetSystem::render_asset_cache,&model_key,ModelAsset);
+        }
+        else
+        {
+            if(AssetSystem::GLTFLoadModel(gltfpath.String,&testmodel))
+            {
+                AnythingCacheCode::AddThing(&AssetSystem::render_asset_cache,&model_key,&testmodel);            
+                PlatformOutput(true, "Got Model mesh count:%d \n",testmodel.meshes.count);
+                Yostr model_meta_file = MetaFiles::GetOrCreateDefaultModelMetaFile(gltfpath,&testmodel);
 
 // 1. Parse a JSON string into DOM.
-            Document d;
-            d.Parse((char*)model_meta_file.String);
-            if(!d.IsObject())
-            {
-                //Error handling
-                Assert(false);
-            }
+                Document d;
+                d.Parse((char*)model_meta_file.String);
+                if(!d.IsObject())
+                {
+                    //Error handling
+                    Assert(false);
+                }
  
-            const Value& metamodelname = d["model_file"];
-            PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
-
-//sould be already assigned defulat material on load
-/*
-            for(int i = 0;i < testmodel.meshes.count;++i)
-            {
-                MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + i;
-                rendermesh->r_material = AssetSystem::default_mat;
-            }
-*/
+                const Value& metamodelname = d["model_file"];
+                PlatformOutput(asset_log,"processing metafile %s\n",metamodelname.GetString());
             
 //This next part gets and loads all the relevent information to render this object properly.
-            //NOTE(Ray):
-            //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
-            //2. We will fail if the mesh is added to or removed need to have some mapping.
-            //3. and add remove materials textures etc base on last use.
-            //4. PSO's should also be allowed to be stored offline for immediate async creation upon startup
-            //or at the users discretion.
-            uint32_t mesh_index = 0;
-            const Value& meshes = d["Meshes"];            
-            for (auto& mesh : meshes.GetArray())
-            {
-                MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
-                rendermesh->r_material = AssetSystem::default_mat;
-                const Value& meshname = mesh["meshname"];
-                PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
-
-                Yostr vs_name = {};
-                Yostr fs_name = {};
-                //NOTE(Ray):Should only be one material per mesh
-                const Value& materials = mesh["materials"];            
-                for (auto& material : materials.GetArray())
+                //NOTE(Ray):
+                //1. We dont have any good defaults or ways to generate this file from a newly imported mesh.
+                //2. We will fail if the mesh is added to or removed need to have some mapping.
+                //3. and add remove materials textures etc base on last use.
+                //4. PSO's should also be allowed to be stored offline for immediate async creation upon startup
+                //or at the users discretion.
+                uint32_t mesh_index = 0;
+                const Value& meshes = d["Meshes"];            
+                for (auto& mesh : meshes.GetArray())
                 {
-                    const Value& material_name = material["material_name"];
-                    PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
-                    
-                    uint32_t strlen = material_name.GetStringLength();
-                    Yostr matstring;
-                    matstring = JSONHelper::GetString(material_name);
+                    MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
+                    rendermesh->r_material = AssetSystem::default_mat;
+                    const Value& meshname = mesh["meshname"];
+                    PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
 
-                    RenderMaterial render_material;
-//                    float4 base_color_input;
-                    uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
-                    //if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
-                    if(true)
+                    Yostr vs_name = {};
+                    Yostr fs_name = {};
+                    //NOTE(Ray):Should only be one material per mesh
+                    const Value& materials = mesh["materials"];            
+                    for (auto& material : materials.GetArray())
                     {
-                        //render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&AssetSystem::material_cache,&mat_key);
-                        render_material = AssetSystem::default_mat;
-                        const Value& inputs = material["inputs"];
-                        for (auto& input : inputs.GetArray())
-                        {
-                            const Value& input_name = input["name"];
-                            PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
-                            
-                            Yostr input_name_string = JSONHelper::GetString(input_name);
-                            const Value& type = input["type"];
-                            if(!type.IsString())Assert(false);
-                            Yostr typestring = JSONHelper::GetString(type);
-                            
-                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
-                            if(value_type == ShaderValueType::float4)
-                            {
-                                const Value& values = input["value"];
-                                float4 result = JSONHelper::GetFloat4(values);
+                        const Value& material_name = material["material_name"];
+                        PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
+                    
+                        uint32_t strlen = material_name.GetStringLength();
+                        Yostr matstring;
+                        matstring = JSONHelper::GetString(material_name);
 
-                                PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
-                                render_material.inputs.base_color = result;
-//                                base_color_input = result;
-                            }
+                        RenderMaterial render_material;
+                        uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
+                        //if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
+                        if(true)
+                        {
+                            //render_material = *(RenderMaterial*)AnythingCacheCode::GetThing(&AssetSystem::material_cache,&mat_key);
+                            render_material = AssetSystem::default_mat;
+                            const Value& inputs = material["inputs"];
+                            for (auto& input : inputs.GetArray())
+                            {
+                                const Value& input_name = input["name"];
+                                PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
+                            
+                                Yostr input_name_string = JSONHelper::GetString(input_name);
+                                const Value& type = input["type"];
+                                if(!type.IsString())Assert(false);
+                                Yostr typestring = JSONHelper::GetString(type);
+                            
+                                ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
+                                if(value_type == ShaderValueType::float4)
+                                {
+                                    const Value& values = input["value"];
+                                    float4 result = JSONHelper::GetFloat4(values);
+                                    PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                                    render_material.inputs.base_color = result;
+                                }
 
 #if 1
-                            if(value_type == ShaderValueType::texture)
-                            {
-                                const Value& values = input["value"];
-                                Yostr path = JSONHelper::GetString(values);
-
-                                PlatformOutput(asset_log,"result texture %s\n",path.String);
-
-                                LoadedTexture tex = {};
-                                if(AssetSystem::AddOrGetTexture(path,&tex))
+                                if(value_type == ShaderValueType::texture)
                                 {
-                                    render_material.texture_slots[render_material.texture_count] = tex.texture;
+                                    const Value& values = input["value"];
+                                    Yostr path = JSONHelper::GetString(values);
+                                    PlatformOutput(asset_log,"result texture %s\n",path.String);
+                                    LoadedTexture tex = {};
+                                    if(AssetSystem::AddOrGetTexture(path,&tex))
+                                    {
+                                        render_material.texture_slots[render_material.texture_count] = tex.texture;
+                                    }
+                                    render_material.texture_count++;
                                 }
-                                render_material.texture_count++;
-                            }
 #endif
                             
-                            if(value_type == ShaderValueType::afloat)
-                            {
-                                const Value& values = input["value"];
-                                float result = JSONHelper::GetFloat(values);
-                                if(CompareCharToChar(input_name_string.String,"metallic_factor",100))
+                                if(value_type == ShaderValueType::afloat)
                                 {
-                                    PlatformOutput(asset_log,"metallic_factor %f\n",result);
-                                    render_material.inputs.metallic_factor = result;
+                                    const Value& values = input["value"];
+                                    float result = JSONHelper::GetFloat(values);
+                                    if(CompareCharToChar(input_name_string.String,"metallic_factor",100))
+                                    {
+                                        PlatformOutput(asset_log,"metallic_factor %f\n",result);
+                                        render_material.inputs.metallic_factor = result;
 //                                    base_color_input = result;                                                                    
+                                    }
+                                    else if(CompareCharToChar(input_name_string.String,"roughness_factor",100))
+                                    {
+                                        PlatformOutput(asset_log,"roughness_factor %f\n",result);
+                                        render_material.inputs.roughness_factor = result;
+                                        //                                  base_color_input = result;                                                                    
+                                    }
                                 }
-                                else if(CompareCharToChar(input_name_string.String,"roughness_factor",100))
+                                if(value_type == ShaderValueType::texture)
                                 {
-                                    PlatformOutput(asset_log,"roughness_factor %f\n",result);
-                                    render_material.inputs.roughness_factor = result;
-                                    //                                  base_color_input = result;                                                                    
                                 }
                             }
-                            if(value_type == ShaderValueType::texture)
-                            {
-                            }
+                            const Value& options = material["options"];
+                            const Value& ds_obj = options["double_sided"];
+                            bool ds = ds_obj.GetBool();
+                            render_material.double_sided = ds;
+                            rendermesh->r_material = render_material;
                         }
-                        rendermesh->r_material = render_material;
-                    }
 
 #if 0
-                    else
-                    {
-
-                        //Getmaterial file
-                        Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
-                        //Create RenderMaterial based on this and add it to the cache
-                        PlatformOutput(asset_log,"Processing meta file");
-                        Document rd;
-                        rd.Parse((char*)meta_file_json.String);
-                        if(!rd.IsObject())
+                        else
                         {
-                            //Error handling
-                            Assert(false);
-                        }
-                        const Value& meta_mat_name = rd["material_name"];
-                        PlatformOutput(asset_log,"processing metafile %s\n",meta_mat_name.GetString());
-                        
-                        const Value& shaders = rd["shaders"];
-                        for (auto& shader : shaders.GetArray())
-                        {
-                            const Value& shader_type = shader["type"];                    
-                            PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
-                            Yostr shader_type_string = JSONHelper::GetString(shader_type);
-                            
-                            const Value& shader_name = shader["name"];
-                            PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
-
-                            if(Compare(shader_type_string, CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
+                            //Getmaterial file
+                            Yostr meta_file_json = MetaFiles::GetMetaFile(matstring);
+                            //Create RenderMaterial based on this and add it to the cache
+                            PlatformOutput(asset_log,"Processing meta file");
+                            Document rd;
+                            rd.Parse((char*)meta_file_json.String);
+                            if(!rd.IsObject())
                             {
-                                vs_name = JSONHelper::GetString(shader_name);
-                            }
-                            else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
-                            {
-                                fs_name = JSONHelper::GetString(shader_name);
-                            }
-                            else
-                            {
-                                Assert(false);//Not supported
-                            }
-
-                            const Value& input_slots = shader["input_slot"];
-                            for (auto& input_slot : input_slots.GetArray())
-                            {
-                                const Value& input_slot_name = input_slot["name"];                    
-                                PlatformOutput(asset_log,"shader name %s\n",input_slot_name.GetString());
-                                const Value& input_slot_type = input_slot["type"];                    
-                                PlatformOutput(asset_log,"shader name %s\n",input_slot_type.GetString());
-                            }
-                        }
-                        
-                        const Value& inputs = material["inputs"];
-                        for (auto& input : inputs.GetArray())
-                        {
-                            const Value& input_name = input["name"];
-                            PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
-                            
-                            Yostr input_name_string = JSONHelper::GetString(input_name);
-                            const Value& type = input["type"];
-                            if(!type.IsString())Assert(false);
-                            Yostr typestring = JSONHelper::GetString(type);
-                            
-                            ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
-                            //TODO(Ray):For the time being we only have one float4 it is base color...
-                            //but will want to make this more flexible later
-                            if(value_type == ShaderValueType::float4)
-                            {
-                                const Value& values = input["value"];
-                                float4 result = JSONHelper::GetFloat4(values);
-                                PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
-                                render_material.inputs.base_color = result;
-                                //sbase_color_input = result;
-                            }
-                            
-                            RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
-                            rendermesh->r_material = final_mat;
-                            render_material = final_mat;
-                            AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
-                    }
-
-/*
-                        if(value_type == ShaderValueType::afloat)
-                        {
-                            float result;
-                            const Value& values = input["value"];
-
-                            if(!value.IsDouble())
-                            {                            
-//Must be a float here if not better chweck whqt went wrong                                      
+                                //Error handling
                                 Assert(false);
                             }
-                            results = (float)value.GetDouble();
-                            float result = float(result);
+                            const Value& meta_mat_name = rd["material_name"];
+                            PlatformOutput(asset_log,"processing metafile %s\n",meta_mat_name.GetString());
+                        
+                            const Value& shaders = rd["shaders"];
+                            for (auto& shader : shaders.GetArray())
+                            {
+                                const Value& shader_type = shader["type"];                    
+                                PlatformOutput(asset_log,"shader type %s\n",shader_type.GetString());
+                                Yostr shader_type_string = JSONHelper::GetString(shader_type);
                             
-                            PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
-                            if(Compare(input_name_string,CreateStringFromLiteral("specular"),&StringsHandler::transient_string_memory))
-                            {
-                                render_material.inputs.specular = result;
+                                const Value& shader_name = shader["name"];
+                                PlatformOutput(asset_log,"shader name %s\n",shader_name.GetString());
+
+                                if(Compare(shader_type_string, CreateStringFromLiteral("vertex", &StringsHandler::transient_string_memory)))
+                                {
+                                    vs_name = JSONHelper::GetString(shader_name);
+                                }
+                                else if(Compare(shader_type_string, CreateStringFromLiteral("fragment", &StringsHandler::transient_string_memory)))
+                                {
+                                    fs_name = JSONHelper::GetString(shader_name);
+                                }
+                                else
+                                {
+                                    Assert(false);//Not supported
+                                }
+
+                                const Value& input_slots = shader["input_slot"];
+                                for (auto& input_slot : input_slots.GetArray())
+                                {
+                                    const Value& input_slot_name = input_slot["name"];                    
+                                    PlatformOutput(asset_log,"shader name %s\n",input_slot_name.GetString());
+                                    const Value& input_slot_type = input_slot["type"];                    
+                                    PlatformOutput(asset_log,"shader name %s\n",input_slot_type.GetString());
+                                }
                             }
-                            else if(Compare(input_name_string,CreateStringFromLiteral("metallic"),&StringsHandler::transient_string_memory))
+                        
+                            const Value& inputs = material["inputs"];
+                            for (auto& input : inputs.GetArray())
                             {
-                                render_material.inputs.metallic = result;                                    
+                                const Value& input_name = input["name"];
+                                PlatformOutput(asset_log,"input name %s\n",input_name.GetString());
+                            
+                                Yostr input_name_string = JSONHelper::GetString(input_name);
+                                const Value& type = input["type"];
+                                if(!type.IsString())Assert(false);
+                                Yostr typestring = JSONHelper::GetString(type);
+                            
+                                ShaderValueType::Type value_type = MetaFiles::GetShaderType(typestring);
+                                //TODO(Ray):For the time being we only have one float4 it is base color...
+                                //but will want to make this more flexible later
+                                if(value_type == ShaderValueType::float4)
+                                {
+                                    const Value& values = input["value"];
+                                    float4 result = JSONHelper::GetFloat4(values);
+                                    PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+                                    render_material.inputs.base_color = result;
+                                    //sbase_color_input = result;
+                                }
+                            
+                                RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
+                                rendermesh->r_material = final_mat;
+                                render_material = final_mat;
+                                AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
                             }
-                            else if(Compare(input_name_string,CreateStringFromLiteral("roughness"),&StringsHandler::transient_string_memory))
-                            {
-                                render_material.inputs.roughness = result;
-                            }
-                        }
-                        */
-                    }
+
+/*
+  if(value_type == ShaderValueType::afloat)
+  {
+  float result;
+  const Value& values = input["value"];
+
+  if(!value.IsDouble())
+  {                            
+//Must be a float here if not better chweck whqt went wrong                                      
+Assert(false);
+}
+results = (float)value.GetDouble();
+float result = float(result);
+                            
+PlatformOutput(asset_log,"result float4 %f %f %f %f\n",result.x(),result.y(),result.z(),result.w());
+if(Compare(input_name_string,CreateStringFromLiteral("specular"),&StringsHandler::transient_string_memory))
+{
+render_material.inputs.specular = result;
+}
+else if(Compare(input_name_string,CreateStringFromLiteral("metallic"),&StringsHandler::transient_string_memory))
+{
+render_material.inputs.metallic = result;                                    
+}
+else if(Compare(input_name_string,CreateStringFromLiteral("roughness"),&StringsHandler::transient_string_memory))
+{
+render_material.inputs.roughness = result;
+}
+}
+*/
+                                }
 #endif                    
-                }
-            }            
+                    }
+                }            
+            }
+            
         }
 
         /*
@@ -547,8 +535,6 @@ namespace Engine
         //TODO(Ray):Set Asset or file system to hold this 
 //        es.base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);
 
-//TODO(ray):Lots to do here getting sleepy.
-        test_material = AssetSystem::CreateDefaultMaterial();
 
         ps.window.dim = window_dim;
         ps.window.is_full_screen_mode = false;
@@ -585,6 +571,7 @@ namespace Engine
         DefferedRenderer::PreframeSetup();
         gameUpdate();
         SoundCode::Update();
+
 //Game UI
 #if 0
     HotNodeState* hot_node_state = &ui->hot_node_state;
@@ -608,10 +595,8 @@ namespace Engine
         old_a.setY(old_a.w() - size_uv.y());
         hot_node_state->node->node_rect.anchor = old_a;
     }
-
     hot_node_state->prev_node = hot_node_state->node;
     hot_node_state->node = 0;
-    
     //begin finalize/aggregating game state data
     EvaluateNode(node,sprite_batch,hot_node_state);
     //end finalize/aggregating game state data
@@ -630,17 +615,17 @@ namespace Engine
     viz_move += float3(0.0f,0.0f,0.1f);
         
     ObjectTransform mot;
-    mot.p = float3(0,0,0) + viz_move;
-    mot.r = axis_angle(float3(1,0,0),90) * axis_angle(float3(0,1,0),180);//quaternion::axis_angle(float3(0,0,1),0);
+    mot.p = float3(0,0,-50);// + viz_move;
+    mot.r = axis_angle(float3(1,0,0),0) * axis_angle(float3(0,1,0),180);
     mot.s = float3(0.1f);
     YoyoUpdateObjectTransform(&mot);
     float4x4 m_matrix = mot.m;
     
-    float3 cam_p = float3(-3,0.4f,60);// + viz_move;
+    float3 cam_p = float3(0,0,0);
     float3 new_p = cam_p;
     float3 look_dir = mot.p - new_p;
     ObjectTransform cam_ot;
-    cam_ot.p = new_p;//render_cam_p;
+    cam_ot.p = new_p;
     cam_ot.r = quaternion::look_rotation(-look_dir,float3(0,1,0));
     cam_ot.s = float3(1);
 
@@ -648,13 +633,11 @@ namespace Engine
     //model has a link to MeshAsset/Renderer we for ever sceneobject using model asset flatten out meshassets
     //the renderer
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
-//    for(int i = 0;i < it_count;++i) 
-#if 1
 
 //Gather lights and make a list
-    
+    for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
     {
-        ModelAsset* model = &testmodel;//(ModelAsset*)AssetSystem::runtime_assets.base + 0;
+        ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
         //NOTE(Ray)://TODO(Ray):Here is where you would split out your meshes to the renderer
         //based on what commandlist you want them in.
         for(int j = 0;j < model->meshes.count;++j)
@@ -668,23 +651,14 @@ namespace Engine
                 //For every mesh in a model generate a render command
                 //one command represents a renderable
                 RenderWithMaterialCommand command_with_material;
-                command_with_material.material     = mesh->r_material;//test_material;
-                command_with_material.model_matrix = m_matrix;//float4x4::identity();//scene_obj.m;
+                command_with_material.material     = mesh->r_material;
+                command_with_material.model_matrix = m_matrix;
                 command_with_material.uniforms     = DefferedRenderer::uniform_buffer;
                 command_with_material.resource     = *mr;
-                //            if(mesh->material.type == 1)
-                {
-                    //                RenderCommandCode::AddRenderCommand(transparent_command_buffer, (void*)&command_with_material);
-                }
-                //            else
-                {
-                    RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
-                }
+                RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
             }
         }
     }
-
-#endif
     
 #ifdef OSX || WINDOWS
     ImGui_ImplOSX_NewFrame();

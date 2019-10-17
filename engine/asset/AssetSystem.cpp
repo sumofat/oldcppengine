@@ -22,10 +22,12 @@ namespace AssetSystem
     AnythingCache texture_cache;
     RenderMaterial default_mat;
     AnythingCache material_cache;
-     
+
+//    YoyoVector renderable_asset_table;
+    AnythingCache render_asset_cache;
+    
     void InitDefaultMaterial()
     {
-        
 //hardcoded default material
         Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
         Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
@@ -86,7 +88,7 @@ namespace AssetSystem
         //ModelCache::Init(3000);
         GPUResourceCache::Init(3000);
         AnythingCacheCode::Init(&texture_cache,3000,sizeof(LoadedTexture),sizeof(uint64_t));
-        
+        AnythingCacheCode::Init(&render_asset_cache,3000,sizeof(ModelAsset),sizeof(RenderAssetKey));
     }
 
     void UploadModelAssetToGPUTest(ModelAsset* ma)

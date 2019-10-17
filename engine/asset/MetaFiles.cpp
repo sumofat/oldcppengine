@@ -109,9 +109,28 @@ namespace MetaFiles
         shader_input_float3,
         shader_input_float2,
         shader_input_float,
+        shader_input_bool,
         shader_input_texture,
     };
 
+    Value AddInputEntryToObject(char* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
+    {
+        Value result(kObjectType);
+        switch(input_type)
+        {
+            case shader_input_bool:
+            {
+                
+            }break;
+            default:
+            {
+                Assert(false);
+            }
+        }
+        
+        return result;
+    }
+    
     Value AddInputEntryToArray(char* name,ShaderInputTypes input_type,void* value,rapidjson::Document::AllocatorType& allocator)
     {
         Value input_object(kObjectType);
@@ -166,6 +185,7 @@ namespace MetaFiles
                 base_color_value.PushBack(final_value.x(),allocator).PushBack(final_value.y(),allocator).PushBack(final_value.z(),allocator).PushBack(final_value.w(),allocator);
                 input_object.AddMember("value",base_color_value,allocator);
             }break;
+
             case shader_input_texture:
             {
 #if 1
@@ -360,13 +380,7 @@ namespace MetaFiles
                 WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
 //                cgltf_float emissive_factor[3];
             }
-            /*
-             * 	cgltf_alpha_mode alpha_mode;
-             cgltf_float alpha_cutoff;
-             cgltf_bool double_sided;
-             cgltf_bool unlit;
-            */
-            
+
             if(mat->has_pbr_metallic_roughness)
             {
                 if(mat->pbr_metallic_roughness.base_color_texture.texture)
@@ -422,7 +436,26 @@ namespace MetaFiles
                 inputs_array.PushBack(gf_input_object,allocator);
             }
 
-            mat_obj.AddMember("inputs",inputs_array,allocator);                
+            mat_obj.AddMember("inputs",inputs_array,allocator);
+
+            Value mat_options_obj(kObjectType);
+//            Value ds_object = AddInputEntryToArray("double_sided",shader_input_bool,(void*)&mat->double_sided,allocator);
+            //Value ds_option_obj = AddInputEntryToObject("double_sided",shader_input_bool,(void*)&mat->double_sided,allocator);\bool final_value = *((bool*)value);
+            Value bool_value(kObjectType);
+            bool_value.SetBool(mat->double_sided);
+            mat_options_obj.AddMember("double_sided",bool_value,allocator);
+            //mat_options_obj.AddMember("double_sided",ds_object,allocator);
+            mat_obj.AddMember("options",mat_options_obj,allocator);
+//Add doublesided property bool
+            
+            //alphaCutoff
+            //alphaMode
+            //emissiveFactor
+            //emissiveTexture
+            //occlusionTexture
+            //normalTexture
+            
+            
             materials_array.PushBack(mat_obj,allocator);
             obj.AddMember("materials",materials_array, allocator);
 
@@ -432,6 +465,7 @@ namespace MetaFiles
             //get buffer data from mesh
             if(prim.type == cgltf_primitive_type_triangles)
             {
+                bool has_got_first_uv_set = false;
                 for(int k = 0;k < prim.attributes_count;++k)
                 {
                     cgltf_attribute ac = prim.attributes[k];
@@ -479,11 +513,15 @@ namespace MetaFiles
                         mesh.tangent_data_size = bf->size;
                         mesh.tangent_count = count * 3;
                     }
-                    else if(ac.type == cgltf_attribute_type_texcoord)
+
+                    //NOTE(Ray):For now we are only using the first one not for sure what to do with teh second
+                    //set of uvs yet
+                    else if(ac.type == cgltf_attribute_type_texcoord && !has_got_first_uv_set)
                     {
                         mesh.uv_data = buffer;
                         mesh.uv_data_size = bf->size;
                         mesh.uv_count = count * 2;
+                        has_got_first_uv_set = true;
                     }
                 }
             }

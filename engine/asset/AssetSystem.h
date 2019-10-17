@@ -1,6 +1,11 @@
 
 #if !defined(ASSETSYSTEM_H)
 
+struct RenderAssetKey
+{
+    ModelAsset asset;
+};
+
 namespace AssetSystem
 {
 #define MAX_GPU_TEXTURE_STORAGE_COUNT 1000//number pulled from random
