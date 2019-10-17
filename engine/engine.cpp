@@ -39,7 +39,7 @@
 
 extern "C" void gameInit();
 extern "C" void gameUpdate();
- 
+#define PDM_EDITOR 1 
 namespace Engine
 {
     YoyoVector test_vector;
@@ -57,9 +57,18 @@ namespace Engine
 
     SceneBuffer scene_buffer;
     Scene* default_empty_scene;
-   
+
+#if PDM_EDITOR
+    float2 cam_pitch_yaw;
+#endif
+    
     void Init(float2 window_dim)
     {
+
+#if PDM_EDITOR
+        cam_pitch_yaw = float2(0.0f);
+#endif
+        
         PlatformOutput(engine_log,"Engine Init Begin\n");
         RendererCode::SetGraphicsOutputLog(false);
         EngineInput::log = false;
@@ -613,7 +622,9 @@ render_material.inputs.roughness = result;
 //Testing rendering and camera moving
     //TODO(Ray):There is a small camera glitch when rotating? 
     viz_move += float3(0.0f,0.0f,0.1f);
-        
+
+    Input* input = &ps.input;
+            
     ObjectTransform mot;
     mot.p = float3(0,0,-50);// + viz_move;
     mot.r = axis_angle(float3(1,0,0),0) * axis_angle(float3(0,1,0),180);
@@ -630,6 +641,51 @@ render_material.inputs.roughness = result;
     cam_ot.s = float3(1);
 
     Camera::main.matrix = YoyoSetCameraView(&cam_ot);//set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
+    
+#if PDM_EDITOR
+    ObjectTransform debug_cam_ot;
+    bool debug_cam_mode = true;    
+    if(debug_cam_mode)
+    {
+        float move_speed = 20.0f;
+        float3 move_dir = float3(0, 0, 0);
+//        if(input->mouse.rmb.down)
+        {
+            YoyoUpdateLocalaxis(&debug_cam_ot);
+#if 0
+            if (input->keyboard.keys[keys.i].down)
+            {
+                move_dir += debug_cam_ot.forward;
+            }
+            if (input->keyboard.keys[keys.k].down)
+            {
+                move_dir += debug_cam_ot.forward * -1;
+            }
+            if (input->keyboard.keys[keys.j].down)
+            {
+                move_dir += debug_cam_ot.right;
+            }
+            if (input->keyboard.keys[keys.l].down)
+            {
+                move_dir += debug_cam_ot.right * -1;
+            }
+#endif
+            cam_pitch_yaw += input->mouse.delta_p;
+        }
+        
+        quaternion pitch = axis_angle(float3(1, 0, 0), cam_pitch_yaw.y());
+        quaternion yaw   = axis_angle(float3(0, 1, 0), cam_pitch_yaw.x() * -1);
+        quaternion turn_qt = (pitch * yaw);
+
+        debug_cam_ot.p += (move_dir * -1) * move_speed  * 0.016f;//ps.time.delta_seconds;
+        debug_cam_ot.r = turn_qt;
+            
+        float4x4 debug_view_matrix = YoyoSetCameraView(&debug_cam_ot);
+        Camera::main.matrix = debug_view_matrix;
+    }
+
+#endif
+
     //model has a link to MeshAsset/Renderer we for ever sceneobject using model asset flatten out meshassets
     //the renderer
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
