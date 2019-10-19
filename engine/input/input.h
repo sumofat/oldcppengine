@@ -11,7 +11,7 @@ struct DigitalButton
 
 struct Keyboard
 {
-    DigitalButton keys[MAX_KEYS];    
+    DigitalButton keys[MAX_KEYS];
 };
 
 struct AnalogButton
@@ -90,8 +90,14 @@ namespace EngineInput
     extern bool log;
 #ifdef OSX || WINDOWS
     void PullMouseState(PlatformState* ps);
+    void UpdateDigitalButton(DigitalButton* button,u32 state);
+    //TODO(Ray):Dont like return a pointer here going with this for now.
+    DigitalButton* GetLastKeyPress();    
+    void PushDigitalButtonInput(DigitalButton b);
+    void ClearButtonQueue();
 #endif
     Input GetInput();
+    void ResetKeys(PlatformState* ps);
 }
 
 #define INPUT_H

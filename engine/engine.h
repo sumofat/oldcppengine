@@ -37,6 +37,7 @@
 #include "audio/SoundInterface.h"
 namespace Engine
 {
+    extern PlatformState ps;
     void Init(float2 window_dim);
     void Update();
 }

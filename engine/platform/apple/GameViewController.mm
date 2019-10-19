@@ -19,6 +19,31 @@ void OnIMGUIEvent(NSEvent* event)
     ImGui_ImplOSX_HandleEvent(event, globalview);
 }
 
+void OnAppleKeyup(NSEvent* event)
+{
+    OnIMGUIEvent(event);
+    Input* input =  &Engine::ps.input;
+    uint32_t code = [event keyCode];
+    NSString* characters = [event characters];
+    const char* characters_as_char = [characters cStringUsingEncoding:NSASCIIStringEncoding];
+    code = (uint32_t)characters_as_char[0];
+    EngineInput::UpdateDigitalButton(&input->keyboard.keys[code],0);
+    //EngineInput::PushDigitalButtonInput(input->keyboard.keys[code]);
+}
+
+void OnAppleKeydown(NSEvent* event)
+{
+    OnIMGUIEvent(event);
+    
+    Input* input =  &Engine::ps.input;
+    uint32_t code = [event keyCode];
+    NSString* characters = [event characters];
+    const char* characters_as_char = [characters cStringUsingEncoding:NSASCIIStringEncoding];
+    code = (uint32_t)characters_as_char[0];
+    EngineInput::UpdateDigitalButton(&input->keyboard.keys[code],1);
+//    EngineInput::PushDigitalButtonInput(input->keyboard.keys[code]);
+}
+
 #elif IOS
 static UIView *globalview;
 #endif
@@ -55,8 +80,10 @@ static UIView *globalview;
             PlatformInputAPI_Metal::SetOnMouseMoved(OnIMGUIEvent);
             PlatformInputAPI_Metal::SetOnScrollWheel(OnIMGUIEvent);
             PlatformInputAPI_Metal::SetOnMouseDragged(OnIMGUIEvent);
-            PlatformInputAPI_Metal::SetOnKeyDown(OnIMGUIEvent);
-            PlatformInputAPI_Metal::SetOnKeyUp(OnIMGUIEvent);
+            PlatformInputAPI_Metal::SetOnKeyDown(OnAppleKeydown);
+
+            PlatformInputAPI_Metal::SetOnKeyUp(OnAppleKeyup);
+        
 #endif
 
             RendererCode::SetGraphicsRenderCallback(Engine::Update);

@@ -59,7 +59,9 @@ namespace Engine
     Scene* default_empty_scene;
 
 #if PDM_EDITOR
+    bool debug_cam_mode = false;
     float2 cam_pitch_yaw;
+    ObjectTransform debug_cam_ot;
 #endif
     
     void Init(float2 window_dim)
@@ -643,8 +645,10 @@ render_material.inputs.roughness = result;
     Camera::main.matrix = YoyoSetCameraView(&cam_ot);//set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
     
 #if PDM_EDITOR
-    ObjectTransform debug_cam_ot;
-    bool debug_cam_mode = true;    
+   
+
+    if (input->keyboard.keys['q'].released)
+        debug_cam_mode = !debug_cam_mode;
     if(debug_cam_mode)
     {
         float move_speed = 20.0f;
@@ -652,24 +656,23 @@ render_material.inputs.roughness = result;
 //        if(input->mouse.rmb.down)
         {
             YoyoUpdateLocalaxis(&debug_cam_ot);
-#if 0
-            if (input->keyboard.keys[keys.i].down)
+
+            if (input->keyboard.keys['i'].down)
             {
                 move_dir += debug_cam_ot.forward;
             }
-            if (input->keyboard.keys[keys.k].down)
+            if (input->keyboard.keys['k'].down)
             {
                 move_dir += debug_cam_ot.forward * -1;
             }
-            if (input->keyboard.keys[keys.j].down)
+            if (input->keyboard.keys['j'].down)
             {
                 move_dir += debug_cam_ot.right;
             }
-            if (input->keyboard.keys[keys.l].down)
+            if (input->keyboard.keys['l'].down)
             {
                 move_dir += debug_cam_ot.right * -1;
             }
-#endif
             cam_pitch_yaw += input->mouse.delta_p;
         }
         
@@ -733,6 +736,7 @@ render_material.inputs.roughness = result;
 
     PlatformOutput(engine_log,"Engine Update Complete\n");
     StringsHandler::ResetTransientStrings();
+    EngineInput::ResetKeys(&ps);
     }
 };
 
