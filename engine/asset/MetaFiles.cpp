@@ -355,7 +355,7 @@ namespace MetaFiles
         uint32_t name_length = CalculateCharLength(ma->name);
         val.SetString(ma->name,(SizeType)name_length,allocator);
         obj.AddMember("meshname",val,allocator);
-           
+        Value materials_array(rapidjson::kArrayType);          
         //Extract mesh binary data
         for(int j = 0;j < ma->primitives_count;++j)
         {
@@ -373,9 +373,9 @@ namespace MetaFiles
             index_value.SetInt(mf->mesh_index);
             mat_obj.AddMember("index",index_value,allocator);
             mf->mesh_index++;
-            Value materials_array(rapidjson::kArrayType);
+
             Value inputs_array(rapidjson::kArrayType);
-            Value mesh_array(rapidjson::kArrayType);
+//            Value mesh_array(rapidjson::kArrayType);
             //Set defaults as
             //base color float4(1)
             //textures empty
@@ -474,9 +474,13 @@ namespace MetaFiles
             //normalTexture
             
             materials_array.PushBack(mat_obj,allocator);
-            obj.AddMember("materials",materials_array, allocator);
+
 
             MeshAsset mesh = {};
+            //TODO(Ray):Next we wil lmake append char to char verify that we are treating these primitives
+            //as such in the importer and make sure that the propery uvs are being imported on the read side.
+            //Something is not quite right.
+        //Yostr mesh_name = AppendCharToString(ma->name, mat->name , &StringsHandler::string_memory);
             mesh.name = CreateStringFromLiteral(ma->name,&StringsHandler::string_memory);
             mesh.r_material = AssetSystem::default_mat;
             //get buffer data from mesh
@@ -549,9 +553,10 @@ namespace MetaFiles
                 }
             }
             YoyoStretchPushBack(&mf->model.meshes, mesh);
-            obj.AddMember("mesh",mesh_array,allocator);
+//            obj.AddMember("mesh",mesh_array,allocator);
+            
         }
-
+        obj.AddMember("materials",materials_array, allocator);
         mf->meshes_json.PushBack(obj,allocator);
     }
     
