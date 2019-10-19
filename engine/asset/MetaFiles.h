@@ -13,6 +13,7 @@ struct InProgressMetaFile
     rapidjson::Value meshes_json;
     AnythingCache tex_cache;
     ModelAsset model;
+    uint32_t mesh_index;
 };
 
 namespace MetaFileType

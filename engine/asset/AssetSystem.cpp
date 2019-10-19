@@ -118,6 +118,13 @@ namespace AssetSystem
                 RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uv_data,sizeof(float) * mesh->uv_count);
                 is_valid++;
             }
+
+            if(mesh->uv2_count > 0)
+            {
+                mesh_r.uv2_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uv2_count,ResourceStorageModeShared,8,mesh->uv2_count);
+                RenderGPUMemory::UploadBufferData(&mesh_r.uv2_buff,(void*)mesh->uv2_data,sizeof(float) * mesh->uv2_count);
+                is_valid++;
+            }
             
             if(mesh->index16_count > 0)
             {
@@ -127,8 +134,15 @@ namespace AssetSystem
                 is_valid++;
             }
             //NOTE(RAY):For now we require that you have met all the data criteria
-            if(is_valid == 4)
-                GPUResourceCache::AddGPUResource(mesh,mesh_r);
+            if(is_valid >= 4)
+            {
+//                GPUResourceCache::AddGPUResource(mesh,mesh_r);
+                mesh->mesh_resource = mesh_r;
+            }
+            else
+            {
+                Assert(false);
+            }
         }
     }
 
@@ -828,7 +842,7 @@ namespace AssetSystem
         //result = nullptr;
         //TODO(Ray):Propery handling of a unfound asset
         //if(!TextureCache::DoesTextureExist(&path))
-        uint64_t t_key = StringsHandler::StringHash(path.String,path.Length);
+        uint64_t t_key = StringsHandler::StringHash(path.String,path.Length) % ULONG_MAX;
         if(!AnythingCacheCode::DoesThingExist(&texture_cache,&t_key))
         {
             //TODO(Ray):This gets it from disk but we should be able to get it from anywhere .. network stream etc...
@@ -838,9 +852,19 @@ namespace AssetSystem
             LoadedTexture tex = Resource::GetLoadedImage(path.String, 4);
             if(tex.texels)
             {
-                tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
+
+                TextureDescriptor td = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm,tex.dim.x(),tex.dim.y(),false);
+                td.storageMode = StorageModeManaged;
+                tex.texture = RendererCode::NewTextureWithDescriptor(td);
+                RenderRegion region = {};
+                region.origin = float3(0.0f);
+                region.size = float2(tex.dim.x(), tex.dim.y());
+                
+                //TODO(Ray):Handle the texture descritptor memory?
+                RenderGPUMemory::ReplaceRegion(tex.texture,region,0,tex.texels,tex.bytes_per_pixel * tex.dim.x());
+
+//                tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
                 AnythingCacheCode::AddThing(&texture_cache,&t_key,&tex);
-//TextureCache::AddTexture(&path,&tex);
                 *result = tex;
                 bool_result = true;
             }

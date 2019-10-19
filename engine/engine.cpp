@@ -206,11 +206,10 @@ namespace Engine
                 const Value& meshes = d["Meshes"];            
                 for (auto& mesh : meshes.GetArray())
                 {
-                    MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + mesh_index++;
-                    rendermesh->r_material = AssetSystem::default_mat;
+
                     const Value& meshname = mesh["meshname"];
                     PlatformOutput(asset_log,"mesh name%s\n",meshname.GetString());
-
+                    
                     Yostr vs_name = {};
                     Yostr fs_name = {};
                     //NOTE(Ray):Should only be one material per mesh
@@ -219,12 +218,17 @@ namespace Engine
                     {
                         const Value& material_name = material["material_name"];
                         PlatformOutput(asset_log,"material name %s\n",material_name.GetString());
-                    
+
+                        const Value& index_value = material["index"];
+                        uint32_t m_i = (uint32_t)index_value.GetInt();
+                        MeshAsset* rendermesh = (MeshAsset*)testmodel.meshes.base + m_i;
+                        rendermesh->r_material = AssetSystem::default_mat;
+                        Assert(CompareChars(rendermesh->name.String, meshname.GetString()));
                         uint32_t strlen = material_name.GetStringLength();
                         Yostr matstring;
                         matstring = JSONHelper::GetString(material_name);
 
-                        RenderMaterial render_material;
+                        RenderMaterial render_material = {};
                         uint64_t mat_key = StringsHandler::StringHash(matstring.String,matstring.Length);
                         //if(AnythingCacheCode::DoesThingExist(&AssetSystem::material_cache,&mat_key))
                         if(true)
@@ -251,20 +255,26 @@ namespace Engine
                                     render_material.inputs.base_color = result;
                                 }
 
-#if 1
                                 if(value_type == ShaderValueType::texture)
                                 {
                                     const Value& values = input["value"];
+                                    const Value& texcoord_v = input["texcoord"];
+                                    float texcoord = texcoord_v.GetDouble();
                                     Yostr path = JSONHelper::GetString(values);
                                     PlatformOutput(asset_log,"result texture %s\n",path.String);
                                     LoadedTexture tex = {};
+                                    tex.texcoord = texcoord;
+                                    if(texcoord != 0)
+                                    {
+                                        int a = 0;
+                                    }
                                     if(AssetSystem::AddOrGetTexture(path,&tex))
                                     {
                                         render_material.texture_slots[render_material.texture_count] = tex.texture;
+                                        render_material.shader.texture_slots[0].texcoord_index = texcoord;
                                     }
                                     render_material.texture_count++;
                                 }
-#endif
                             
                                 if(value_type == ShaderValueType::afloat)
                                 {
@@ -367,9 +377,11 @@ namespace Engine
                                     //sbase_color_input = result;
                                 }
                             
-                                RenderMaterial final_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
-                                rendermesh->r_material = final_mat;
-                                render_material = final_mat;
+                                RenderMaterial base_mat = AssetSystem::CreateMaterialFromDescription(&vs_name,&fs_name,base_color_input);
+                                render_material.shader = base_mat.shader;
+                                render_material.pipeline_state = base_mat.pipeline_state;
+                                render_material.depth_stencil_state = base_mat.depth_stencil_state;
+                                rendermesh->r_material = render_material;
                                 AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
                             }
 
@@ -651,9 +663,42 @@ render_material.inputs.roughness = result;
         debug_cam_mode = !debug_cam_mode;
     if(debug_cam_mode)
     {
+
+        //Check if we are looking for selection.
+		if (input->mouse.lmb.down)
+		{
+#if 0
+            if(selected_gizmo == nullptr)
+			{
+				//Dragging the selected object along the forward direction of the gizmo
+				switch (closest_gizmo_info.index)
+				{
+				case 0://up
+				{
+					es.selected_gizmo = &as->up;
+					es.selected_gizmo_index = 0;
+				}break;
+				case 1://right
+				{
+					es.selected_gizmo = &as->right;
+					es.selected_gizmo_index = 1;
+				}break;
+				case 2://forward
+				{
+					es.selected_gizmo = &as->forward;
+					es.selected_gizmo_index = 2;
+				}break;
+				default:
+				{
+					//Assert(false);
+				}
+				}
+			}
+#endif
+        }
+        
         float move_speed = 20.0f;
         float3 move_dir = float3(0, 0, 0);
-//        if(input->mouse.rmb.down)
         {
             YoyoUpdateLocalaxis(&debug_cam_ot);
 
@@ -685,6 +730,8 @@ render_material.inputs.roughness = result;
             
         float4x4 debug_view_matrix = YoyoSetCameraView(&debug_cam_ot);
         Camera::main.matrix = debug_view_matrix;
+
+
     }
 
 #endif
@@ -702,19 +749,27 @@ render_material.inputs.roughness = result;
         for(int j = 0;j < model->meshes.count;++j)
         {
             MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
-            if(GPUResourceCache::DoesGPUResourceExist(mesh))
+//            if(GPUResourceCache::DoesGPUResourceExist(mesh))
             {
-                GPUMeshResource* mr = GPUResourceCache::GetGPUResource(mesh);
+//                GPUMeshResource* mr = GPUResourceCache::GetGPUResource(mesh);
                 //Pass game data to renderer
                 //Add a render command to the render command buffer.
                 //For every mesh in a model generate a render command
                 //one command represents a renderable
                 RenderWithMaterialCommand command_with_material;
+                if((uint32_t)mesh->r_material.texture_slots[0].descriptor.width == 1024)
+                {
+                    int a =0;
+                }
                 command_with_material.material     = mesh->r_material;
                 command_with_material.model_matrix = m_matrix;
                 command_with_material.uniforms     = DefferedRenderer::uniform_buffer;
-                command_with_material.resource     = *mr;
+                command_with_material.resource     = mesh->mesh_resource;
                 RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
+            }
+            //else
+            {
+               // Assert(false);
             }
         }
     }

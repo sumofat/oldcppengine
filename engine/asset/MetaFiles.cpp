@@ -288,7 +288,7 @@ namespace MetaFiles
         obj->AddMember("materials",materials_array, allocator);
     }
     
-    void WriteAddTexture(InProgressMetaFile* mf,cgltf_texture_view tv,char* tex_name,Value* inputs_array,cgltf_mesh* ma)
+    void WriteAddTexture(InProgressMetaFile* mf,cgltf_texture_view tv,char* tex_name,Value* inputs_array,cgltf_mesh* ma,uint32_t primitive_index)
     {
         rapidjson::Document::AllocatorType& allocator = mf->d.GetAllocator();
 
@@ -301,10 +301,13 @@ namespace MetaFiles
                     
         if(!AnythingCacheCode::DoesThingExist(&mf->tex_cache, &k))
         {
-
             Yostr bcname = CreateStringFromLiteral(tex_name,&StringsHandler::transient_string_memory);
             Yostr bccname =  AppendCharToString(bcname,ma->name,&StringsHandler::transient_string_memory);
-            Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname, &StringsHandler::transient_string_memory) ;
+            char p_i[2];
+            p_i[0] = (char)(primitive_index + 49);
+            p_i[1] = 0;
+            Yostr bccname_prim =  AppendCharToString(bccname,p_i,&StringsHandler::transient_string_memory);
+            Yostr texture_write_file_path = AppendString(CreateStringFromLiteral(game_data_dir,&StringsHandler::transient_string_memory), bccname_prim, &StringsHandler::transient_string_memory) ;
             final_twrfp = AppendCharToString(texture_write_file_path,".png",&StringsHandler::transient_string_memory);
             LoadedTexture lt = {};
 //            Resource::GetImageFromMemory(tex_data,data_size,&lt,4);
@@ -324,10 +327,19 @@ namespace MetaFiles
         }
                     
         //value to pass is the path
-        char* bcvalue = ltv.path.String;//final_twrfp.String;
+        char* bcvalue = ltv.path.String;
         Value input_object = AddInputEntryToArray(&ltv.name,shader_input_texture,bcvalue,allocator);
 
+        Value tex_coord_value(kObjectType);
+        if(tv.texcoord != 0)
+        {
+            int a = 0;
+        }
+        tex_coord_value.SetDouble(tv.texcoord);
+        input_object.AddMember("texcoord",tex_coord_value,allocator);
+        
         inputs_array->PushBack(input_object,allocator);
+        
         //Get path to textures on disk relative to data folder.
         char* name = tv.texture->name;
         char* uri = tv.texture->image->uri;
@@ -352,10 +364,15 @@ namespace MetaFiles
             
             Value mat_obj(kObjectType);
             Value mat_val(kObjectType);
+            Value index_value(kObjectType);
             Yostr default_mat_string = CreateStringFromLiteral(mat->name,&StringsHandler::transient_string_memory);
             mat_val.SetString(default_mat_string.String,(SizeType)default_mat_string.Length,allocator);
             mat_obj.AddMember("material_name",mat_val,allocator);
-                
+
+
+            index_value.SetInt(mf->mesh_index);
+            mat_obj.AddMember("index",index_value,allocator);
+            mf->mesh_index++;
             Value materials_array(rapidjson::kArrayType);
             Value inputs_array(rapidjson::kArrayType);
             Value mesh_array(rapidjson::kArrayType);
@@ -365,19 +382,19 @@ namespace MetaFiles
             if(mat->normal_texture.texture)
             {
                 cgltf_texture_view tv = mat->normal_texture;
-                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma,j);                
             }
 
             if(mat->occlusion_texture.texture)
             {
                 cgltf_texture_view tv = mat->occlusion_texture;
-                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma,j);                
             }
 
             if(mat->emissive_texture.texture)
             {
                 cgltf_texture_view tv = mat->emissive_texture;
-                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma);                
+                WriteAddTexture(mf,tv,"normal_texture",&inputs_array,ma,j);                
 //                cgltf_float emissive_factor[3];
             }
 
@@ -386,12 +403,12 @@ namespace MetaFiles
                 if(mat->pbr_metallic_roughness.base_color_texture.texture)
                 {
                     cgltf_texture_view tv = mat->pbr_metallic_roughness.base_color_texture;
-                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_base_color",&inputs_array,ma);
+                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_base_color",&inputs_array,ma,j);
                 }
                 if(mat->pbr_metallic_roughness.metallic_roughness_texture.texture)
                 {
                     cgltf_texture_view tv = mat->pbr_metallic_roughness.metallic_roughness_texture;
-                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_metallic_roughness",&inputs_array,ma);
+                    WriteAddTexture(mf,tv,"pbr_mettalic_roughness_texture_metallic_roughness",&inputs_array,ma,j);
                 }
 
                 cgltf_float* bcf = mat->pbr_metallic_roughness.base_color_factor;
@@ -413,12 +430,13 @@ namespace MetaFiles
                 if(mat->pbr_specular_glossiness.diffuse_texture.texture)
                 {
                     cgltf_texture_view tv = mat->pbr_specular_glossiness.diffuse_texture;
-                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_diffuse_texture",&inputs_array,ma);
+                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_diffuse_texture",&inputs_array,ma,j);
                 }
+
                 if(mat->pbr_specular_glossiness.specular_glossiness_texture.texture)
                 {
                     cgltf_texture_view tv = mat->pbr_specular_glossiness.specular_glossiness_texture;
-                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_specular_glossiness_texture",&inputs_array,ma);
+                    WriteAddTexture(mf,tv,"pbr_specular_glossiness_specular_glossiness_texture",&inputs_array,ma,j);
                 }
 
                 cgltf_float* dcf = mat->pbr_specular_glossiness.diffuse_factor;
@@ -454,7 +472,6 @@ namespace MetaFiles
             //emissiveTexture
             //occlusionTexture
             //normalTexture
-            
             
             materials_array.PushBack(mat_obj,allocator);
             obj.AddMember("materials",materials_array, allocator);
@@ -514,14 +531,20 @@ namespace MetaFiles
                         mesh.tangent_count = count * 3;
                     }
 
-                    //NOTE(Ray):For now we are only using the first one not for sure what to do with teh second
-                    //set of uvs yet
+//NOTE(Ray):only support two set of uv data for now.
                     else if(ac.type == cgltf_attribute_type_texcoord && !has_got_first_uv_set)
                     {
                         mesh.uv_data = buffer;
                         mesh.uv_data_size = bf->size;
                         mesh.uv_count = count * 2;
                         has_got_first_uv_set = true;
+                    }
+                    else if(ac.type == cgltf_attribute_type_texcoord && has_got_first_uv_set)
+                    {
+                        mesh.uv2_data = buffer;
+                        mesh.uv2_data_size = bf->size;
+                        mesh.uv2_count = count * 2;
+                        has_got_first_uv_set = true;                        
                     }
                 }
             }
