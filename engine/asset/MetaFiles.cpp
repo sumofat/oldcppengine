@@ -553,7 +553,6 @@ namespace MetaFiles
                 }
             }
             YoyoStretchPushBack(&mf->model.meshes, mesh);
-//            obj.AddMember("mesh",mesh_array,allocator);
             
         }
         obj.AddMember("materials",materials_array, allocator);
