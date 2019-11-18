@@ -28,7 +28,7 @@ static RenderPipelineState render_pipeline_state;
 static int current_buffer = 0;
 static int buffer_count = 3;
 static GPUBuffer buffer[3];
-static GPUBuffer index_buffer[3];
+static GPUBuffer gpu_index_buffer[3];
 #pragma mark - ImGui API implementation
 // We are retrieving and uploading the font atlas as a 4-channels RGBA texture here.
 // In theory we could call GetTexDataAsAlpha8() and upload a 1-channel texture to save on memory access bandwidth.
@@ -189,11 +189,11 @@ bool ImGui_ImplMetal_Init(RenderDevice device,RenderPassDescriptor* renderpassde
     for(int i = 0;i < buffer_count;++i)
     {
         buffer[i] = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeShared);
-        index_buffer[i] = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeShared);
+        gpu_index_buffer[i] = RenderGPUMemory::NewBufferWithLength(MegaBytes(5), StorageModeShared);
     }
     
     //buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
-    //index_buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
+    //gpu_index_buffer = RenderGPUMemory::NewBufferAndUpload(0,MegaBytes(5),StorageModeManaged);
 
     //ImGui_ImplMetal_CreateDeviceObjects(device);
     render_pipeline_state = InitRenderPipelineStateForFramebufferDescriptor(&g_sharedMetalContext,device);
@@ -282,7 +282,7 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
         ImDrawIdx idx_buffer_offset = 0;
         
         memcpy((char *)buffer[current_buffer].data + vertexBufferOffset, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy((char *)index_buffer[current_buffer].data + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        memcpy((char *)gpu_index_buffer[current_buffer].data + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
 
         RenderEncoderCode::SetVertexBufferOffset(command_encoder,vertexBufferOffset,0);
         
@@ -312,7 +312,7 @@ void RenderDrawData(ImDrawData *drawData,void* command_buffer,RenderCommandEncod
                         tex.state = pcmd->TextureId;
                         RenderEncoderCode::SetFragmentTexture(command_encoder,&tex,0);
                     }
-                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&index_buffer[current_buffer],primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
+                    RenderEncoderCode::DrawIndexedPrimitives(command_encoder,&gpu_index_buffer[current_buffer],primitive_type_triangle,pcmd->ElemCount,sizeof(ImDrawIdx) == 2 ? IndexTypeUInt16 : IndexTypeUInt32,indexBufferOffset + idx_buffer_offset);
                 }
             }
             idx_buffer_offset += pcmd->ElemCount * sizeof(ImDrawIdx);

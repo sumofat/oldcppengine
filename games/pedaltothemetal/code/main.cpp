@@ -144,7 +144,6 @@ float ground_friction = 0.991f;
 //Frame Update
 extern "C" void gameUpdate()
 {
-
     PlatformOutput(game_log,"Game Update start\n");
 //Update things
         float2 window_dim = RendererCode::dim;
@@ -152,7 +151,6 @@ extern "C" void gameUpdate()
     Input input = EngineInput::GetInput();
     if(input.mouse.lmb.down)
     {
-
         //Begin the pull
         finger_pull.pull_begin = true;
         if(!finger_pull.gp)
@@ -189,6 +187,7 @@ extern "C" void gameUpdate()
     }
     else
     {
+
         if(finger_pull.pull_begin)
         {
             finger_pull.end_pull_p  = input.mouse.p;
@@ -196,7 +195,6 @@ extern "C" void gameUpdate()
             {
                 finger_pull.pull_begin = false;
             }
-
             if(finger_pull.pull_begin && finger_pull.gp)
             {
                 //Pull was valid
@@ -236,7 +234,6 @@ extern "C" void gameUpdate()
         PxTransform pxt = GamePieceCode::game_pieces[i].rbd.state->getGlobalPose();
         GamePieceCode::game_pieces[i].ot.p = float3(pxt.p.x,pxt.p.y,pxt.p.z);
         SpriteBatchCode::AddSpriteToBatchAtBuffer(OpenGLEmu::current_buffer_index, GamePieceCode::game_pieces[i].ot.p, GamePieceCode::game_pieces[i].ot.r, GamePieceCode::game_pieces[i].ot.s.xy(), float4(1) ,uvs,matrix, v_buffer);
-        
         current_count++;        
     }
     
@@ -278,7 +275,6 @@ extern "C" void gameUpdate()
     v_buffer->from_to_bytes = float2(from_bytes,to_bytes);
     OpenGLEmu::AddBufferBinding(v_buffer->buffer[bi],0,v_buffer->from_to_bytes.x());
     OpenGLEmu::DrawArrays(current_count * 6,SIZE_OF_SPRITE_IN_BYTES);
-    
     
     PhysicsCode::Update(&scene,1,0.016f);        
 //Play bgm

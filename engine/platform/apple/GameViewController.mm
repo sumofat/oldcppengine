@@ -63,7 +63,7 @@ static UIView *globalview;
         CGRect screenFrame = [[UIScreen mainScreen]bounds];
         float2 dim = float2(screenFrame.size.width,screenFrame.size.height) * [UIScreen mainScreen].nativeScale;
 #endif
-       
+        StringsHandler::Init();
         CreateDeviceResult device_create_result = RendererCode::InitGraphics(dim,0);
         if(device_create_result.is_init)
         {

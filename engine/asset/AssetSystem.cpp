@@ -29,15 +29,21 @@ namespace AssetSystem
     void InitDefaultMaterial()
     {
 //hardcoded default material
+
+#if 0
         Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
         Yostr d_fs_name = CreateStringFromLiteral("diffuse_color_fs", &StringsHandler::transient_string_memory);
+#else
+        Yostr d_vs_name = CreateStringFromLiteral("diffuse_vs", &StringsHandler::transient_string_memory);
+        Yostr d_fs_name = CreateStringFromLiteral("diffuse_fs", &StringsHandler::transient_string_memory);
+#endif
         float4 d_base_color = float4(0.5f,0.5f,0.5f,1.0f);
         Yostr d_mat_string = CreateStringFromLiteral("standard_hardcoded_default_material",&StringsHandler::transient_string_memory);
         uint64_t d_mat_key = StringsHandler::StringHash(d_mat_string.String,d_mat_string.Length);
         default_mat = AssetSystem::CreateMaterialFromDescription(&d_vs_name,&d_fs_name,d_base_color);
         AnythingCacheCode::AddThing(&material_cache,&d_mat_key,&default_mat);
-
     }
+    
     Yostr GetDataPath(const char* file,MemoryArena* arena)
     {
         Yostr path = BuildPathToAssets(arena,0);

@@ -28,6 +28,8 @@
 		946DE1122303E4E100393D99 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 94A0148C21F23583004A9DF2 /* data */; };
 		9472753C21F8519C002C8B98 /* libfbxsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9459AF2321F7308000B59C75 /* libfbxsdk.a */; };
 		9475B8AC23037F1000BD1004 /* libfmodL_iphoneos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94DB20512303776C00431408 /* libfmodL_iphoneos.a */; };
+		9475EF07237E2DEC0062E0F0 /* game.metal in Sources */ = {isa = PBXBuildFile; fileRef = 9475EF06237E2DEC0062E0F0 /* game.metal */; };
+		9475EF09237E2EA00062E0F0 /* ShaderTypes.h in Sources */ = {isa = PBXBuildFile; fileRef = 9475EF08237E2E9F0062E0F0 /* ShaderTypes.h */; };
 		949197FB22F9556300E2450D /* libPhysX_64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491977022F94E8C00E2450D /* libPhysX_64.dylib */; };
 		949197FD22F955A700E2450D /* libPhysXCommon_64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491977222F94E8D00E2450D /* libPhysXCommon_64.dylib */; };
 		949197FE22F955A700E2450D /* libPhysXCooking_64.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9491977422F94E8D00E2450D /* libPhysXCooking_64.dylib */; };
@@ -51,7 +53,6 @@
 		9491985D22F9A85400E2450D /* libfmod.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 94D5865A22F9140E00060A78 /* libfmod.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		949694382303CF28000B9C3E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949694342303CF27000B9C3E /* AudioToolbox.framework */; };
 		9498125922459471003D1855 /* libmetalizerosx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 949AB29E22458A5F00133C88 /* libmetalizerosx.a */; };
-		949AB29522451FDB00133C88 /* base.metal in Sources */ = {isa = PBXBuildFile; fileRef = 949AB29422451FDA00133C88 /* base.metal */; };
 		949AB2A322458BB400133C88 /* RendererInclude.h in Headers */ = {isa = PBXBuildFile; fileRef = 949AB2A222458BB400133C88 /* RendererInclude.h */; };
 		949AB2A622458BE700133C88 /* MTKViewDelegateView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 949AB2A422458BE700133C88 /* MTKViewDelegateView.mm */; };
 		949AB2A722458BE700133C88 /* native_graphics_api_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 949AB2A522458BE700133C88 /* native_graphics_api_metal.mm */; };
@@ -61,7 +62,6 @@
 		94A0148E21F23654004A9DF2 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 94A0148C21F23583004A9DF2 /* data */; };
 		94A841DF21E994DA0051DB13 /* libpedaltothemetal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9452F9F121E8E5BB00B07061 /* libpedaltothemetal.a */; };
 		94A841E921E9F0D30051DB13 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94A841E221E9F0BB0051DB13 /* main.cpp */; };
-		94D3F22F22FACE2100423CA1 /* sprite.metal in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F22E22FACE2100423CA1 /* sprite.metal */; };
 		94D3F24C22FD72CD00423CA1 /* metalizerios.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D3F24922FD72CD00423CA1 /* metalizerios.h */; };
 		94D3F25922FD72FE00423CA1 /* engineios.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94D3F25622FD72FE00423CA1 /* engineios.h */; };
 		94D3F27E22FD733600423CA1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94D3F27C22FD733600423CA1 /* Main.storyboard */; };
@@ -309,6 +309,9 @@
 		946DE1102303E38A00393D99 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.4.sdk/usr/lib/libiconv.tbd; sourceTree = DEVELOPER_DIR; };
 		9472753321F84341002C8B98 /* engineapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engineapi.h; sourceTree = "<group>"; };
 		9475B8AA23037F0B00BD1004 /* libfmod_iphoneos.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfmod_iphoneos.a; path = ../../../engine/external/fmod/core/ios/lib/libfmod_iphoneos.a; sourceTree = "<group>"; };
+		9475EF05237E2C9A0062E0F0 /* base.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = base.metal; path = ../../../games/pedaltothemetal/code/base.metal; sourceTree = "<group>"; };
+		9475EF06237E2DEC0062E0F0 /* game.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = game.metal; path = ../../../games/pedaltothemetal/code/game.metal; sourceTree = "<group>"; };
+		9475EF08237E2E9F0062E0F0 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ShaderTypes.h; path = ../../../games/pedaltothemetal/code/ShaderTypes.h; sourceTree = "<group>"; };
 		9486891D21FB4A14004304B4 /* engine_runtime_app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = engine_runtime_app.entitlements; sourceTree = "<group>"; };
 		9491976B22F94E8B00E2450D /* libPhysXPvdSDK_static_64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPhysXPvdSDK_static_64.a; path = ../../../engine/external/Physx/physx/bin/mac.x86_64/checked/libPhysXPvdSDK_static_64.a; sourceTree = "<group>"; };
 		9491976C22F94E8C00E2450D /* libPhysXFoundation_64.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libPhysXFoundation_64.dylib; path = ../../../engine/external/Physx/physx/bin/mac.x86_64/checked/libPhysXFoundation_64.dylib; sourceTree = "<group>"; };
@@ -2738,6 +2741,9 @@
 		94FD8F4F21E631C000054E9C = {
 			isa = PBXGroup;
 			children = (
+				9475EF08237E2E9F0062E0F0 /* ShaderTypes.h */,
+				9475EF06237E2DEC0062E0F0 /* game.metal */,
+				9475EF05237E2C9A0062E0F0 /* base.metal */,
 				94DB20512303776C00431408 /* libfmodL_iphoneos.a */,
 				94DB1FFB2302BC7400431408 /* main.m */,
 				94DB200523034A1E00431408 /* main.m */,
@@ -3519,9 +3525,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				949AB29522451FDB00133C88 /* base.metal in Sources */,
 				9452F9E821E8DFCB00B07061 /* main.m in Sources */,
-				94D3F22F22FACE2100423CA1 /* sprite.metal in Sources */,
+				9475EF07237E2DEC0062E0F0 /* game.metal in Sources */,
+				9475EF09237E2EA00062E0F0 /* ShaderTypes.h in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

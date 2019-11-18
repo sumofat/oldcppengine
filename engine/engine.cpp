@@ -82,7 +82,6 @@ namespace Engine
     void Init(float2 window_dim)
     {
 #if 1
-        
         core_count = GetLogicalCPUCoreCount();
         threads = YoyoInitVector(core_count,sizeof(YoyoThread),false);
         for(int i = 0;i < core_count - 2;++i)
@@ -408,7 +407,6 @@ namespace Engine
                     }
                 }            
             }
-            
         }
 
         AssetSystem::UploadModelAssetToGPUTest(&testmodel);
@@ -494,7 +492,7 @@ namespace Engine
     ObjectTransform mot;
     mot.p = float3(0,0,-50);// + viz_move;
     mot.r = axis_angle(float3(1,0,0),0) * axis_angle(float3(0,1,0),180);
-    mot.s = float3(0.1f);
+    mot.s = float3(1.0f);
     YoyoUpdateObjectTransform(&mot);
     float4x4 m_matrix = mot.m;
     
@@ -547,7 +545,7 @@ namespace Engine
 #endif
         }
         
-        float move_speed = 20.0f;
+        float move_speed = 50.0f;
         float3 move_dir = float3(0, 0, 0);
         {
             YoyoUpdateLocalaxis(&debug_cam_ot);
@@ -580,8 +578,6 @@ namespace Engine
             
         float4x4 debug_view_matrix = YoyoSetCameraView(&debug_cam_ot);
         Camera::main.matrix = debug_view_matrix;
-
-
     }
 
 #endif
