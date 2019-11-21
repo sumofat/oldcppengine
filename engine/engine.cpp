@@ -122,6 +122,9 @@ namespace Engine
         //Assets
         AssetSystem::Init();
 
+        ogle_init(&DefferedRenderer::ogl_test_state);
+        VertexDescriptor vd = ogle_create_default_vert_desc();
+
         //TODO(Ray):AssetSystem/MetaFiles:
         /*
           Load scenes from meta file
@@ -286,9 +289,12 @@ namespace Engine
                                     {
                                         int a = 0;
                                     }
-                                    if(AssetSystem::AddOrGetTexture(path,&tex))
+                                    GLTexture gl_tex= {};
+                                    if(AssetSystem::AddOrGetTexture(path,&tex,&gl_tex))
                                     {
                                         render_material.texture_slots[render_material.texture_count] = tex.texture;
+                                        render_material.gl_tex_slots[render_material.texture_count] = gl_tex;
+                                        
                                         render_material.shader.texture_slots[0].texcoord_index = texcoord;
                                     }
                                     render_material.texture_count++;
@@ -400,6 +406,7 @@ namespace Engine
                                 render_material.pipeline_state = base_mat.pipeline_state;
                                 render_material.depth_stencil_state = base_mat.depth_stencil_state;
                                 rendermesh->r_material = render_material;
+
                                 AnythingCacheCode::AddThing(&AssetSystem::material_cache,&mat_key,&render_material);
                             }
                                 }
@@ -408,8 +415,38 @@ namespace Engine
                 }            
             }
         }
-
-        AssetSystem::UploadModelAssetToGPUTest(&testmodel);
+        VertexDescriptor vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
+        VertexAttributeDescriptor vad;
+        vad.format = VertexFormatFloat3;
+        vad.offset = 0;
+        vad.buffer_index = 0;
+        VertexAttributeDescriptor n_ad;
+        n_ad.format = VertexFormatFloat3;
+        n_ad.offset = 0;
+        n_ad.buffer_index = 1;
+        VertexAttributeDescriptor uv_ad;
+        uv_ad.format = VertexFormatFloat2;
+        uv_ad.offset = 0;
+        uv_ad.buffer_index = 2;
+        VertexBufferLayoutDescriptor vbld;
+        vbld.step_function = step_function_per_vertex;
+        vbld.step_rate = 1;
+        vbld.stride = 12;
+        VertexBufferLayoutDescriptor n_bld;
+        n_bld.step_function = step_function_per_vertex;
+        n_bld.step_rate = 1;
+        n_bld.stride = 12;
+        VertexBufferLayoutDescriptor uv_bld;
+        uv_bld.step_function = step_function_per_vertex;
+        uv_bld.step_rate = 1;
+        uv_bld.stride = 8;
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,n_ad,n_bld);
+        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
+        DefferedRenderer::diffuse_program = ogle_add_prog_lib(&DefferedRenderer::ogl_test_state,"diffuse_vs","diffuse_fs",vertex_descriptor);
+                                
+        AssetSystem::UploadModelAssetToOpenGLEmuState(&DefferedRenderer::ogl_test_state,&testmodel);
+//        AssetSystem::UploadModelAssetToGPUTest(&testmodel);
 
 //TODO(Ray):Set Asset or file system to hold this 
 //        es.base_path_to_data = BuildPathToAssets(&ps->string_state.string_memory, Directory_None);
@@ -504,6 +541,7 @@ namespace Engine
     cam_ot.r = quaternion::look_rotation(-look_dir,float3(0,1,0));
     cam_ot.s = float3(1);
 
+    Camera::main.ot = cam_ot;
     Camera::main.matrix = YoyoSetCameraView(&cam_ot);//set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
     
 #if PDM_EDITOR
@@ -577,6 +615,7 @@ namespace Engine
         debug_cam_ot.r = turn_qt;
             
         float4x4 debug_view_matrix = YoyoSetCameraView(&debug_cam_ot);
+        Camera::main.ot = debug_cam_ot;
         Camera::main.matrix = debug_view_matrix;
     }
 
@@ -585,7 +624,7 @@ namespace Engine
     //model has a link to MeshAsset/Renderer we for ever sceneobject using model asset flatten out meshassets
     //the renderer
 //TODO(Ray):Coarse grain render bound on scene cpu based culling here.
-
+#if 0
 //Gather lights and make a list
     for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
     {
@@ -619,6 +658,88 @@ namespace Engine
             }
         }
     }
+#else
+
+    OpenGLEmuState* s = &DefferedRenderer::ogl_test_state;
+//Using GLEMU
+    for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
+    {
+        ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
+        //NOTE(Ray)://TODO(Ray):Here is where you would split out your meshes to the renderer
+        //based on what commandlist you want them in.
+        for(int j = 0;j < model->meshes.count;++j)
+        {
+            MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
+//            if(GPUResourceCache::DoesGPUResourceExist(mesh))
+            {
+//                GPUMeshResource* mr = GPUResourceCache::GetGPUResource(mesh);
+                //Pass game data to renderer
+                //Add a render command to the render command buffer.
+                //For every mesh in a model generate a render command
+                //one command represents a renderable
+
+                ogle_use_program(s,DefferedRenderer::diffuse_program);
+                ogle_enable_depth_test(s);
+                ogle_depth_func(s,compare_func_less);
+                
+                RenderMaterial material = mesh->r_material;
+                
+                Uniforms* vuniforms = (Uniforms*)ogle_vert_set_uniform_(s,sizeof(Uniforms),3);
+                vuniforms->world_mat = m_matrix;
+                vuniforms->pcm_mat = mul(Camera::main.matrix,m_matrix);
+                vuniforms->pcm_mat = mul(Camera::main.projection_matrix,vuniforms->pcm_mat);
+                vuniforms->inputs.base_color = material.inputs.base_color;
+                vuniforms->inputs.metallic_factor = material.inputs.metallic_factor;
+                vuniforms->inputs.roughness_factor = material.inputs.roughness_factor;
+        
+                Uniforms* funiforms = (Uniforms*)ogle_frag_set_uniform_(s,sizeof(Uniforms),3);
+                funiforms->view_p = float4(Camera::main.ot.p,1);
+
+                GPUBuffer uv_buffer;
+                for(int i = 0;i < material.texture_count;++i)
+                {
+                    ShaderTextureSlot slot = material.shader.texture_slots[i];
+                    ogle_bind_texture_frag(s,material.gl_tex_slots[i],i);
+                    if(slot.texcoord_index == 0)
+                    {
+                        uv_buffer = mesh->mesh_resource.uv_buff;
+                    }
+                    else if(slot.texcoord_index == 1)
+                    {
+                        uv_buffer = mesh->mesh_resource.uv2_buff;
+                    }
+                    else
+                    {
+                        Assert(false);
+                    }
+                    ogle_bind_buffer_raw(s,uv_buffer.id,2,0);
+                }
+
+                ogle_bind_buffer_raw(s,mesh->mesh_resource.vertex_buff.id,0,0);
+                ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);
+//TODO(Ray):The use of the index16count here is silly need to fix this.
+                ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);
+/*    
+                RenderWithMaterialCommand command_with_material;
+                if((uint32_t)mesh->r_material.texture_slots[0].descriptor.width == 1024)
+                {
+                    int a =0;
+                }
+                command_with_material.material     = mesh->r_material;
+                command_with_material.model_matrix = m_matrix;
+                command_with_material.uniforms     = DefferedRenderer::uniform_buffer;
+                command_with_material.resource     = mesh->mesh_resource;
+                RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
+*/
+            }
+            //else
+            {
+               // Assert(false);
+            }
+        }
+    }
+#endif
+    
     
 #ifdef OSX || WINDOWS
     ImGui_ImplOSX_NewFrame();

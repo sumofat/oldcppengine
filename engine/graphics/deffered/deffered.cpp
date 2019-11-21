@@ -32,11 +32,12 @@ namespace DefferedRenderer
     RenderMaterial full_screen_quad_material;
 
     bool output_log = false;
-
+    OpenGLEmuState ogl_test_state;
+    GLProgram diffuse_program;    
     void Init(bool is_log)
     {
         output_log = is_log;
-        
+
     }
     
     void ExecuteFullScreenQuadCommands(RenderPass* pass,RenderCommandBuffer* buffer,void* command_params_)
@@ -215,6 +216,7 @@ namespace DefferedRenderer
     void PreframeSetup()
     {
         OpenGLEmu::PreFrameSetup();
+        ogle_pre_frame_setup(&ogl_test_state);
     }
     
     //TODO(Ray):Later we should have a render graph that would have intimate knowledge of the passes to be executed
@@ -260,8 +262,9 @@ namespace DefferedRenderer
 //        RenderEncoderCode::Commit(c_buffer);
 #endif
         
-        OpenGLEmu::Execute(c_buffer);        
-
+//        OpenGLEmu::Execute(c_buffer);
+        ogle_execute_enqueue(&OpenGLEmu::ogs,c_buffer);
+        ogle_execute_commit(&ogl_test_state,c_buffer,true);
     }
 
 };

@@ -216,14 +216,15 @@ float4 GetAmbience()
 float4 DoDefaultSpecularLighting(float4 frag_p,float4 normal,float4 surface_color,float4 view_p,float4 specular,float shininess)
 {
     Light light = GetDefaultLight();
-    float4 world_p = frag_p;
-    float4 light_dir = normalize(light.p - world_p);
-    float4 view_dir  = normalize(view_p  - world_p);
-    float ndl = dot(normal, light_dir);
+    float3 world_p = frag_p.xyz;
+    float3 n = normalize(normal.xyz);
+    float3 light_dir = normalize(light.p.xyz - world_p);
+    float3 view_dir  = normalize(view_p.xyz  - world_p);
+    float ndl = dot(n, light_dir);
     float4 result = float4(0,0,0,0);
     if(ndl > 0)
     {
-        float4 reflect_dir = normalize(reflect(-light_dir, normal));
+        float3 reflect_dir = normalize(reflect(-light_dir, n));
         float nd = dot(view_dir, reflect_dir);
         result = pow(max(nd,0.0), shininess);       
     }
@@ -234,13 +235,14 @@ float4 DoDefaultSpecularLighting(float4 frag_p,float4 normal,float4 surface_colo
     return result * surface_color * light.color * specular;
 }
 
-float4 DoDefaultDiffuseLighting(float4 frag_p,float4 normal,float4 surface_color)//normal is assumed to be pre normalzied
+float4 DoDefaultDiffuseLighting(float4 frag_p,float4 normal,float4 surface_color)
 {
     Light light = GetDefaultLight();
     float4 world_p = frag_p;
-    float4 light_dir = normalize(light.p - world_p);
-    float4 diffuse_lighting = max(dot(normal,light_dir),0.0f);
-    return diffuse_lighting * light.color;
+    float3 n = normalize(normal.xyz);
+    float3 light_dir = normalize(light.p.xyz - world_p.xyz);
+    float3 diffuse_lighting = max(dot(n,light_dir),0.0f);
+    return float4(diffuse_lighting,1) * light.color;
 }
 
 vertex ColorInOut diffuse_vs(Vertex in [[stage_in]],

@@ -214,7 +214,7 @@ extern "C" void gameUpdate()
 //Graphics
     uint32_t current_count = 1; 
     TripleGPUBuffer* v_buffer = OpenGLEmu::GetBufferAtBinding(0);
-    uint32_t bi = OpenGLEmu::current_buffer_index;
+    uint32_t bi = OpenGLEmu::ogs.current_buffer_index;
     for(int i = 0;i < 32;++i)
     {
         //Physics
@@ -233,7 +233,7 @@ extern "C" void gameUpdate()
   
         PxTransform pxt = GamePieceCode::game_pieces[i].rbd.state->getGlobalPose();
         GamePieceCode::game_pieces[i].ot.p = float3(pxt.p.x,pxt.p.y,pxt.p.z);
-        SpriteBatchCode::AddSpriteToBatchAtBuffer(OpenGLEmu::current_buffer_index, GamePieceCode::game_pieces[i].ot.p, GamePieceCode::game_pieces[i].ot.r, GamePieceCode::game_pieces[i].ot.s.xy(), float4(1) ,uvs,matrix, v_buffer);
+        SpriteBatchCode::AddSpriteToBatchAtBuffer(OpenGLEmu::ogs.current_buffer_index, GamePieceCode::game_pieces[i].ot.p, GamePieceCode::game_pieces[i].ot.r, GamePieceCode::game_pieces[i].ot.s.xy(), float4(1) ,uvs,matrix, v_buffer);
         current_count++;        
     }
     
@@ -243,12 +243,12 @@ extern "C" void gameUpdate()
     float from_bytes = v_buffer->from_to_bytes.y();
     float to_bytes = from_bytes + current_count * SIZE_OF_SPRITE_IN_BYTES;
     v_buffer->from_to_bytes = float2(from_bytes,to_bytes);
-    OpenGLEmu::AddBufferBinding(v_buffer->buffer[bi],0,v_buffer->from_to_bytes.x());
+    OpenGLEmu::AddBufferBinding(0,0,v_buffer->from_to_bytes.x());
     OpenGLEmu::DrawArrays(current_count * 6,SIZE_OF_SPRITE_IN_BYTES);
     
     current_count = 1;
     v_buffer = OpenGLEmu::GetBufferAtBinding(0);
-    bi = OpenGLEmu::current_buffer_index;
+    bi = OpenGLEmu::ogs.current_buffer_index;
     for(int i = 0;i < 32;++i)
     {
         //Graphics
@@ -262,7 +262,7 @@ extern "C" void gameUpdate()
         float4 temp_color = float4(1);
         
         //GamePieceCode::game_pieces[i].ot.p = float3(pxt.p.x,pxt.p.y,pxt.p.z);
-        SpriteBatchCode::AddSpriteToBatchAtBuffer(OpenGLEmu::current_buffer_index, GamePieceCode::game_pieces[i].ot.p, GamePieceCode::game_pieces[i].ot.r, GamePieceCode::game_pieces[i].life_ot[0].s.xy(), float4(1) ,uvs,matrix, v_buffer);
+        SpriteBatchCode::AddSpriteToBatchAtBuffer(OpenGLEmu::ogs.current_buffer_index, GamePieceCode::game_pieces[i].ot.p, GamePieceCode::game_pieces[i].ot.r, GamePieceCode::game_pieces[i].life_ot[0].s.xy(), float4(1) ,uvs,matrix, v_buffer);
         
         current_count++;
     }
@@ -273,7 +273,7 @@ extern "C" void gameUpdate()
     from_bytes = v_buffer->from_to_bytes.y();
     to_bytes = from_bytes + current_count * SIZE_OF_SPRITE_IN_BYTES;
     v_buffer->from_to_bytes = float2(from_bytes,to_bytes);
-    OpenGLEmu::AddBufferBinding(v_buffer->buffer[bi],0,v_buffer->from_to_bytes.x());
+    OpenGLEmu::AddBufferBinding(0,0,v_buffer->from_to_bytes.x());
     OpenGLEmu::DrawArrays(current_count * 6,SIZE_OF_SPRITE_IN_BYTES);
     
     PhysicsCode::Update(&scene,1,0.016f);        

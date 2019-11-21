@@ -70,7 +70,8 @@ namespace EditorGUI
                         MetaFileType::Type type = MetaFiles::GetFileExtensionType(file_ext);
                         if(MetaFileType::PNG == type || MetaFileType::PSD == type)
                         {
-                            if(AssetSystem::AddOrGetTexture(f_info->Name,&tex))
+                            GLTexture fake;
+                            if(AssetSystem::AddOrGetTexture(f_info->Name,&tex,&fake))
                             {
                                 current_texture = tex;
                                 current_tex_id = tex.texture.state;

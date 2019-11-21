@@ -44,6 +44,7 @@ namespace DefferedRenderer
     extern RenderPassBuffer overlay_pass_buffer;
 
     extern GPUBuffer uniform_buffer;
+    extern OpenGLEmuState ogl_test_state;
     
     void Init(RenderCamera* cam,PlatformState* ps);
     void PreframeSetup();    

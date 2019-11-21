@@ -20,6 +20,7 @@ namespace AssetSystem
     u32 error_count = 0;
 
     AnythingCache texture_cache;
+    AnythingCache gl_texture_cache;
     RenderMaterial default_mat;
     AnythingCache material_cache;
 
@@ -94,7 +95,77 @@ namespace AssetSystem
         //ModelCache::Init(3000);
         GPUResourceCache::Init(3000);
         AnythingCacheCode::Init(&texture_cache,3000,sizeof(LoadedTexture),sizeof(uint64_t));
+        AnythingCacheCode::Init(&gl_texture_cache,3000,sizeof(GLTexture),sizeof(uint64_t));
+        
         AnythingCacheCode::Init(&render_asset_cache,3000,sizeof(ModelAsset),sizeof(RenderAssetKey));
+    }
+
+    void UploadModelAssetToOpenGLEmuState(OpenGLEmuState*s,ModelAsset* ma)
+    {
+        for(int i = 0;i < ma->meshes.count;++i)
+        {
+            int is_valid = 0;
+            GPUMeshResource mesh_r;
+            MeshAsset* mesh = (MeshAsset*)ma->meshes.base + i;
+            if(mesh->vertex_count > 0)
+            {
+                u64 v_size = sizeof(float) * mesh->vertex_count;
+                mesh_r.vertex_buff = ogle_gen_buffer(s,v_size,ResourceStorageModeShared);
+                ogle_buffer_data_named(s,v_size,&mesh_r.vertex_buff,(void*)mesh->vertex_data);
+                is_valid++;
+            }
+
+            if(mesh->normal_count > 0)
+            {
+                u64 size = sizeof(float) * mesh->normal_count;
+                mesh_r.normal_buff = ogle_gen_buffer(s,size,ResourceStorageModeShared);
+                ogle_buffer_data_named(s,size,&mesh_r.normal_buff,(void*)mesh->normal_data);
+//                mesh_r.normal_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->normal_count,ResourceStorageModeShared,12,mesh->normal_count);
+//                RenderGPUMemory::UploadBufferData(&mesh_r.normal_buff,(void*)mesh->normal_data,sizeof(float) * mesh->normal_count);
+                is_valid++;
+            }
+
+            if(mesh->uv_count > 0)
+            {
+                u64 size = sizeof(float) * mesh->uv_count;
+                mesh_r.uv_buff = ogle_gen_buffer(s,size,ResourceStorageModeShared);
+                ogle_buffer_data_named(s,size,&mesh_r.uv_buff,(void*)mesh->uv_data);
+//                mesh_r.uv_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uv_count,ResourceStorageModeShared,8,mesh->uv_count);
+//                RenderGPUMemory::UploadBufferData(&mesh_r.uv_buff,(void*)mesh->uv_data,sizeof(float) * mesh->uv_count);
+                is_valid++;
+            }
+
+            if(mesh->uv2_count > 0)
+            {
+                u64 size = sizeof(float) * mesh->uv2_count;
+                mesh_r.uv2_buff = ogle_gen_buffer(s,size,ResourceStorageModeShared);
+                ogle_buffer_data_named(s,size,&mesh_r.uv2_buff,(void*)mesh->uv2_data);
+//                mesh_r.uv2_buff = RenderGPUMemory::NewBufferWithLength(sizeof(float) * mesh->uv2_count,ResourceStorageModeShared,8,mesh->uv2_count);
+//                RenderGPUMemory::UploadBufferData(&mesh_r.uv2_buff,(void*)mesh->uv2_data,sizeof(float) * mesh->uv2_count);
+                is_valid++;
+            }
+            
+            if(mesh->index16_count > 0)
+            {
+                u64 size = sizeof(float) * mesh->index16_count;
+                mesh_r.element_buff = ogle_gen_buffer(s,size,ResourceStorageModeShared);
+                ogle_buffer_data_named(s,size,&mesh_r.element_buff,(void*)mesh->index_16_data);                
+//                mesh_r.element_buff = RenderGPUMemory::NewBufferWithLength(sizeof(u16) * mesh->index16_count,ResourceStorageModeShared,4,mesh->index16_count);
+//                RenderGPUMemory::UploadBufferData(&mesh_r.element_buff,(void*)mesh->index_16_data,sizeof(u16) * mesh->index16_count);
+                mesh_r.element_buff.index_type = IndexTypeUInt16;
+                is_valid++;
+            }
+            //NOTE(RAY):For now we require that you have met all the data criteria
+            if(is_valid >= 4)
+            {
+//                GPUResourceCache::AddGPUResource(mesh,mesh_r);
+                mesh->mesh_resource = mesh_r;
+            }
+            else
+            {
+                Assert(false);
+            }
+        }
     }
 
     void UploadModelAssetToGPUTest(ModelAsset* ma)
@@ -842,7 +913,7 @@ namespace AssetSystem
 //NOTE(Ray):Maybe or we will just release everything on scence change for starters.
     //TODO(Ray):Handle loosing the device reference and rebuild everthing in that case...
     
-    bool AddOrGetTexture(Yostr path,LoadedTexture* result)
+    bool AddOrGetTexture(Yostr path,LoadedTexture* result,GLTexture* gl_tex_result)
     {
         bool bool_result = false;
         //result = nullptr;
@@ -858,7 +929,6 @@ namespace AssetSystem
             LoadedTexture tex = Resource::GetLoadedImage(path.String, 4);
             if(tex.texels)
             {
-
                 TextureDescriptor td = RendererCode::Texture2DDescriptorWithPixelFormat(PixelFormatRGBA8Unorm,tex.dim.x(),tex.dim.y(),false);
                 td.storageMode = StorageModeManaged;
                 tex.texture = RendererCode::NewTextureWithDescriptor(td);
@@ -872,18 +942,29 @@ namespace AssetSystem
 //                tex.texture.state = PlatformGraphicsAPI_Metal::GPUAllocateTexture(tex.texels,tex.bytes_per_pixel,tex.dim.x(),tex.dim.y());
                 AnythingCacheCode::AddThing(&texture_cache,&t_key,&tex);
                 *result = tex;
+
+
+                *gl_tex_result = ogle_tex_image_2d(&DefferedRenderer::ogl_test_state,tex.texels,tex.dim,PixelFormatRGBA8Unorm,TextureUsageShaderRead);
+                AnythingCacheCode::AddThing(&gl_texture_cache,&t_key,gl_tex_result);
                 bool_result = true;
             }
         }
         else
         {
-            //LoadedTexture* tex = TextureCache::GetTexture(&path);
+            GLTexture*gl_tex = (GLTexture*)AnythingCacheCode::GetThing(&gl_texture_cache,&t_key);
+            if(gl_tex)
+            {
+                *gl_tex_result = *gl_tex;
+                bool_result = true;
+            }
+            
             LoadedTexture*tex = (LoadedTexture*)AnythingCacheCode::GetThing(&texture_cache,&t_key);
             if(tex)
             {
                 *result = *tex;
                 bool_result = true;
             }
+
         }
         return bool_result;
     }

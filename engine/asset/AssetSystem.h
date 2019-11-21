@@ -14,7 +14,8 @@ namespace AssetSystem
     void Init();
     //ModelAsset* LoadModel(char* file_name,PlatformState* ps);
     extern RenderMaterial default_mat;    
-    bool AddOrGetTexture(Yostr path,LoadedTexture* result);
+    bool AddOrGetTexture(Yostr path,LoadedTexture* result,GLTexture* gl_tex_result);
+    //    bool AddOrGetTexture(Yostr path,LoadedTexture* result);
     bool FBXSDKLoadModel(char* file_path,ModelAsset* result);
     void UploadModelAssetToGPU(ModelAsset* ma);
 
