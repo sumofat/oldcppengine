@@ -39,6 +39,14 @@ struct Uniforms
     ShaderInputs inputs;
 };
 
+struct ShadowMapUniforms
+{
+    float4x4 pcm_mat;
+    float4x4 world_mat;
+    float4x4 light_view_matrix;
+    float4 view_p;
+};
+
 struct SpriteUniforms
 {
     float4x4 pcm_mat;

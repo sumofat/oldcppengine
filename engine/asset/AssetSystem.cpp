@@ -22,8 +22,11 @@ namespace AssetSystem
     AnythingCache texture_cache;
     AnythingCache gl_texture_cache;
     RenderMaterial default_mat;
+    VertexDescriptor default_vertex_descriptor;
+    
     AnythingCache material_cache;
 
+    
 //    YoyoVector renderable_asset_table;
     AnythingCache render_asset_cache;
     
@@ -1039,7 +1042,7 @@ namespace AssetSystem
         
         //TODO(Ray):Introspect the shader and build this automagically from the introspected shader
         //source.  We can get the datatypes inputs to the vertex function from the shader.
-        VertexDescriptor vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
+        default_vertex_descriptor = RenderEncoderCode::NewVertexDescriptor();
         VertexAttributeDescriptor vad;
         vad.format = VertexFormatFloat3;
         vad.offset = 0;
@@ -1064,10 +1067,10 @@ namespace AssetSystem
         uv_bld.step_function = step_function_per_vertex;
         uv_bld.step_rate = 1;
         uv_bld.stride = 8;
-        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,vad,vbld);
-        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,n_ad,n_bld);
-        RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,uv_bld);
-        RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
+        RenderEncoderCode::AddVertexDescription(&default_vertex_descriptor,vad,vbld);
+        RenderEncoderCode::AddVertexDescription(&default_vertex_descriptor,n_ad,n_bld);
+        RenderEncoderCode::AddVertexDescription(&default_vertex_descriptor,uv_ad,uv_bld);
+        RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&default_vertex_descriptor);
         
         RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
         RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
@@ -1176,24 +1179,8 @@ namespace AssetSystem
         RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
         rad.pixelFormat = PixelFormatBGRA8Unorm;
         render_pipeline_descriptor.color_attachments.i[0] = rad;
-        
-/*
-  if(mat_result.type == 1)//transparent set blending
-  {
-  RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
-  RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
-  rad.writeMask = ColorWriteMaskAll;
-  rad.blendingEnabled = true;
-  rad.destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
-  rad.destinationAlphaBlendFactor = BlendFactorOne;
-  rad.sourceRGBBlendFactor = BlendFactorSourceAlpha;
-  rad.sourceAlphaBlendFactor = BlendFactorOne;
-  render_pipeline_descriptor.color_attachments.i[0] = rad;                    
-  }
-*/
 
 //Create pipeline states    
-
         PipelineOption options = (PipelineOption)(PipelineOptionArgumentInfo | PipelineOptionBufferTypeInfo);
         RenderPipelineReflection ref_ptr;
         RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);
@@ -1202,18 +1189,11 @@ namespace AssetSystem
 //After we create the pipeline state we can now get the arguments from the shaders and match them with the material
 //The shader must have a slot for the material will match what it can        
 //create depth states
-        
         DepthStencilDescription depth_desc = RendererCode::CreateDepthStencilDescriptor();
         depth_desc.depthWriteEnabled = true;
         depth_desc.depthCompareFunction = compare_func_less;
         DepthStencilState depth_state = RendererCode::NewDepthStencilStateWithDescriptor(&depth_desc);
         mat_result.depth_stencil_state = depth_state;
-            
-//            mat_result.texture_slots[mat_result.texture_count] = uploaded_texture;
-//            mat_result.texture_count++;                   
-//        test_material = mat_result;
-
-        //NOTE(Ray):Probably move this to a more renderer specific area
         return mat_result;
     }
     
@@ -1272,21 +1252,6 @@ namespace AssetSystem
         //RenderEncoderCode::AddVertexDescription(&vertex_descriptor,uv_ad,vbld);
         RenderEncoderCode::AddVertexLayout(&vertex_descriptor, vbld);//(&vertex_descriptor,uv_ad,uv_bld);
         RenderEncoderCode::SetVertexDescriptor(&render_pipeline_descriptor,&vertex_descriptor);
-            
-/*
-  if(mat_result.type == 1)//transparent set blending
-  {
-  RenderPipelineColorAttachmentDescriptorArray rpcada = render_pipeline_descriptor.color_attachments;
-  RenderPipelineColorAttachmentDescriptor rad = rpcada.i[0];
-  rad.writeMask = ColorWriteMaskAll;
-  rad.blendingEnabled = true;
-  rad.destinationRGBBlendFactor = BlendFactorOneMinusSourceAlpha;
-  rad.destinationAlphaBlendFactor = BlendFactorOne;
-  rad.sourceRGBBlendFactor = BlendFactorSourceAlpha;
-  rad.sourceAlphaBlendFactor = BlendFactorOne;
-  render_pipeline_descriptor.color_attachments.i[0] = rad;                    
-  }
-*/
 
 //Create pipeline states    
         RenderPipelineState pipeline_state = RenderEncoderCode::NewRenderPipelineStateWithDescriptor(render_pipeline_descriptor);

@@ -295,6 +295,7 @@ vertex ColorInOut composite_vs(FullScreenVertex in [[stage_in]])
     out.uv = in.uv;
     return out;
 }
+
 // NOTE(Ray):Not compositing anything at the moment but will be.
 fragment float4 composite_fs(ColorInOut in[[stage_in]],
                              texture2d<float> base_color_texture[[texture(base_color_texture)]])
@@ -319,6 +320,7 @@ fragment float4 carbonfiber_fs(ColorInOut in [[stage_in]],
     float4 specular = DoDefaultSpecularLighting(in.frag_p,in.n,inputs.base_color,uniforms.view_p,float4(0.5f),32.0f);
     return ((ambient + diffuse + specular) * light.intensity) * inputs.base_color;
 }
+
 /*
  fragment float4 Composite(ColorInOut in [[stage_in]],
  constant Uniforms& uniforms[[buffer(buffer_uniforms)]],
@@ -331,3 +333,22 @@ fragment float4 carbonfiber_fs(ColorInOut in [[stage_in]],
  float4 final_color = base_color + base_color_two;
  }
  */
+    
+vertex ColorInOut shadow_map_gen_vertex_function(VertexIn in [[stage_in]],
+                               constant Uniforms& uniforms [[ buffer(buffer_uniforms) ]],
+                               uint v_id [[vertex_id]])
+{
+    ColorInOut out;
+    out.frag_p = uniforms.m_mat * float4(in.p.xyz,1.0);
+    out.p = uniforms.lv_mat * uniforms.m_mat * float4(in.p.xyz,1.0);
+    return out;
+}
+    
+fragment float shadow_map_gen_fragment_function(ColorInOut in [[stage_in]],
+                                                constant Light& light [[ buffer(7) ]])
+{
+    float3 dir = light.p.xyz - in.frag_p.xyz;
+    float dist = length(dir);
+    return dist;
+}
+

@@ -66,6 +66,30 @@ namespace Engine
     YoyoVector threads;
     u64 fake_thread_id = 0;
 
+    //base pass
+    GLTexture diffuse_render_texture;
+    GLTexture normal_render_texture;
+    GLTexture worldp_render_texture;
+
+    //general
+    GLTexture depth_texture;
+    
+    GLProgram composite_pass_shader;
+    GPUBuffer composite_buff;
+    
+    u64 opaque_id;
+
+    //Shadow
+    GLProgram shadow_map_program;
+    GLTexture shadow_texture;
+    GLTexture shadow_depth_texture;
+    
+    f32 atlas_size = 4096;
+    f32 tile_size = 128;
+    f32 dir_tile_size = tile_size;
+    u32 shadow_fb_id;
+
+//Using the free list anything buffer for now.
     void* LoadAssetAsync(void* data)
     {
         u64 v = (u64)data;
@@ -77,7 +101,6 @@ namespace Engine
         PlatformOutput(true,"Thread is leaving threadid: %lu \n",t->id);
         return 0;
     }
-    
    
     void Init(float2 window_dim)
     {
@@ -466,6 +489,75 @@ namespace Engine
         gameInit();
         StringsHandler::ResetTransientStrings();
         is_init = true;
+
+        //OGLE TEST INIT STUFF
+        OpenGLEmuState* s = &DefferedRenderer::ogl_test_state;
+
+        //opaque
+        diffuse_render_texture = ogle_tex_image_2d(s,0,window_dim, PixelFormatBGRA8Unorm,(TextureUsage)(TextureUsageRenderTarget | TextureUsageShaderRead));
+        normal_render_texture  = ogle_tex_image_2d(s,0,window_dim, PixelFormatBGRA8Unorm,(TextureUsage)(TextureUsageRenderTarget | TextureUsageShaderRead));
+        worldp_render_texture  = ogle_tex_image_2d(s,0,window_dim, PixelFormatBGRA8Unorm,(TextureUsage)(TextureUsageRenderTarget | TextureUsageShaderRead));
+        depth_texture          = ogle_tex_image_2d(s,0,window_dim, PixelFormatDepth32Float_Stencil8,TextureUsageRenderTarget);
+
+        //shadow pass
+        shadow_texture = ogle_tex_image_2d(s,0,float2(atlas_size), PixelFormatR32Float,(TextureUsage)(TextureUsageRenderTarget | TextureUsageShaderRead));
+        shadow_depth_texture  = ogle_tex_image_2d(s,0,float2(atlas_size), PixelFormatDepth32Float_Stencil8,TextureUsageRenderTarget);
+
+        //composite pass
+        VertexDescriptor vd_composite = RenderEncoderCode::NewVertexDescriptor();
+        VertexAttributeDescriptor vad_comp;
+        vad_comp.format = VertexFormatFloat3;
+        vad_comp.offset = 0;
+        vad_comp.buffer_index = 0;
+        VertexAttributeDescriptor uv_ad_comp;
+        uv_ad_comp.format = VertexFormatFloat2;
+        uv_ad_comp.offset = float3::size();
+        uv_ad_comp.buffer_index = 0;
+
+        VertexBufferLayoutDescriptor vbld_comp;
+        vbld_comp.step_function = step_function_per_vertex;
+        vbld_comp.step_rate = 1;
+        vbld_comp.stride = float3::size() + float2::size();
+        
+        RenderEncoderCode::AddVertexAttribute(&vd_composite,vad_comp);
+        RenderEncoderCode::AddVertexAttribute(&vd_composite,uv_ad_comp);
+        RenderEncoderCode::AddVertexLayout(&vd_composite, vbld_comp);
+        composite_pass_shader = ogle_add_prog_lib(s,"composite_vs","composite_fs",vd_composite);
+
+
+        //Init the full screen quad and uvs
+        float quad_p_uvs[] =
+            {
+                -1.0, -1.0, 0.0,            0.0, 1.0,
+                1.0,  -1.0, 0.0,            1.0, 1.0,
+                1.0,   1.0, 0.0,            1.0, 0.0,
+                -1.0, -1.0, 0.0,            0.0, 1.0,
+                1.0,   1.0, 0.0,            1.0, 0.0,
+                -1.0,  1.0, 0.0,            0.0, 0.0
+            };
+
+        u64 v_size = sizeof(float) * 5 * 6;
+        composite_buff = ogle_gen_buffer(s,v_size,ResourceStorageModeShared);
+        ogle_buffer_data_named(s,v_size,&composite_buff,(void*)&quad_p_uvs);
+
+        opaque_id = ogle_gen_framebuffer(s);
+        ogle_fb_tex2d_color(s,opaque_id,0,diffuse_render_texture,0,LoadActionClear,StoreActionStore);
+        ogle_fb_tex2d_color(s,opaque_id,1,normal_render_texture,0,LoadActionClear,StoreActionStore);
+        ogle_fb_tex2d_color(s,opaque_id,2,worldp_render_texture,0,LoadActionClear,StoreActionStore);
+        ogle_fb_tex2d_depth(s,opaque_id,depth_texture,0,LoadActionClear,StoreActionStore);
+        ogle_fb_tex2d_stencil(s,opaque_id,depth_texture,0,LoadActionClear,StoreActionStore);
+
+        //Shadow map
+        //light buffer 7
+
+//        shadow_map_program = ogle_add_prog_lib(s,"shadow_map_gen_vertex_function","shadow_map_gen_fragment_function",AssetSystem::default_vertex_descriptor);
+        
+        //Light buffer
+        shadow_fb_id = ogle_gen_framebuffer(s);
+        ogle_fb_tex2d_color(s,shadow_fb_id,0,shadow_texture,0,LoadActionLoad,StoreActionStore);
+        ogle_fb_tex2d_depth(s,shadow_fb_id,shadow_depth_texture,0,LoadActionClear,StoreActionStore);
+        ogle_fb_tex2d_stencil(s,shadow_fb_id,shadow_depth_texture,0,LoadActionClear,StoreActionStore);
+        
     }
 
     //TODO(Ray):Fixed update.
@@ -621,26 +713,14 @@ namespace Engine
 
 #endif
 
-    //model has a link to MeshAsset/Renderer we for ever sceneobject using model asset flatten out meshassets
-    //the renderer
-//TODO(Ray):Coarse grain render bound on scene cpu based culling here.
 #if 0
-//Gather lights and make a list
     for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
     {
         ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
-        //NOTE(Ray)://TODO(Ray):Here is where you would split out your meshes to the renderer
-        //based on what commandlist you want them in.
         for(int j = 0;j < model->meshes.count;++j)
         {
             MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
-//            if(GPUResourceCache::DoesGPUResourceExist(mesh))
             {
-//                GPUMeshResource* mr = GPUResourceCache::GetGPUResource(mesh);
-                //Pass game data to renderer
-                //Add a render command to the render command buffer.
-                //For every mesh in a model generate a render command
-                //one command represents a renderable
                 RenderWithMaterialCommand command_with_material;
                 if((uint32_t)mesh->r_material.texture_slots[0].descriptor.width == 1024)
                 {
@@ -652,16 +732,12 @@ namespace Engine
                 command_with_material.resource     = mesh->mesh_resource;
                 RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
             }
-            //else
-            {
-               // Assert(false);
-            }
         }
     }
 #else
 
+#if 0
     OpenGLEmuState* s = &DefferedRenderer::ogl_test_state;
-//Using GLEMU
     for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
     {
         ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
@@ -670,20 +746,12 @@ namespace Engine
         for(int j = 0;j < model->meshes.count;++j)
         {
             MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
-//            if(GPUResourceCache::DoesGPUResourceExist(mesh))
             {
-//                GPUMeshResource* mr = GPUResourceCache::GetGPUResource(mesh);
-                //Pass game data to renderer
-                //Add a render command to the render command buffer.
-                //For every mesh in a model generate a render command
-                //one command represents a renderable
-
                 ogle_use_program(s,DefferedRenderer::diffuse_program);
                 ogle_enable_depth_test(s);
                 ogle_depth_func(s,compare_func_less);
                 
                 RenderMaterial material = mesh->r_material;
-                
                 Uniforms* vuniforms = (Uniforms*)ogle_vert_set_uniform_(s,sizeof(Uniforms),3);
                 vuniforms->world_mat = m_matrix;
                 vuniforms->pcm_mat = mul(Camera::main.matrix,m_matrix);
@@ -719,25 +787,162 @@ namespace Engine
                 ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);
 //TODO(Ray):The use of the index16count here is silly need to fix this.
                 ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);
-/*    
-                RenderWithMaterialCommand command_with_material;
-                if((uint32_t)mesh->r_material.texture_slots[0].descriptor.width == 1024)
-                {
-                    int a =0;
-                }
-                command_with_material.material     = mesh->r_material;
-                command_with_material.model_matrix = m_matrix;
-                command_with_material.uniforms     = DefferedRenderer::uniform_buffer;
-                command_with_material.resource     = mesh->mesh_resource;
-                RenderCommandCode::AddRenderCommand(DefferedRenderer::gbufferpass.pass_command_buffer, (void*)&command_with_material);
-*/
-            }
-            //else
-            {
-               // Assert(false);
             }
         }
     }
+#else
+    
+//TEST FOR passes in glemu ... deffered renderer will do a depth pre pass (for testing)
+    //. shadow depth pass
+    //. The first pass is the split of the attributes into seperate render targets.
+    //normals worldp base_color
+    //. light distance pass stencil write
+    //. light distance pass stencil test
+    //. light cascaded shadows pass
+    //. light accumulation /caclulation pass
+    //apply spec + diffuse + accumlated buffer values
+    //. composite pass
+    //. done
+    OpenGLEmuState* s = &DefferedRenderer::ogl_test_state;
+
+//Opaqe deffered pass
+
+    ogle_bind_framebuffer(s,opaque_id);
+    
+//NOTE(Ray):Since bind framebuffer changes the render pipeline we need to do use program and all that after it.
+//Its a small quirk.
+    ogle_use_program(s,DefferedRenderer::diffuse_program);
+    ogle_enable_depth_test(s);
+    ogle_depth_func(s,compare_func_less);
+    for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
+    {
+        ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
+        for(int j = 0;j < model->meshes.count;++j)
+        {
+            MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
+            RenderMaterial material = mesh->r_material;
+            Uniforms* vuniforms = (Uniforms*)ogle_vert_set_uniform_(s,sizeof(Uniforms),3);
+            vuniforms->world_mat = m_matrix;
+            vuniforms->pcm_mat = mul(Camera::main.matrix,m_matrix);
+            vuniforms->pcm_mat = mul(Camera::main.projection_matrix,vuniforms->pcm_mat);
+            vuniforms->inputs.base_color = material.inputs.base_color;
+            vuniforms->inputs.metallic_factor = material.inputs.metallic_factor;
+            vuniforms->inputs.roughness_factor = material.inputs.roughness_factor;
+        
+            Uniforms* funiforms = (Uniforms*)ogle_frag_set_uniform_(s,sizeof(Uniforms),3);
+            funiforms->view_p = float4(Camera::main.ot.p,1);
+
+            GPUBuffer uv_buffer;
+            for(int i = 0;i < material.texture_count;++i)
+            {
+                ShaderTextureSlot slot = material.shader.texture_slots[i];
+                ogle_bind_texture_frag(s,material.gl_tex_slots[i],i);
+                if(slot.texcoord_index == 0)
+                {
+                    uv_buffer = mesh->mesh_resource.uv_buff;
+                }
+                else if(slot.texcoord_index == 1)
+                {
+                    uv_buffer = mesh->mesh_resource.uv2_buff;
+                }
+                else
+                {
+                    Assert(false);
+                }
+                ogle_bind_buffer_raw(s,uv_buffer.id,2,0);
+            }
+
+            ogle_bind_buffer_raw(s,mesh->mesh_resource.vertex_buff.id,0,0);
+            ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);
+//TODO(Ray):The use of the index16count here is silly need to fix this.
+            ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);
+        }
+    }
+    ogle_bind_framebuffer(s,0);
+
+//shadow depth pass
+    ogle_bind_framebuffer(s,shadow_fb_id);
+    ogle_use_program(s,shadow_map_program);
+    
+    ogle_enable_stencil_test(s);
+    ogle_stencil_func(s,compare_func_always,(u32)0xFF,(u32)0xFF);
+    ogle_stencil_op_sep(s,1,stencil_op_keep,stencil_op_incrementClamp,stencil_op_keep);
+
+    //for each frustum of each light in the light buffer,
+    //render distance to shadow map texture as color red.(r32 format).
+    //GPU:
+    //Each vertex outputs world space of fragment position which is interpolated arcross the pixels.
+    //convertes the world space of the vertex to the position of the vertex from light view.
+    //Each rendered pixel than subtracks from the fragment world position and the cam view pos to get distance
+    //of pixel to the camera(used for shadow map calculations)TODO(Ray):Should just use depth buffer.
+    bool is_render_all = true;
+//    for(int l = 0;l < light_buffer_cache.anythings.count;++l)
+    {
+//        Light* light = (Light*)light_buffer_cache.anythings.base + l;
+//        if((!light->is_entry && light->is_dirty) || !is_render_all)continue;
+
+        //      if(light->Type == LightType_Point)
+        {
+            for(int frustrum_index = 0;frustrum_index < 6;++frustrum_index)
+            {
+                for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
+                {
+                    ModelAsset* model = (ModelAsset*)AssetSystem::render_asset_cache.anythings.base + i;
+                    for(int j = 0;j < model->meshes.count;++j)
+                    {
+                        MeshAsset* mesh = (MeshAsset*)model->meshes.base + j;
+                        RenderMaterial material = mesh->r_material;
+                        Uniforms* vuniforms = (Uniforms*)ogle_vert_set_uniform_(s,sizeof(Uniforms),3);
+                        vuniforms->world_mat = m_matrix;
+                        vuniforms->pcm_mat = mul(Camera::main.matrix,m_matrix);
+                        vuniforms->pcm_mat = mul(Camera::main.projection_matrix,vuniforms->pcm_mat);
+//                        vuniforms->light_view_matrix = light->view_matrices[frustrum_index];
+
+                        Uniforms* funiforms = (Uniforms*)ogle_frag_set_uniform_(s,sizeof(Uniforms),3);
+                        funiforms->view_p = float4(Camera::main.ot.p,1);
+//Set Light buffer parameter
+            
+                        GPUBuffer uv_buffer;
+                        for(int i = 0;i < material.texture_count;++i)
+                        {
+                            ShaderTextureSlot slot = material.shader.texture_slots[i];
+                            ogle_bind_texture_frag(s,material.gl_tex_slots[i],i);
+                            if(slot.texcoord_index == 0)
+                            {
+                                uv_buffer = mesh->mesh_resource.uv_buff;
+                            }
+                            else if(slot.texcoord_index == 1)
+                            {
+                                uv_buffer = mesh->mesh_resource.uv2_buff;
+                            }
+                            else
+                            {
+                                Assert(false);
+                            }
+                            ogle_bind_buffer_raw(s,uv_buffer.id,2,0);
+                        }
+
+//                        ogle_bind_buffer_raw(s,mesh->light_buffer_id,7,0);
+                        ogle_bind_buffer_raw(s,mesh->mesh_resource.vertex_buff.id,0,0);
+                        ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);            
+                        ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);            
+                    }
+                }
+            }
+        }
+    }
+    ogle_disable_stencil_test(s);
+
+//composite pass
+    ogle_bind_framebuffer(s,0);
+    ogle_use_program(s,composite_pass_shader);
+    ogle_disable_depth_test(s);
+    
+    ogle_bind_buffer_raw(s,composite_buff.id,0,0);    
+    ogle_bind_texture_frag(s,diffuse_render_texture,0);
+    ogle_draw_arrays(s,6,0);
+        
+#endif
 #endif
     
     

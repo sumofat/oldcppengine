@@ -656,3 +656,24 @@ fragment float4 mask_frag(MaskInOut in [[stage_in]],
   return in.color * final_color;
 }
 
+    /*
+vertex ColorInOut shadow_map_gen_vertex_function(VertexIn in [[stage_in]],
+                               constant ShadowMapUniforms& uniforms [[ buffer(buffer_uniforms) ]],
+                               uint v_id [[vertex_id]])
+{
+    ColorInOut out;
+    //needs model to world matrix
+    out.frag_p = uniforms.world_mat * float4(in.p.xyz,1.0);
+
+    out.p = uniforms.light_view_matrix * uniforms.world_mat * float4(in.p.xyz,1.0);
+    return out;
+}
+    
+fragment float shadow_map_gen_fragment_function(ColorInOut in [[stage_in]],
+                                                constant Light& light [[ buffer(7) ]])
+{
+    float3 dir = light.p.xyz - in.world_cam_p.xyz;
+    float dist = length(dir);
+    return dist;
+}
+*/

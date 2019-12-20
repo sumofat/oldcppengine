@@ -253,20 +253,12 @@ namespace DefferedRenderer
             }
         }
         YoyoResetVectorIterator(&passes.buffer);
-        
-        if(current_drawable.state)
-        {
-//            RenderEncoderCode::PresentDrawable(c_buffer,current_drawable.state);
-        }
-//                RenderEncoderCode::(c_buffer);
-//        RenderEncoderCode::Commit(c_buffer);
 #endif
         
-//        OpenGLEmu::Execute(c_buffer);
-        ogle_execute_enqueue(&OpenGLEmu::ogs,c_buffer);
-        ogle_execute_commit(&ogl_test_state,c_buffer,true);
+        ogle_execute_enqueue(&ogl_test_state,c_buffer);
+        ogle_execute_commit(&OpenGLEmu::ogs,c_buffer,true);
+//        ogle_execute_commit(&ogl_test_state,c_buffer,true);        
     }
-
 };
 #endif
 
