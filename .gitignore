@@ -14,3 +14,5 @@ engine/platform/apple/\.#AppDelegate\.h
 engine/platform/apple/\.#GameViewController\.mm
 
 engine/external/fbx/
+
+ide/xcode/pedaltothemetal/libPhysX_static_64.a

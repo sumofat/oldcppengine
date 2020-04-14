@@ -1,0 +1,2913 @@
+{
+    "model_file": "littlest_tokyo",
+    "Meshes": [
+        {
+            "meshname": "Mesh",
+            "materials": [
+                {
+                    "material_name": "Plastic_Soft",
+                    "index": 0,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1088855237544877e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.108886509830619e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.006",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 1,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.005",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 2,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.004",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 3,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.003",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 4,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.002",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 5,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.001",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 6,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.008",
+            "materials": [
+                {
+                    "material_name": "paintmat",
+                    "index": 7,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109173457984893e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1091744440610249e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "metalmat",
+                    "index": 8,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.009",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 9,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "paintmat",
+                    "index": 10,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109173457984893e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1091744440610249e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "metalmat",
+                    "index": 11,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "glassmat",
+                    "index": 12,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109461392215299e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1094623782914305e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "Plastic_Soft",
+                    "index": 13,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1088855237544877e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.108886509830619e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "alpha_glass",
+                    "index": 14,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1096053593305018e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109606345406633e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "interiors",
+                    "index": 15,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0097.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1097493264457047e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109750312521836e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "glass_transp",
+                    "index": 16,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.0941176563501358,
+                                0.33725491166114809,
+                                0.27843138575553896,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1098932935609075e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109894279637039e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "alpha.001",
+                    "index": 17,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.11003726067611e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1100382467522419e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "Material #5511",
+                    "index": 18,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110181227791313e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1101822138674447e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "Material #5512",
+                    "index": 19,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5882353186607361,
+                                0.24313727021217347,
+                                0.24313727021217347,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110325194906516e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1103261809826475e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.010",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 20,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.013",
+            "materials": [
+                {
+                    "material_name": "metalmat",
+                    "index": 21,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.014",
+            "materials": [
+                {
+                    "material_name": "metalmat",
+                    "index": 22,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.012",
+            "materials": [
+                {
+                    "material_name": "paintmat",
+                    "index": 23,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109173457984893e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1091744440610249e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "metalmat",
+                    "index": 24,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "glassmat",
+                    "index": 25,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109461392215299e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1094623782914305e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "outline",
+                    "index": 26,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.1725490242242813,
+                                0.1568627506494522,
+                                0.1411764770746231,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1104691620217188e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.11047014809785e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.015",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 27,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.016",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 28,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.017",
+            "materials": [
+                {
+                    "material_name": "metalmat",
+                    "index": 29,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.018",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 30,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.019",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 31,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.021",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 32,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.022",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 33,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.024",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 34,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.026",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 35,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.027",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 36,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.029",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 37,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.031",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 38,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.032",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 39,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.033",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 40,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.034",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 41,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.036",
+            "materials": [
+                {
+                    "material_name": "metalmat",
+                    "index": 42,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "Plastic_Soft",
+                    "index": 43,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1088855237544877e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.108886509830619e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.037",
+            "materials": [
+                {
+                    "material_name": "Plastic_Soft",
+                    "index": 44,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1088855237544877e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.108886509830619e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.039",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 45,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.040",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 46,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.041",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 47,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.038",
+            "materials": [
+                {
+                    "material_name": "Plastic_Soft",
+                    "index": 48,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1088855237544877e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.108886509830619e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.042",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 49,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.043",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 50,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.044",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 51,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.045",
+            "materials": [
+                {
+                    "material_name": "Material #5516",
+                    "index": 52,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1106131291369217e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.110614115213053e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.046",
+            "materials": [
+                {
+                    "material_name": "alpha",
+                    "index": 53,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1107570962521245e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.110758082328256e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.047",
+            "materials": [
+                {
+                    "material_name": "alpha",
+                    "index": 54,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1107570962521245e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.110758082328256e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.048",
+            "materials": [
+                {
+                    "material_name": "alpha",
+                    "index": 55,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1107570962521245e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.110758082328256e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.049",
+            "materials": [
+                {
+                    "material_name": "alpha",
+                    "index": 56,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh.0094.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1107570962521245e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.110758082328256e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.050",
+            "materials": [
+                {
+                    "material_name": "Material #5518",
+                    "index": 57,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110901063367327e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1109020494434589e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.051",
+            "materials": [
+                {
+                    "material_name": "Material #5518",
+                    "index": 58,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110901063367327e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1109020494434589e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.052",
+            "materials": [
+                {
+                    "material_name": "Material #5518",
+                    "index": 59,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110901063367327e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1109020494434589e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.053",
+            "materials": [
+                {
+                    "material_name": "Material #5518",
+                    "index": 60,
+                    "inputs": [
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                0.5879999995231628,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.110901063367327e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1109020494434589e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.007",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 61,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                },
+                {
+                    "material_name": "metalmat",
+                    "index": 62,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.109317425100096e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.1093184111762277e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.023",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 63,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.020",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 64,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.025",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 65,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.028",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 66,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.030",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 67,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        },
+        {
+            "meshname": "Mesh.035",
+            "materials": [
+                {
+                    "material_name": "normal",
+                    "index": 68,
+                    "inputs": [
+                        {
+                            "name": "pbr_mettalic_roughness_texture_base_color",
+                            "type": "texture",
+                            "value": "/Users/ray.garner/work/mar/games/pedaltothemetal/data/pbr_mettalic_roughness_texture_base_colorMesh1.png",
+                            "texcoord": 0.0
+                        },
+                        {
+                            "name": "base_color",
+                            "type": "float4",
+                            "value": [
+                                1.0,
+                                1.0,
+                                1.0,
+                                1.0
+                            ]
+                        },
+                        {
+                            "name": "metallic_factor",
+                            "type": "float",
+                            "value": [
+                                2.1090294908696905e-25
+                            ]
+                        },
+                        {
+                            "name": "roughness_factor",
+                            "type": "float",
+                            "value": [
+                                2.109030476945822e-25
+                            ]
+                        }
+                    ],
+                    "options": {
+                        "double_sided": true
+                    }
+                }
+            ]
+        }
+    ]
+}

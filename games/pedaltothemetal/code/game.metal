@@ -664,7 +664,6 @@ vertex ColorInOut shadow_map_gen_vertex_function(VertexIn in [[stage_in]],
     ColorInOut out;
     //needs model to world matrix
     out.frag_p = uniforms.world_mat * float4(in.p.xyz,1.0);
-
     out.p = uniforms.light_view_matrix * uniforms.world_mat * float4(in.p.xyz,1.0);
     return out;
 }

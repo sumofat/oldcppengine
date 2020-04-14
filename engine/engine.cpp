@@ -1,4 +1,3 @@
-
 //NOTE(Ray):Following this model we will maintain a seperate implementation.
 //We want the game to link to the engine as a dll or static lib.
 
@@ -6,6 +5,8 @@
 #include "input/input.cpp"
 
 #ifdef ENGINEIMPL
+#include "graphics/shadow_tiles.cpp"
+#include "graphics/light.cpp"
 #include "graphics/camera.cpp"
 #include "graphics/deffered/deffered.cpp"
 #include "external/imgui/imgui.cpp"
@@ -89,6 +90,7 @@ namespace Engine
     f32 dir_tile_size = tile_size;
     u32 shadow_fb_id;
 
+    block_texture shadow_block_texture;
 //Using the free list anything buffer for now.
     void* LoadAssetAsync(void* data)
     {
@@ -104,6 +106,7 @@ namespace Engine
    
     void Init(float2 window_dim)
     {
+        ShadowTilesCode::InitSquareBlockTexture(&shadow_block_texture,atlas_size,1024,128);
 #if 1
         core_count = GetLogicalCPUCoreCount();
         threads = YoyoInitVector(core_count,sizeof(YoyoThread),false);
@@ -634,8 +637,8 @@ namespace Engine
     cam_ot.s = float3(1);
 
     Camera::main.ot = cam_ot;
-    Camera::main.matrix = YoyoSetCameraView(&cam_ot);//set_camera_view(cam_p, float3(0,0,1), float3(0,1,0));
-    
+    Camera::main.matrix = YoyoSetCameraView(&cam_ot);
+
 #if PDM_EDITOR
 
     if (input->keyboard.keys['q'].released)
@@ -710,9 +713,71 @@ namespace Engine
         Camera::main.ot = debug_cam_ot;
         Camera::main.matrix = debug_view_matrix;
     }
-
 #endif
 
+//PRERENDERING SETUPS
+    //NOTE(RAY):we only need to do this for lights that have either been
+    //a. moved
+    //b. has had an object move withing their view light sphere reach.
+    float4x4 shadow_map_projection_matrix = init_pers_proj_matrix(float2(1024,1024),90);
+//Update Light and properties
+    for(int light_index = 0;light_index < LightCode::point_light_buffer_cache.anythings.count;++light_index)
+    {
+//        if(light->type == LightType_Point)
+        {
+            Light* light = (Light*)LightCode::point_light_buffer_cache.anythings.base + light_index;
+            LightProperties* light_prop = (LightProperties*)LightCode::point_light_property_buffer_cache.anythings.base + light_index;                        
+            for(s32 i = 0;i < 6;++i)//6 frustrums
+            {
+                float3 new_cam_dir;
+                float3 new_up_dir;
+
+                //This will be how we write into the texture atlas
+                float4x4 light_view_matrix = float4x4::identity();
+                if(i == 0)
+                {
+                    new_cam_dir = float3(-1,0,0);
+                    new_up_dir  = float3(0,1,0);
+                }
+                else if(i == 1)
+                {
+                    new_cam_dir = float3(1,0,0);
+                    new_up_dir  = float3(0,1,0);
+                }
+                else if(i == 2)
+                {
+                    new_cam_dir = float3(0,-1,0);
+                    new_up_dir  = float3(0,0,1);
+                }
+                else if(i == 3)
+                {
+                    new_cam_dir = float3(0,1,0);
+                    new_up_dir  = float3(0,0,1);
+                }
+                else if(i == 4)
+                {
+                    new_cam_dir = float3(0,0,-1);
+                    new_up_dir  = float3(0,-1,0);
+                }
+                else if(i == 5)
+                {
+                    new_cam_dir = float3(0,0,1);
+                    new_up_dir  = float3(0,-1,0);
+                }
+                else
+                {
+                    Assert(false);// You have failed.
+                }
+
+                block_tile_entry_result d = ShadowTilesCode::AddTileEntry_(&shadow_block_texture);
+                LightCode::CalculateViewportAndOffsets(d,light,light_prop,shadow_block_texture.max_block_size,i);
+                LightCode::UpdateLight(light,light_prop);
+                LightCode::CalculateViewMatrices(light,light_prop,new_cam_dir,new_up_dir,Camera::main.point_light_shadow_projection_matrix,i);
+            }
+//            PushLightModel(per_light_model_command_list,light,light_prop,light->view_matrices,light->viewports,&as->light_sphere_model_asset);
+        }
+    }
+    
 #if 0
     for (int i = 0;i < AssetSystem::render_asset_cache.anythings.count;++i)
     {
@@ -806,9 +871,9 @@ namespace Engine
     OpenGLEmuState* s = &DefferedRenderer::ogl_test_state;
 
 //Opaqe deffered pass
-
     ogle_bind_framebuffer(s,opaque_id);
     
+
 //NOTE(Ray):Since bind framebuffer changes the render pipeline we need to do use program and all that after it.
 //Its a small quirk.
     ogle_use_program(s,DefferedRenderer::diffuse_program);
@@ -854,22 +919,23 @@ namespace Engine
 
             ogle_bind_buffer_raw(s,mesh->mesh_resource.vertex_buff.id,0,0);
             ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);
+            ogle_bind_buffer_raw(s,uv_buffer.id,2,0);
 //TODO(Ray):The use of the index16count here is silly need to fix this.
             ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);
         }
     }
     ogle_bind_framebuffer(s,0);
-
-//shadow depth pass
+#if 0
+//shadow map pass 
     ogle_bind_framebuffer(s,shadow_fb_id);
     ogle_use_program(s,shadow_map_program);
     
     ogle_enable_stencil_test(s);
     ogle_stencil_func(s,compare_func_always,(u32)0xFF,(u32)0xFF);
     ogle_stencil_op_sep(s,1,stencil_op_keep,stencil_op_incrementClamp,stencil_op_keep);
-
     //for each frustum of each light in the light buffer,
     //render distance to shadow map texture as color red.(r32 format).
+
     //GPU:
     //Each vertex outputs world space of fragment position which is interpolated arcross the pixels.
     //convertes the world space of the vertex to the position of the vertex from light view.
@@ -880,7 +946,6 @@ namespace Engine
     {
 //        Light* light = (Light*)light_buffer_cache.anythings.base + l;
 //        if((!light->is_entry && light->is_dirty) || !is_render_all)continue;
-
         //      if(light->Type == LightType_Point)
         {
             for(int frustrum_index = 0;frustrum_index < 6;++frustrum_index)
@@ -897,34 +962,14 @@ namespace Engine
                         vuniforms->pcm_mat = mul(Camera::main.matrix,m_matrix);
                         vuniforms->pcm_mat = mul(Camera::main.projection_matrix,vuniforms->pcm_mat);
 //                        vuniforms->light_view_matrix = light->view_matrices[frustrum_index];
-
                         Uniforms* funiforms = (Uniforms*)ogle_frag_set_uniform_(s,sizeof(Uniforms),3);
                         funiforms->view_p = float4(Camera::main.ot.p,1);
 //Set Light buffer parameter
-            
-                        GPUBuffer uv_buffer;
-                        for(int i = 0;i < material.texture_count;++i)
-                        {
-                            ShaderTextureSlot slot = material.shader.texture_slots[i];
-                            ogle_bind_texture_frag(s,material.gl_tex_slots[i],i);
-                            if(slot.texcoord_index == 0)
-                            {
-                                uv_buffer = mesh->mesh_resource.uv_buff;
-                            }
-                            else if(slot.texcoord_index == 1)
-                            {
-                                uv_buffer = mesh->mesh_resource.uv2_buff;
-                            }
-                            else
-                            {
-                                Assert(false);
-                            }
-                            ogle_bind_buffer_raw(s,uv_buffer.id,2,0);
-                        }
 
 //                        ogle_bind_buffer_raw(s,mesh->light_buffer_id,7,0);
                         ogle_bind_buffer_raw(s,mesh->mesh_resource.vertex_buff.id,0,0);
-                        ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);            
+                        ogle_bind_buffer_raw(s,mesh->mesh_resource.normal_buff.id,1,0);
+                        ogle_bind_buffer_raw(s,mesh->mesh_resource.uv_buff.id,2,0);
                         ogle_draw_elements(s,mesh->index16_count, mesh->mesh_resource.element_buff.index_type,mesh->mesh_resource.element_buff.id,0);            
                     }
                 }
@@ -935,6 +980,7 @@ namespace Engine
 
 //composite pass
     ogle_bind_framebuffer(s,0);
+#endif
     ogle_use_program(s,composite_pass_shader);
     ogle_disable_depth_test(s);
     

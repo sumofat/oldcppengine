@@ -278,7 +278,7 @@ extern "C" void gameUpdate()
     
     PhysicsCode::Update(&scene,1,0.016f);        
 //Play bgm
-    //SoundCode::ContinousPlay(&bgm_soundclip);
+    SoundCode::ContinousPlay(&bgm_soundclip);
 
     PlatformOutput(game_log,"Game update complete\n");
 }

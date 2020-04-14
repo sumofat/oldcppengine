@@ -12,6 +12,9 @@
 #include "editor/editorgui.h"
 #include "editor/editor.h"
 
+#include "graphics/shadow_tiles.h"
+#include "graphics/light.h"
+
 #include "graphics/deffered/deffered.h"
 
 #include "asset/MetaFiles.h"
@@ -29,7 +32,6 @@
 #if OSX || IOS
 #pragma clang diagnostic pop
 #endif
-
 
 #include "metalizer/cgltf/cgltf.h"
 

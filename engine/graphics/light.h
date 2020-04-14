@@ -1,5 +1,6 @@
-#if !defined(LIGHT_H)
 
+#if !defined(LIGHT_H)
+#define MAX_LIGHT_COUNT 4096
 enum LightType
 {
     LightType_Point,
@@ -41,9 +42,29 @@ struct LightProperties
     float4x4 matrices[6];
 };
 
+struct LightPackage
+{
+    Light* l;
+    LightProperties* lp;
+};
+
+struct GPULightBuffer
+{
+    GPUBuffer light;
+    GPUBuffer light_prop;
+};
+
 namespace LightCode
 {
-    extern  AnythingCache point_light_buffer_cache;    
+    extern  AnythingCache point_light_buffer_cache;
+    extern  AnythingCache point_light_property_buffer_cache;
+    GPULightBuffer InitPointLightBuffer();    
+    void Init(AnythingCache* ac);
+    void CreatePointLight(f32 attenuation,f32 intensity,float4 color,float3 p);
+    LightPackage GetPointLight(u64 id);    
+    void RemovePointLight(u64 id);
+    void CalculateViewportAndOffsets(block_tile_entry_result t,Light*l,LightProperties*lp,u32 max_block_size);
+    void UpdateLight(Light* light,LightProperties* light_prop);
 };
 
 #define LIGHT_H
